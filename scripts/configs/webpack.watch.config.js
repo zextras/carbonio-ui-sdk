@@ -16,7 +16,7 @@ const chalk = require('chalk');
 const { createBabelConfig } = require('./babelrc.build.js');
 const { pkg } = require('../utils/pkg.js');
 
-exports.setupWebpackWatchConfig = (options, { basePath, shellHash }) => {
+exports.setupWebpackWatchConfig = (options, { basePath }) => {
 	const server = `https://${options.host}/`;
 	const defaultConfig = {
 		entry: {
