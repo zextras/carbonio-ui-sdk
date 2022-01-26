@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Zextras Carbonio Web SDK",
   "main": "scripts/index.js",
+  "bin": {
+    "sdk": "scripts/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com:Zextras/carbonio-ui-sdk.git"
