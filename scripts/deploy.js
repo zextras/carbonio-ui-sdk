@@ -6,7 +6,7 @@
 
 /* eslint-disable no-console */
 const arg = require('arg');
-const { execSync, spawn } = require('child_process');
+const { execSync } = require('child_process');
 const chalk = require('chalk');
 const { runBuild } = require('./build');
 const { pkg } = require('./utils/pkg');
@@ -46,7 +46,7 @@ exports.runDeploy = async () => {
 		const target = `${options.user}@${options.host}`;
 		console.log(`- Deploying to ${chalk.bold(target)}...`);
 		execSync(
-			`ssh ${target} "cd ${pathPrefix} && rm -rf ${pkg.carbonio.name}/* && mkdir -p ${pkg.carbonio.name}/${buildSetup.commitHash}"`
+			`ssh ${target} "cd ${pathPrefix} && rm -rf ${pkg.carbonio.name}/* && mkdir -p ${pkg.carbonio.name}/${buildSetup.commitHash} ${pkg.zapp.name}/current"`
 		);
 		execSync(`scp -r dist/* ${target}:${pathPrefix}${pkg.carbonio.name}/${buildSetup.commitHash}`);
 		console.log(`- Updating ${chalk.bold('components.json')}...`);
@@ -62,6 +62,10 @@ exports.runDeploy = async () => {
 			)
 		).replace(/"/g, '\\"');
 		execSync(`ssh ${target} "echo '${components}' > ${pathPrefix}components.json"`);
+		console.log(`- Updating ${chalk.bold('current/index.html...')}...`);
+		execSync(
+			`ssh ${target} "cp ${pathPrefix}${pkg.zapp.name}/${buildSetup.commitHash}/index.html ${pathPrefix}${pkg.zapp.name}/current/index.html 2>/dev/null || :"`
+		);
 		console.log(chalk.bgBlue.white.bold('Deploy Completed'));
 	} else {
 		console.log(chalk.bgYellow.white('Target host not specified, skipping deploy step'));
