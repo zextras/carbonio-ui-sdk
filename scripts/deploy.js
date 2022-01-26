@@ -33,16 +33,16 @@ function parseArguments() {
 }
 
 const updateJson = (jsonObject, stats) => {
-	const components = jsonObject.components.filter((component) => component.name !== pkg.zapp.name);
+	const components = jsonObject.components.filter(
+		(component) => component.name !== pkg.carbonio.name
+	);
 
 	components.push({
-		name: pkg.zapp.name,
+		name: pkg.carbonio.name,
 		commit: buildSetup.commitHash,
-		display: pkg.zapp.display,
-		route: pkg.zapp.route,
 		description: pkg.description,
 		version: pkg.version,
-		priority: pkg.zapp.priority,
+		priority: pkg.carbonio.priority,
 		js_entrypoint:
 			buildSetup.basePath + Object.keys(stats.compilation.assets).find((p) => ENTRY_REGEX.test(p))
 	});
@@ -55,10 +55,10 @@ exports.runDeploy = async () => {
 		const target = `${options.user}@${options.host}`;
 		console.log('- Deploying to the carbonio podman container...');
 		execSync(
-			`ssh ${target} "cd /opt/zextras/web/iris/ && rm -rf ${pkg.zapp.name}/* && mkdir -p ${pkg.zapp.name}/${buildSetup.commitHash}"`
+			`ssh ${target} "cd /opt/zextras/web/iris/ && rm -rf ${pkg.carbonio.name}/* && mkdir -p ${pkg.carbonio.name}/${buildSetup.commitHash}"`
 		);
 		execSync(
-			`scp -r dist/* ${target}:/opt/zextras/web/iris/${pkg.zapp.name}/${buildSetup.commitHash}`
+			`scp -r dist/* ${target}:/opt/zextras/web/iris/${pkg.carbonio.name}/${buildSetup.commitHash}`
 		);
 		console.log('- Updating components.json...');
 		const components = JSON.stringify(

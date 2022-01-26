@@ -24,7 +24,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }) => {
 		new webpack.DefinePlugin({
 			PACKAGE_VERSION: JSON.stringify(pkg.version),
 			ZIMBRA_PACKAGE_VERSION: semver.valid(semver.coerce(pkg.version)),
-			PACKAGE_NAME: JSON.stringify(pkg.zapp.name)
+			PACKAGE_NAME: JSON.stringify(pkg.carbonio.name)
 		}),
 		new MiniCssExtractPlugin({
 			// Options similar to the same options in webpackOptions.output
@@ -37,13 +37,12 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }) => {
 			inject: false,
 			template: path.resolve(process.cwd(), 'sdk/scripts/configs/component.template'),
 			filename: 'component.json',
-			name: pkg.zapp.name,
+			name: pkg.carbonio.name,
 			description: pkg.description,
-			display: pkg.zapp.display,
 			version: pkg.version,
 			commit: commitHash,
-			priority: pkg.zapp.priority,
-			route: pkg.zapp.route
+			priority: pkg.carbonio.priority,
+			type: pkg.carbonio.type
 		})
 	];
 	if (options.analyzeBundle) {
@@ -161,14 +160,14 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }) => {
 		moment: `__ZAPP_SHARED_LIBRARIES__['moment']`,
 		'styled-components': `__ZAPP_SHARED_LIBRARIES__['styled-components']`,
 		'@reduxjs/toolkit': `__ZAPP_SHARED_LIBRARIES__['@reduxjs/toolkit']`,
-		'@zextras/carbonio-shell-ui': `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-shell-ui']['${pkg.zapp.name}']`,
+		'@zextras/carbonio-shell-ui': `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-shell-ui']['${pkg.carbonio.name}']`,
 		'@zextras/carbonio-design-system': `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-design-system']`,
 		/* Exports for App's Handlers */
 		faker: `__ZAPP_SHARED_LIBRARIES__['faker']`,
 		msw: `__ZAPP_SHARED_LIBRARIES__['msw']`
 	};
 
-	const confPath = path.resolve(process.cwd(), 'zapp.webpack.js');
+	const confPath = path.resolve(process.cwd(), 'carbonio.webpack.js');
 
 	if (!fs.existsSync(confPath)) {
 		return defaultConfig;

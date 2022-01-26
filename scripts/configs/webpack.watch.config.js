@@ -16,7 +16,7 @@ const chalk = require('chalk');
 const { createBabelConfig } = require('./babelrc.build.js');
 const { pkg } = require('../utils/pkg.js');
 
-exports.setupWebpackWatchConfig = (options, { basePath }) => {
+exports.setupWebpackWatchConfig = (options, { basePath, shellHash }) => {
 	const server = `https://${options.host}/`;
 	const defaultConfig = {
 		entry: {
@@ -27,7 +27,7 @@ exports.setupWebpackWatchConfig = (options, { basePath }) => {
 			hot: true,
 			port: 9000,
 			historyApiFallback: {
-				index: basePath,
+				index: basePath
 				// TODO: remove once confirmed that it is not needed
 				// rewrites: { from: '/static/iris/carbonio-shell-ui/current', to: `${basePath}/index.html` }
 			},
@@ -41,9 +41,8 @@ exports.setupWebpackWatchConfig = (options, { basePath }) => {
 						hasHandlers: !!options.hasHandlers,
 						enableErrorReporter: !!options.enableErrorReporter,
 						app_package: {
-							package: pkg.zapp.name,
-							name: pkg.zapp.name,
-							label: pkg.zapp.display,
+							package: pkg.carbonio.name,
+							name: pkg.carbonio.name,
 							version: pkg.version,
 							description: pkg.description
 						}
@@ -78,7 +77,7 @@ exports.setupWebpackWatchConfig = (options, { basePath }) => {
 							if (body?.components) {
 								console.log(chalk.green.bold('[Proxy] modifying components.json'));
 								const components = body.components.reduce((acc, module) => {
-									if (module.name === pkg.zapp.name) {
+									if (module.name === pkg.carbonio.name) {
 										return [...acc, { ...module, js_entrypoint: `${basePath}app.bundle.js` }];
 									}
 									if (
@@ -189,7 +188,7 @@ exports.setupWebpackWatchConfig = (options, { basePath }) => {
 			new webpack.DefinePlugin({
 				PACKAGE_VERSION: JSON.stringify(pkg.version),
 				ZIMBRA_PACKAGE_VERSION: semver.valid(semver.coerce(pkg.version)),
-				PACKAGE_NAME: JSON.stringify(pkg.zapp.name)
+				PACKAGE_NAME: JSON.stringify(pkg.carbonio.name)
 			}),
 			new MiniCssExtractPlugin({
 				// Options similar to the same options in webpackOptions.output
@@ -216,15 +215,17 @@ exports.setupWebpackWatchConfig = (options, { basePath }) => {
 			moment: `__ZAPP_SHARED_LIBRARIES__['moment']`,
 			'styled-components': `__ZAPP_SHARED_LIBRARIES__['styled-components']`,
 			'@reduxjs/toolkit': `__ZAPP_SHARED_LIBRARIES__['@reduxjs/toolkit']`,
-			'@zextras/carbonio-shell-ui': `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-shell-ui']['${pkg.zapp.name}']`,
+			'@zextras/carbonio-shell-ui': `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-shell-ui']['${pkg.carbonio.name}']`,
 			/* Exports for App's Handlers */
 			msw: `__ZAPP_SHARED_LIBRARIES__['msw']`
 		}
 	};
 	if (!options.useLocalDS) {
-		defaultConfig.externals['@zextras/carbonio-design-system'] = `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-design-system']`
+		defaultConfig.externals[
+			'@zextras/carbonio-design-system'
+		] = `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-design-system']`;
 	}
-	const confPath = path.resolve(process.cwd(), 'zapp.webpack.js');
+	const confPath = path.resolve(process.cwd(), 'carbonio.webpack.js');
 	if (!fs.existsSync(confPath)) {
 		return defaultConfig;
 	}

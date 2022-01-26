@@ -62,7 +62,7 @@ const logBuild =
 exports.runBuild = () =>
 	new Promise((...p) => {
 		const options = parseArguments();
-		console.log('Building ', chalk.green(pkg.zapp.name));
+		console.log('Building ', chalk.green(pkg.carbonio.name));
 		console.log('Using base path ', chalk.green(buildSetup.basePath));
 		const config = setupWebpackBuildConfig(options, buildSetup);
 		const compiler = webpack(config);

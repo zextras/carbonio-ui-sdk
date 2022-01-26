@@ -40,7 +40,7 @@ function parseArguments() {
 
 exports.runWatch = async () => {
 	const options = parseArguments();
-	console.log('Building ', chalk.green(pkg.zapp.name));
+	console.log('Building ', chalk.green(pkg.carbonio.name));
 	console.log('Using base path ', chalk.green(buildSetup.basePath));
 	console.log('Paramenters:');
 	Object.keys(options).forEach((key) => console.log(chalk.green(`${key}: `), options[key]));
