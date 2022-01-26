@@ -20,7 +20,7 @@ exports.setupWebpackWatchConfig = (options, { basePath, shellHash }) => {
 	const server = `https://${options.host}/`;
 	const defaultConfig = {
 		entry: {
-			app: path.resolve(process.cwd(), 'sdk/scripts/utils/entry.js')
+			app: path.resolve(__dirname, '../utils/entry.js')
 		},
 		mode: 'development',
 		devServer: {

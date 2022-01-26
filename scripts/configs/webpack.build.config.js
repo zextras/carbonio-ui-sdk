@@ -35,7 +35,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }) => {
 		}),
 		new HtmlWebpackPlugin({
 			inject: false,
-			template: path.resolve(process.cwd(), 'sdk/scripts/configs/component.template'),
+			template: path.resolve(__dirname, './component.template'),
 			filename: 'component.json',
 			name: pkg.carbonio.name,
 			description: pkg.description,
@@ -61,7 +61,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }) => {
 	const entry = {};
 	const alias = {};
 
-	entry.app = path.resolve(process.cwd(), 'sdk/scripts/utils/entry.js');
+	entry.app = path.resolve(__dirname, '../utils/entry.js');
 	alias['app-entrypoint'] = path.resolve(process.cwd(), 'src/app.jsx');
 
 	const defaultConfig = {
