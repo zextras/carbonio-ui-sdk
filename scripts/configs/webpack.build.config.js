@@ -42,7 +42,8 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }) => {
 			version: pkg.version,
 			commit: commitHash,
 			priority: pkg.carbonio.priority,
-			type: pkg.carbonio.type
+			type: pkg.carbonio.type,
+			attrKey: pkg.carbonio.attrKey ?? '',
 		})
 	];
 	if (options.analyzeBundle) {
