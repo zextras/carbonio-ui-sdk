@@ -64,7 +64,7 @@ exports.runDeploy = async () => {
 		execSync(`ssh ${target} "echo '${components}' > ${pathPrefix}components.json"`);
 		console.log(`- Updating ${chalk.bold('current/index.html...')}...`);
 		execSync(
-			`ssh ${target} "cp ${pathPrefix}${pkg.zapp.name}/${buildSetup.commitHash}/index.html ${pathPrefix}${pkg.zapp.name}/current/index.html 2>/dev/null || :"`
+			`ssh ${target} "cp ${pathPrefix}${pkg.zapp.name}/${buildSetup.commitHash}/index.html ${pathPrefix}${pkg.carbonio.name}/current/index.html 2>/dev/null || :"`
 		);
 		console.log(chalk.bgBlue.white.bold('Deploy Completed'));
 	} else {
