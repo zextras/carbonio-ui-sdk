@@ -16,11 +16,11 @@ const chalk = require('chalk');
 const { createBabelConfig } = require('./babelrc.build.js');
 const { pkg } = require('../utils/pkg.js');
 
-exports.setupWebpackWatchConfig = (options, { basePath, shellHash }) => {
+exports.setupWebpackWatchConfig = (options, { basePath }) => {
 	const server = `https://${options.host}/`;
 	const defaultConfig = {
 		entry: {
-			app: path.resolve(process.cwd(), 'sdk/scripts/utils/entry.js')
+			app: path.resolve(__dirname, '../utils/entry.js')
 		},
 		mode: 'development',
 		devServer: {
@@ -229,9 +229,7 @@ exports.setupWebpackWatchConfig = (options, { basePath, shellHash }) => {
 	if (!fs.existsSync(confPath)) {
 		return defaultConfig;
 	}
-	// eslint-disable-next-line global-require, import/no-dynamic-require
-	const molder = require(confPath);
-	molder(defaultConfig, pkg, options);
 
-	return defaultConfig;
+	const molder = require(confPath);
+	return molder(defaultConfig, pkg, options, 'development');
 };

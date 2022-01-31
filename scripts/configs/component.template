@@ -5,5 +5,6 @@
 	"version": "<%- htmlWebpackPlugin.options.version %>",
 	"commit": "<%- htmlWebpackPlugin.options.commit %>",
 	"priority": <%- htmlWebpackPlugin.options.priority %>,
-	"type": "<%- htmlWebpackPlugin.options.type %>"
+	"type": "<%- htmlWebpackPlugin.options.type %>",
+	"attrKey": "<%- htmlWebpackPlugin.options.attrKey %>"
 }

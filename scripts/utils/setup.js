@@ -11,13 +11,9 @@ const { pkg } = require('./pkg');
 const prefix = '/static/iris/';
 const commitHash = execSync('git rev-parse HEAD').toString().trim();
 const basePath = `${prefix}${pkg.carbonio.name}/${commitHash}/`;
-const shellHash = execSync('cat node_modules/@zextras/carbonio-shell-ui/dist/commit')
-	.toString()
-	.trim();
 
 exports.buildSetup = {
 	commitHash,
 	prefix,
-	basePath,
-	shellHash
+	basePath
 };

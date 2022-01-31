@@ -6,13 +6,13 @@
 
 /* eslint-disable no-console */
 const arg = require('arg');
-const { execSync, spawn } = require('child_process');
+const { execSync } = require('child_process');
 const chalk = require('chalk');
 const { runBuild } = require('./build');
 const { pkg } = require('./utils/pkg');
 const { buildSetup } = require('./utils/setup');
 
-const ENTRY_REGEX = /^app\..*\.js$/;
+const pathPrefix = '/opt/zextras/web/iris/';
 function parseArguments() {
 	const args = arg(
 		{
@@ -32,20 +32,11 @@ function parseArguments() {
 	};
 }
 
-const updateJson = (jsonObject, stats) => {
-	const components = jsonObject.components.filter(
+const updateJson = (appJson, carbonioJson, stats) => {
+	const components = carbonioJson.components.filter(
 		(component) => component.name !== pkg.carbonio.name
 	);
-
-	components.push({
-		name: pkg.carbonio.name,
-		commit: buildSetup.commitHash,
-		description: pkg.description,
-		version: pkg.version,
-		priority: pkg.carbonio.priority,
-		js_entrypoint:
-			buildSetup.basePath + Object.keys(stats.compilation.assets).find((p) => ENTRY_REGEX.test(p))
-	});
+	components.push(appJson);
 	return { components };
 };
 exports.runDeploy = async () => {
@@ -53,23 +44,30 @@ exports.runDeploy = async () => {
 	const stats = await runBuild();
 	if (options.host) {
 		const target = `${options.user}@${options.host}`;
-		console.log('- Deploying to the carbonio podman container...');
+		console.log(`- Deploying to ${chalk.bold(target)}...`);
 		execSync(
-			`ssh ${target} "cd /opt/zextras/web/iris/ && rm -rf ${pkg.carbonio.name}/* && mkdir -p ${pkg.carbonio.name}/${buildSetup.commitHash}"`
+			`ssh ${target} "cd ${pathPrefix} && rm -rf ${pkg.carbonio.name}/* && mkdir -p ${pkg.carbonio.name}/${buildSetup.commitHash} ${pkg.carbonio.name}/current"`
 		);
-		execSync(
-			`scp -r dist/* ${target}:/opt/zextras/web/iris/${pkg.carbonio.name}/${buildSetup.commitHash}`
-		);
-		console.log('- Updating components.json...');
+		execSync(`scp -r dist/* ${target}:${pathPrefix}${pkg.carbonio.name}/${buildSetup.commitHash}`);
+		console.log(`- Updating ${chalk.bold('components.json')}...`);
 		const components = JSON.stringify(
 			updateJson(
-				JSON.parse(execSync(`ssh ${target} cat /opt/zextras/web/iris/components.json`).toString()),
+				JSON.parse(
+					execSync(
+						`ssh ${target} cat ${pathPrefix}${pkg.carbonio.name}/${buildSetup.commitHash}/component.json`
+					).toString()
+				),
+				JSON.parse(execSync(`ssh ${target} cat ${pathPrefix}components.json`).toString()),
 				stats
 			)
 		).replace(/"/g, '\\"');
-		execSync(`ssh ${target} "echo '${components}' > /opt/zextras/web/iris/components.json"`);
+		execSync(`ssh ${target} "echo '${components}' > ${pathPrefix}components.json"`);
+		console.log(`- Updating ${chalk.bold('current/index.html...')}...`);
+		execSync(
+			`ssh ${target} "cp ${pathPrefix}${pkg.carbonio.name}/${buildSetup.commitHash}/index.html ${pathPrefix}${pkg.carbonio.name}/current/index.html 2>/dev/null || :"`
+		);
 		console.log(chalk.bgBlue.white.bold('Deploy Completed'));
 	} else {
-		console.log(chalk.bgYellow.white('Target host not specified, skippind deploy step'));
+		console.log(chalk.bgYellow.white('Target host not specified, skipping deploy step'));
 	}
 };

@@ -35,14 +35,15 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }) => {
 		}),
 		new HtmlWebpackPlugin({
 			inject: false,
-			template: path.resolve(process.cwd(), 'sdk/scripts/configs/component.template'),
+			template: path.resolve(__dirname, './component.template'),
 			filename: 'component.json',
 			name: pkg.carbonio.name,
 			description: pkg.description,
 			version: pkg.version,
 			commit: commitHash,
 			priority: pkg.carbonio.priority,
-			type: pkg.carbonio.type
+			type: pkg.carbonio.type,
+			attrKey: pkg.carbonio.attrKey ?? '',
 		})
 	];
 	if (options.analyzeBundle) {
@@ -61,7 +62,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }) => {
 	const entry = {};
 	const alias = {};
 
-	entry.app = path.resolve(process.cwd(), 'sdk/scripts/utils/entry.js');
+	entry.app = path.resolve(__dirname, '../utils/entry.js');
 	alias['app-entrypoint'] = path.resolve(process.cwd(), 'src/app.jsx');
 
 	const defaultConfig = {
@@ -173,10 +174,6 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }) => {
 		return defaultConfig;
 	}
 
-	// eslint-disable-next-line max-len
-	// eslint-disable-next-line global-require,import/no-dynamic-require,@typescript-eslint/no-var-requires
 	const molder = require(confPath);
-	molder(defaultConfig, pkg, options);
-
-	return defaultConfig;
+	return molder(defaultConfig, pkg, options, 'production');
 };
