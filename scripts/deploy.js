@@ -46,7 +46,7 @@ exports.runDeploy = async () => {
 		const target = `${options.user}@${options.host}`;
 		console.log(`- Deploying to ${chalk.bold(target)}...`);
 		execSync(
-			`ssh ${target} "cd ${pathPrefix} && rm -rf ${pkg.carbonio.name}/* && mkdir -p ${pkg.carbonio.name}/${buildSetup.commitHash} ${pkg.zapp.name}/current"`
+			`ssh ${target} "cd ${pathPrefix} && rm -rf ${pkg.carbonio.name}/* && mkdir -p ${pkg.carbonio.name}/${buildSetup.commitHash} ${pkg.carbonio.name}/current"`
 		);
 		execSync(`scp -r dist/* ${target}:${pathPrefix}${pkg.carbonio.name}/${buildSetup.commitHash}`);
 		console.log(`- Updating ${chalk.bold('components.json')}...`);
@@ -64,7 +64,7 @@ exports.runDeploy = async () => {
 		execSync(`ssh ${target} "echo '${components}' > ${pathPrefix}components.json"`);
 		console.log(`- Updating ${chalk.bold('current/index.html...')}...`);
 		execSync(
-			`ssh ${target} "cp ${pathPrefix}${pkg.zapp.name}/${buildSetup.commitHash}/index.html ${pathPrefix}${pkg.carbonio.name}/current/index.html 2>/dev/null || :"`
+			`ssh ${target} "cp ${pathPrefix}${pkg.carbonio.name}/${buildSetup.commitHash}/index.html ${pathPrefix}${pkg.carbonio.name}/current/index.html 2>/dev/null || :"`
 		);
 		console.log(chalk.bgBlue.white.bold('Deploy Completed'));
 	} else {
