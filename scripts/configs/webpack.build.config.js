@@ -44,6 +44,8 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }) => {
 			priority: pkg.carbonio.priority,
 			type: pkg.carbonio.type,
 			attrKey: pkg.carbonio.attrKey ?? '',
+			icon: pkg.carbonio.icon ?? 'CubeOutline',
+			display: pkg.carbonio.display
 		})
 	];
 	if (options.analyzeBundle) {

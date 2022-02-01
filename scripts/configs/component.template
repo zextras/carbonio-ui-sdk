@@ -6,5 +6,7 @@
 	"commit": "<%- htmlWebpackPlugin.options.commit %>",
 	"priority": <%- htmlWebpackPlugin.options.priority %>,
 	"type": "<%- htmlWebpackPlugin.options.type %>",
-	"attrKey": "<%- htmlWebpackPlugin.options.attrKey %>"
+	"attrKey": "<%- htmlWebpackPlugin.options.attrKey %>",
+	"icon": "<%- htmlWebpackPlugin.options.icon %>",
+	"display": "<%- htmlWebpackPlugin.options.display %>"
 }
