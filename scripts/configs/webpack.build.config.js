@@ -67,7 +67,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }) => {
 
 	const defaultConfig = {
 		entry,
-		mode: 'production',
+		mode: options.devMode ? 'development' : 'production',
 		devtool: 'source-map',
 		target: 'web',
 		module: {

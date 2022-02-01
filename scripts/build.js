@@ -18,7 +18,9 @@ function parseArguments() {
 			'--analyze': Boolean,
 			'-a': '--analyze',
 			'--verbose': Boolean,
-			'-v': '--verbose'
+			'-v': '--verbose',
+			'--dev': Boolean,
+			'-d': '--dev'
 		},
 		{
 			argv: process.argv.slice(2),
@@ -27,7 +29,9 @@ function parseArguments() {
 	);
 	return {
 		analyzeBundle: args['--analyze'] || false,
-		verbose: args['--verbose'] || false
+		verbose: args['--verbose'] || false,
+		devMode: args['--dev'] || false,
+
 	};
 }
 
@@ -57,13 +61,13 @@ const logBuild =
 		const info = stats.toJson();
 
 		if (stats.hasWarnings()) {
-			console.log(chalk.bgYellow.white.bold(`Webpack Compilations Warning${info.warnings.length > 1 ? 's' : ''}`));
+			console.log(chalk.bgYellow.white.bold(`Webpack Compilation Warning${info.warnings.length > 1 ? 's' : ''}`));
 			logErrors(info.warnings, 'warning', options.verbose);
 		}
 
 		if (stats.hasErrors()) {
 			console.log(
-				chalk.bgRed.white.bold(`Webpack Compilations Error${info.errors.length > 1 ? 's' : ''}`)
+				chalk.bgRed.white.bold(`Webpack Compilation Error${info.errors.length > 1 ? 's' : ''}`)
 			);
 			logErrors(info.errors, 'error', options.verbose);
 			reject(err);
