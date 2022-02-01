@@ -42,8 +42,7 @@ const logErrors = (errors, gravity, verbose) => {
 		console.log(title(`${i + 1}/${errors.length}:`));
 		console.log(message(` > ${error.message}`));
 		if (error.moduleName) console.log(message('Module: '), error.moduleName);
-		if (error.file) console.log(message('File: '), error.file);
-		if (error.loc) console.log(message('Path: '), error.loc);
+		if (error.file) console.log(message('File: '), error.file, error.loc ? ` at position ${error.loc}` : '');
 		if (error.details) console.log(message('Details: '), error.details);
 		if (error.stack && verbose) console.log(message('Stack: '), error.stack);
 	});
