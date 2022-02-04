@@ -16,7 +16,7 @@ const chalk = require('chalk');
 const { createBabelConfig } = require('./babelrc.build.js');
 const { pkg } = require('../utils/pkg.js');
 
-exports.setupWebpackWatchConfig = (options, { basePath }) => {
+exports.setupWebpackWatchConfig = (options, { basePath, commitHash }) => {
 	const server = `https://${options.host}/`;
 	const defaultConfig = {
 		entry: {
@@ -76,9 +76,11 @@ exports.setupWebpackWatchConfig = (options, { basePath }) => {
 						modifyResponse(res, proxyRes, function (body) {
 							if (body?.components) {
 								console.log(chalk.green.bold('[Proxy] modifying components.json'));
+								let found = false;
 								const components = body.components.reduce((acc, module) => {
 									if (module.name === pkg.carbonio.name) {
-										return [...acc, { ...module, js_entrypoint: `${basePath}app.bundle.js` }];
+										found = true;
+										return [...acc, {...module, js_entrypoint: `${basePath}app.bundle.js`}];
 									}
 									if (
 										options.standalone ||
@@ -87,6 +89,20 @@ exports.setupWebpackWatchConfig = (options, { basePath }) => {
 										return acc;
 									return [...acc, module];
 								}, []);
+								if (!found) {
+									components.push({
+										js_entrypoint: `${basePath}app.bundle.js`,
+										commit: commitHash,
+										description: pkg.description,
+										name: pkg.carbonio.name,
+										priority: pkg.carbonio.priority,
+										version: pkg.version,
+										type: pkg.carbonio.type,
+										attrKey: pkg.carbonio.attrKey,
+										icon: pkg.carbonio.icon,
+										display: pkg.carbonio.display
+									})
+								}
 								return JSON.stringify({ components });
 							}
 							console.log(chalk.green.bold('[Proxy] components.json: no content'));
