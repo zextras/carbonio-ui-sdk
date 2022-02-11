@@ -8,5 +8,6 @@
 	"type": "<%- htmlWebpackPlugin.options.type %>",
 	"attrKey": "<%- htmlWebpackPlugin.options.attrKey %>",
 	"icon": "<%- htmlWebpackPlugin.options.icon %>",
-	"display": "<%- htmlWebpackPlugin.options.display %>"
+	"display": "<%- htmlWebpackPlugin.options.display %>",
+	"sentryDsn": "<%- htmlWebpackPlugin.options.sentryDsn %>"
 }
