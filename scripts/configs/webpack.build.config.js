@@ -178,5 +178,5 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }) => {
 	}
 
 	const molder = require(confPath);
-	return molder(defaultConfig, pkg, options, 'production');
+	return molder(defaultConfig, pkg, options, options.devMode ? 'development' : 'production');
 };
