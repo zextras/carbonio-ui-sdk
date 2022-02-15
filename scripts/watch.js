@@ -12,12 +12,15 @@ const WebpackDevServer = require('webpack-dev-server');
 const { buildSetup } = require('./utils/setup');
 const { pkg } = require('./utils/pkg');
 const { setupWebpackWatchConfig } = require('./configs/webpack.watch.config');
+const {printArgs} = require('./utils/console');
 
 function parseArguments() {
 	const args = arg(
 		{
 			'--host': String,
 			'-h': '--host',
+			'--watch-type': String,
+			'-t': '--watch-type',
 			'--standalone': Boolean,
 			'-s': '--standalone',
 			'--error-reporter': Boolean,
@@ -31,6 +34,7 @@ function parseArguments() {
 		}
 	);
 	return {
+		watchType: args['--watch-type'] || 'carbonio',
 		host: args['--host'] || 'localhost:4443',
 		standalone: args['--standalone'] || false,
 		errorReporter: args['--error-reporter'] || false,
@@ -39,7 +43,7 @@ function parseArguments() {
 }
 
 exports.runWatch = async () => {
-	const options = parseArguments();
+	const options = printArgs(parseArguments(), 'Watch');
 	console.log('Building ', chalk.green(pkg.carbonio.name));
 	console.log('Using base path ', chalk.green(buildSetup.basePath));
 	console.log('Paramenters:');

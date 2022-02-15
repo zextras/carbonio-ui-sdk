@@ -11,6 +11,7 @@ const chalk = require('chalk');
 const { runBuild } = require('./build');
 const { pkg } = require('./utils/pkg');
 const { buildSetup } = require('./utils/setup');
+const { printArgs } = require('./utils/console');
 
 const pathPrefix = '/opt/zextras/web/iris/';
 function parseArguments() {
@@ -40,7 +41,7 @@ const updateJson = (appJson, carbonioJson, stats) => {
 	return { components };
 };
 exports.runDeploy = async () => {
-	const options = parseArguments();
+	const options = printArgs(parseArguments(), 'Deploy');
 	const stats = await runBuild();
 	if (options.host) {
 		const target = `${options.user}@${options.host}`;

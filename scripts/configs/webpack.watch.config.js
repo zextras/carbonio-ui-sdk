@@ -49,7 +49,7 @@ exports.setupWebpackWatchConfig = (options, { basePath, commitHash }) => {
 					});
 				});
 			},
-			open: ['/carbonio/'],
+			open: [`/${pkg.carbonio.type}/`],
 			proxy: [
 				{
 					context: [`!${basePath}/**/*`, '!/static/iris/components.json'],
