@@ -63,7 +63,7 @@ exports.runDeploy = async () => {
 			)
 		).replace(/"/g, '\\"');
 		execSync(`ssh ${target} "echo '${components}' > ${pathPrefix}components.json"`);
-		console.log(`- Updating ${chalk.bold('current/index.html...')}...`);
+		console.log(`- Updating html indexes...`);
 		execSync(
 			`ssh ${target} "cp ${pathPrefix}${pkg.carbonio.name}/${buildSetup.commitHash}/*.html ${pathPrefix}${pkg.carbonio.name}/current/ 2>/dev/null || :"`
 		);
