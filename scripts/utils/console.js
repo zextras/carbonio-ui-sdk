@@ -4,12 +4,12 @@ exports.printArgs = (opts, label) => {
 	const options = Object.entries(opts);
 	console.log(chalk.green.bold(`${label} options:`));
 	options.forEach(opt => {
-		console.log(`- ${chalk.green.bold(opt[0])}, ${opt[1]}`)
+		console.log(`- ${chalk.green.bold(opt[0])}: ${opt[1]}`)
 	});
 	return opts;
 }
 
-exports.logErrors = (errors, gravity, verbose) => {
+const logErrors = (errors, gravity, verbose) => {
 	const title = gravity === 'error' ? chalk.bgRed.white : chalk.bgYellow.white;
 	const message = gravity === 'error' ? chalk.redBright : chalk.yellowBright;
 	errors.forEach((error, i) => {
