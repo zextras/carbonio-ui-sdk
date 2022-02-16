@@ -11,7 +11,7 @@ const webpack = require('webpack');
 const { buildSetup } = require('@zextras/carbonio-ui-sdk/scripts/utils/setup');
 const { pkg } = require('@zextras/carbonio-ui-sdk/scripts/utils/pkg');
 const { setupWebpackBuildConfig } = require('@zextras/carbonio-ui-sdk/scripts/configs/webpack.build.config');
-const { setupWebpackExternalBuildConfig } = require('@zextras/carbonio-ui-sdk/scripts/configs/external.webpack.build.config');
+const { setupWebpackExternalBuildConfig } = require('@zextras/carbonio-ui-sdk/scripts/configs/webpack.external.config');
 const {logBuild, printArgs} = require('./utils/console');
 function parseArguments() {
 	const args = arg(
@@ -38,7 +38,7 @@ function parseArguments() {
 	};
 }
 const runExternalBuild = (options) => {
-		console.log('Building external ', chalk.green(pkg.zapp.name));
+		console.log('Building external ', chalk.green(pkg.carbonio.name));
 		console.log('Using base path ', chalk.green(buildSetup.basePath));
 		const externalConfig = setupWebpackExternalBuildConfig(options, buildSetup);
 		const compilerExternal = webpack(externalConfig);
