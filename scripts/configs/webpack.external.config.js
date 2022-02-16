@@ -7,9 +7,9 @@
 const webpack = require('webpack');
 
 const { pkg } = require('../utils/pkg.js');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const { createBabelConfig } = require('./babelrc.build.js');
+const fs = require('fs');
 
 exports.setupWebpackExternalBuildConfig = (options, { basePath }) => {
 	const defaultConfig = {

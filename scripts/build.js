@@ -37,17 +37,17 @@ function parseArguments() {
 		external: args['--external'] || false,
 	};
 }
-const runExternalBuild = (options) => {
-		console.log('Building external ', chalk.green(pkg.carbonio.name));
+const runExternalBuild = (options) => new Promise((...p) => {
+		console.log('Building ', chalk.bold.yellow('external '), chalk.green(pkg.carbonio.name));
 		console.log('Using base path ', chalk.green(buildSetup.basePath));
 		const externalConfig = setupWebpackExternalBuildConfig(options, buildSetup);
 		const compilerExternal = webpack(externalConfig);
-		compilerExternal.run(logBuild([], options));
-};
-exports.runBuild = () =>
-	new Promise((...p) => {
+		compilerExternal.run(logBuild(p, options));
+});
+exports.runBuild = async () =>
+	new Promise(async (...p) => {
 		const options = printArgs(parseArguments(), 'Build');
-		if (options.external) runExternalBuild(options);
+		if (options.external) await runExternalBuild(options);
 		console.log('Building ', chalk.green(pkg.carbonio.name));
 		console.log('Using base path ', chalk.green(buildSetup.basePath));
 		const config = setupWebpackBuildConfig(options, buildSetup);
