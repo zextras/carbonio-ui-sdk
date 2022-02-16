@@ -28,7 +28,7 @@ exports.logBuild =
 		if (err) {
 			console.log(chalk.bgRed.white.bold('Webpack Runtime Error'));
 			logErrors([err], 'error', options.verbose);
-			reject(err);
+			if (reject) reject(err);
 		}
 
 		const info = stats.toJson();
@@ -43,9 +43,9 @@ exports.logBuild =
 				chalk.bgRed.white.bold(`Webpack Compilation Error${info.errors.length > 1 ? 's' : ''}`)
 			);
 			logErrors(info.errors, 'error', options.verbose);
-			reject(err);
+			if (reject) reject(err);
 		} else {
 			console.log(chalk.bgBlue.white.bold('Compiled Successfully!'));
 		}
-		resolve(stats);
+		if (resolve) resolve(stats);
 	};

@@ -33,7 +33,7 @@ function parseArguments() {
 	};
 }
 
-const updateJson = (appJson, carbonioJson, stats) => {
+const updateJson = (appJson, carbonioJson) => {
 	const components = carbonioJson.components.filter(
 		(component) => component.name !== pkg.carbonio.name
 	);
@@ -42,7 +42,7 @@ const updateJson = (appJson, carbonioJson, stats) => {
 };
 exports.runDeploy = async () => {
 	const options = printArgs(parseArguments(), 'Deploy');
-	const stats = await runBuild();
+	await runBuild();
 	if (options.host) {
 		const target = `${options.user}@${options.host}`;
 		console.log(`- Deploying to ${chalk.bold(target)}...`);
@@ -59,7 +59,6 @@ exports.runDeploy = async () => {
 					).toString()
 				),
 				JSON.parse(execSync(`ssh ${target} cat ${pathPrefix}components.json`).toString()),
-				stats
 			)
 		).replace(/"/g, '\\"');
 		execSync(`ssh ${target} "echo '${components}' > ${pathPrefix}components.json"`);
