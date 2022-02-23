@@ -8,15 +8,22 @@
 const arg = require('arg');
 const chalk = require('chalk');
 const webpack = require('webpack');
-const { buildSetup } = require('./utils/setup');
-const { pkg } = require('./utils/pkg');
-const { setupWebpackBuildConfig } = require('./configs/webpack.build.config');
-
+const { buildSetup } = require('@zextras/carbonio-ui-sdk/scripts/utils/setup');
+const { pkg } = require('@zextras/carbonio-ui-sdk/scripts/utils/pkg');
+const { setupWebpackBuildConfig } = require('@zextras/carbonio-ui-sdk/scripts/configs/webpack.build.config');
+const { setupWebpackExternalBuildConfig } = require('@zextras/carbonio-ui-sdk/scripts/configs/webpack.external.config');
+const {logBuild, printArgs} = require('./utils/console');
 function parseArguments() {
 	const args = arg(
 		{
 			'--analyze': Boolean,
-			'-a': '--analyze'
+			'-a': '--analyze',
+			'--verbose': Boolean,
+			'-v': '--verbose',
+			'--dev': Boolean,
+			'-d': '--dev',
+			'--external': Boolean,
+			'-e': '--external'
 		},
 		{
 			argv: process.argv.slice(2),
@@ -24,47 +31,26 @@ function parseArguments() {
 		}
 	);
 	return {
-		analyzeBundle: args['--analyze'] || false
+		analyzeBundle: args['--analyze'] || false,
+		verbose: args['--verbose'] || false,
+		devMode: args['--dev'] || false,
+		external: args['--external'] || false,
 	};
 }
-
-const logBuild =
-	([resolve, reject]) =>
-	(err, stats) => {
-		if (err) {
-			console.log(chalk.bgRed.white.bold('Webpack Runtime Error'));
-			console.error(err.stack || err);
-			if (err.details) {
-				console.error(err.details);
-			}
-			reject(err);
-		}
-
-		const info = stats.toJson();
-
-		if (stats.hasWarnings()) {
-			chalk.bgRed.white.bold(`Webpack Compilations Warning${info.warnings.length > 0 ? 's' : ''}`);
-			console.warn(info.warnings);
-		}
-
-		if (stats.hasErrors()) {
-			console.log(
-				chalk.bgRed.white.bold(`Webpack Compilations Error${info.errors.length > 0 ? 's' : ''}`)
-			);
-			console.error(info.errors);
-			reject(err);
-		} else {
-			console.log(chalk.bgBlue.white.bold('Compiled Successfully!'));
-		}
-		resolve(stats);
-	};
-
-exports.runBuild = () =>
-	new Promise((...p) => {
-		const options = parseArguments();
-		console.log('Building ', chalk.green(pkg.zapp.name));
+const runExternalBuild = (options) => new Promise((...p) => {
+		console.log('Building ', chalk.bold.yellow('external '), chalk.green(pkg.carbonio.name));
+		console.log('Using base path ', chalk.green(buildSetup.basePath));
+		const externalConfig = setupWebpackExternalBuildConfig(options, buildSetup);
+		const compilerExternal = webpack(externalConfig);
+		compilerExternal.run(logBuild(p, options));
+});
+exports.runBuild = async () =>
+	new Promise(async (...p) => {
+		const options = printArgs(parseArguments(), 'Build');
+		if (options.external) await runExternalBuild(options);
+		console.log('Building ', chalk.green(pkg.carbonio.name));
 		console.log('Using base path ', chalk.green(buildSetup.basePath));
 		const config = setupWebpackBuildConfig(options, buildSetup);
 		const compiler = webpack(config);
-		compiler.run(logBuild(p));
+		compiler.run(logBuild(p, options));
 	});

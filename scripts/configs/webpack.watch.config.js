@@ -16,18 +16,18 @@ const chalk = require('chalk');
 const { createBabelConfig } = require('./babelrc.build.js');
 const { pkg } = require('../utils/pkg.js');
 
-exports.setupWebpackWatchConfig = (options, { basePath }) => {
+exports.setupWebpackWatchConfig = (options, { basePath, commitHash }) => {
 	const server = `https://${options.host}/`;
 	const defaultConfig = {
 		entry: {
-			app: path.resolve(process.cwd(), 'sdk/scripts/utils/entry.js')
+			app: path.resolve(__dirname, '../utils/entry.js')
 		},
 		mode: 'development',
 		devServer: {
 			hot: true,
 			port: 9000,
 			historyApiFallback: {
-				index: basePath,
+				index: basePath
 				// TODO: remove once confirmed that it is not needed
 				// rewrites: { from: '/static/iris/carbonio-shell-ui/current', to: `${basePath}/index.html` }
 			},
@@ -41,16 +41,15 @@ exports.setupWebpackWatchConfig = (options, { basePath }) => {
 						hasHandlers: !!options.hasHandlers,
 						enableErrorReporter: !!options.enableErrorReporter,
 						app_package: {
-							package: pkg.zapp.name,
-							name: pkg.zapp.name,
-							label: pkg.zapp.display,
+							package: pkg.carbonio.name,
+							name: pkg.carbonio.name,
 							version: pkg.version,
 							description: pkg.description
 						}
 					});
 				});
 			},
-			open: ['/carbonio/'],
+			open: [`/${pkg.carbonio.type}/`],
 			proxy: [
 				{
 					context: [`!${basePath}/**/*`, '!/static/iris/components.json'],
@@ -77,9 +76,11 @@ exports.setupWebpackWatchConfig = (options, { basePath }) => {
 						modifyResponse(res, proxyRes, function (body) {
 							if (body?.components) {
 								console.log(chalk.green.bold('[Proxy] modifying components.json'));
+								let found = false;
 								const components = body.components.reduce((acc, module) => {
-									if (module.name === pkg.zapp.name) {
-										return [...acc, { ...module, js_entrypoint: `${basePath}app.bundle.js` }];
+									if (module.name === pkg.carbonio.name) {
+										found = true;
+										return [...acc, {...module, js_entrypoint: `${basePath}app.bundle.js`}];
 									}
 									if (
 										options.standalone ||
@@ -88,6 +89,21 @@ exports.setupWebpackWatchConfig = (options, { basePath }) => {
 										return acc;
 									return [...acc, module];
 								}, []);
+								if (!found) {
+									components.push({
+										js_entrypoint: `${basePath}app.bundle.js`,
+										commit: commitHash,
+										description: pkg.description,
+										name: pkg.carbonio.name,
+										priority: pkg.carbonio.priority,
+										version: pkg.version,
+										type: pkg.carbonio.type,
+										attrKey: pkg.carbonio.attrKey,
+										icon: pkg.carbonio.icon,
+										display: pkg.carbonio.display,
+										sentryDsn: pkg.carbonio.sentryDsn
+									})
+								}
 								return JSON.stringify({ components });
 							}
 							console.log(chalk.green.bold('[Proxy] components.json: no content'));
@@ -189,7 +205,7 @@ exports.setupWebpackWatchConfig = (options, { basePath }) => {
 			new webpack.DefinePlugin({
 				PACKAGE_VERSION: JSON.stringify(pkg.version),
 				ZIMBRA_PACKAGE_VERSION: semver.valid(semver.coerce(pkg.version)),
-				PACKAGE_NAME: JSON.stringify(pkg.zapp.name)
+				PACKAGE_NAME: JSON.stringify(pkg.carbonio.name)
 			}),
 			new MiniCssExtractPlugin({
 				// Options similar to the same options in webpackOptions.output
@@ -216,21 +232,21 @@ exports.setupWebpackWatchConfig = (options, { basePath }) => {
 			moment: `__ZAPP_SHARED_LIBRARIES__['moment']`,
 			'styled-components': `__ZAPP_SHARED_LIBRARIES__['styled-components']`,
 			'@reduxjs/toolkit': `__ZAPP_SHARED_LIBRARIES__['@reduxjs/toolkit']`,
-			'@zextras/carbonio-shell-ui': `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-shell-ui']['${pkg.zapp.name}']`,
+			'@zextras/carbonio-shell-ui': `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-shell-ui']['${pkg.carbonio.name}']`,
 			/* Exports for App's Handlers */
 			msw: `__ZAPP_SHARED_LIBRARIES__['msw']`
 		}
 	};
 	if (!options.useLocalDS) {
-		defaultConfig.externals['@zextras/carbonio-design-system'] = `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-design-system']`
+		defaultConfig.externals[
+			'@zextras/carbonio-design-system'
+		] = `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-design-system']`;
 	}
-	const confPath = path.resolve(process.cwd(), 'zapp.webpack.js');
+	const confPath = path.resolve(process.cwd(), 'carbonio.webpack.js');
 	if (!fs.existsSync(confPath)) {
 		return defaultConfig;
 	}
-	// eslint-disable-next-line global-require, import/no-dynamic-require
-	const molder = require(confPath);
-	molder(defaultConfig, pkg, options);
 
-	return defaultConfig;
+	const molder = require(confPath);
+	return molder(defaultConfig, pkg, options, 'development');
 };
