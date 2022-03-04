@@ -1,11 +1,13 @@
 const chalk = require('chalk');
 
 exports.printArgs = (opts, label) => {
-	const options = Object.entries(opts);
-	console.log(chalk.green.bold(`${label} options:`));
-	options.forEach(opt => {
-		console.log(`- ${chalk.green.bold(opt[0])}: ${opt[1]}`)
-	});
+	if (opts.verbose) {
+		const options = Object.entries(opts);
+		console.log(chalk.green.bold(`${label} options:`));
+		options.forEach(opt => {
+			console.log(`- ${chalk.green.bold(opt[0])}: ${opt[1]}`);
+		});
+	}
 	return opts;
 }
 

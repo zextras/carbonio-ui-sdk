@@ -5,44 +5,41 @@
  */
 
 /* eslint-disable no-console */
-const arg = require('arg');
 const { execSync } = require('child_process');
 const chalk = require('chalk');
-const { runBuild } = require('./build');
+const { handler: build, builder: buildOptions } = require('./build');
 const { pkg } = require('./utils/pkg');
 const { buildSetup } = require('./utils/setup');
 const { printArgs } = require('./utils/console');
 
 const pathPrefix = '/opt/zextras/web/iris/';
-function parseArguments() {
-	const args = arg(
-		{
-			'--host': String,
-			'-h': '--host',
-			'--user': String,
-			'-u': '--user'
-		},
-		{
-			argv: process.argv.slice(2),
-			permissive: true
-		}
-	);
-	return {
-		host: args['--host'],
-		user: args['--user'] || 'root'
-	};
-}
 
-const updateJson = (appJson, carbonioJson) => {
+const updateJson = (appJson, carbonioJson, stats) => {
 	const components = carbonioJson.components.filter(
 		(component) => component.name !== pkg.carbonio.name
 	);
 	components.push(appJson);
 	return { components };
 };
-exports.runDeploy = async () => {
-	const options = printArgs(parseArguments(), 'Deploy');
-	await runBuild();
+
+exports.command = 'deploy';
+exports.desc = 'Build and inject the project to a Carbonio instance';
+exports.builder = Object.assign({
+	host: {
+		desc: 'Destination hostname',
+		demandOption: true,
+		alias: 'h',
+	},
+	user: {
+		desc: 'Username for ssh access',
+		alias: 'u',
+		default: 'root',
+	}
+}, buildOptions);
+
+exports.handler = async (options) => {
+	printArgs(options, 'Deploy');
+	await build(options);
 	if (options.host) {
 		const target = `${options.user}@${options.host}`;
 		console.log(`- Deploying to ${chalk.bold(target)}...`);

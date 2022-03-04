@@ -5,45 +5,44 @@
  */
 
 /* eslint-disable no-console */
-const arg = require('arg');
 const chalk = require('chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const { buildSetup } = require('./utils/setup');
 const { pkg } = require('./utils/pkg');
 const { setupWebpackWatchConfig } = require('./configs/webpack.watch.config');
-const {printArgs} = require('./utils/console');
+const { printArgs } = require('./utils/console');
 
-function parseArguments() {
-	const args = arg(
-		{
-			'--host': String,
-			'-h': '--host',
-			'--watch-type': String,
-			'-t': '--watch-type',
-			'--standalone': Boolean,
-			'-s': '--standalone',
-			'--error-reporter': Boolean,
-			'-e': '--error-reporter',
-			'--use-local-ds': Boolean,
-			'-u': '--use-local-ds'
-		},
-		{
-			argv: process.argv.slice(2),
-			permissive: true
-		}
-	);
-	return {
-		watchType: args['--watch-type'] || 'carbonio',
-		host: args['--host'] || 'localhost:4443',
-		standalone: args['--standalone'] || false,
-		errorReporter: args['--error-reporter'] || false,
-		useLocalDS: args['--error-reporter'] || false
-	};
-}
+exports.command = 'watch';
+exports.desc = 'Run the project in watch mode, proxying against a Carbonio instance';
+exports.aliases = ['start'];
+exports.builder = {
+	host: {
+		desc: 'Destination hostname',
+		demandOption: true,
+		alias: 'h',
+	},
+	type: {
+		desc: 'Watchmode type (client or admin)',
+		alias: 't',
+		defaultOption: 'carbonio',
+	},
+	standalone: {
+		desc: 'Only load the current module',
+		alias: 's',
+		defaultOption: false,
+		boolean: true
+	},
+	useLocalDS: {
+		desc: 'Use the local DS module instead of the one provided by the remote shell',
+		alias: 'u',
+		defaultOption: false,
+		boolean: true
+	}
+};
 
-exports.runWatch = async () => {
-	const options = printArgs(parseArguments(), 'Watch');
+exports.handler = async (options) => {
+	printArgs(options, 'Watch');
 	console.log('Building ', chalk.green(pkg.carbonio.name));
 	console.log('Using base path ', chalk.green(buildSetup.basePath));
 	console.log('Paramenters:');
