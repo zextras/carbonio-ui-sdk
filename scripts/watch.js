@@ -22,11 +22,6 @@ exports.builder = {
 		demandOption: true,
 		alias: 'h',
 	},
-	type: {
-		desc: 'Watchmode type (client or admin)',
-		alias: 't',
-		defaultOption: 'carbonio',
-	},
 	standalone: {
 		desc: 'Only load the current module',
 		alias: 's',
@@ -45,8 +40,6 @@ exports.handler = async (options) => {
 	printArgs(options, 'Watch');
 	console.log('Building ', chalk.green(pkg.carbonio.name));
 	console.log('Using base path ', chalk.green(buildSetup.basePath));
-	console.log('Paramenters:');
-	Object.keys(options).forEach((key) => console.log(chalk.green(`${key}: `), options[key]));
 	const config = setupWebpackWatchConfig(options, buildSetup);
 	const compiler = webpack(config);
 	// const watching = compiler.watch( {}, logBuild );

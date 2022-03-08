@@ -14,6 +14,11 @@ yargs(hideBin(process.argv))
 			desc: 'Verbose logging',
 			default: false,
 			boolean: true
+		},
+		admin: {
+			desc: 'Build/Watch for the admin panel',
+			default: false,
+			boolean: true
 		}
 	})
 	.command(require('./build'))

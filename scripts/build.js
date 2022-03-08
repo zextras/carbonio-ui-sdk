@@ -7,11 +7,12 @@
 /* eslint-disable no-console */
 const chalk = require('chalk');
 const webpack = require('webpack');
-const { buildSetup } = require('@zextras/carbonio-ui-sdk/scripts/utils/setup');
-const { pkg } = require('@zextras/carbonio-ui-sdk/scripts/utils/pkg');
-const { setupWebpackBuildConfig } = require('@zextras/carbonio-ui-sdk/scripts/configs/webpack.build.config');
-const { setupWebpackExternalBuildConfig } = require('@zextras/carbonio-ui-sdk/scripts/configs/webpack.external.config');
+const { buildSetup } = require('./utils/setup');
+const { pkg } = require('./utils/pkg');
+const { setupWebpackBuildConfig } = require('./configs/webpack.build.config');
+const { setupWebpackExternalBuildConfig } = require('./configs/webpack.external.config');
 const {logBuild, printArgs} = require('./utils/console');
+const { rmSync } = require('fs');
 
 exports.command = 'build';
 exports.desc = 'Compile and bundle your project';
@@ -51,5 +52,6 @@ exports.handler = async (options) =>
 		console.log('Using base path ', chalk.green(buildSetup.basePath));
 		const config = setupWebpackBuildConfig(options, buildSetup);
 		const compiler = webpack(config);
+		rmSync('dist', {recursive: true, force: true});
 		compiler.run(logBuild(p, options));
 	});
