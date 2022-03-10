@@ -22,7 +22,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 		new webpack.DefinePlugin({
 			PACKAGE_VERSION: JSON.stringify(pkg.version),
 			ZIMBRA_PACKAGE_VERSION: semver.valid(semver.coerce(pkg.version)),
-			PACKAGE_NAME: JSON.stringify(pkg.carbonio.name)
+			PACKAGE_NAME: JSON.stringify(options.name)
 		}),
 		new MiniCssExtractPlugin({
 			// Options similar to the same options in webpackOptions.output
@@ -35,7 +35,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 			inject: false,
 			template: path.resolve(__dirname, './component.template'),
 			filename: 'component.json',
-			name: pkg.carbonio.name,
+			name: options.name ?? options.name,
 			description: pkg.description,
 			version: pkg.version,
 			commit: commitHash,
@@ -52,18 +52,19 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 			minify: { collapseWhitespace: false },
 			template: path.resolve(__dirname, './PKGBUILD.template'),
 			filename: 'PKGBUILD',
-			name: pkg.carbonio.name,
+			name: options.name ?? options.name,
 			description: pkg.description,
 			version: pkg.version,
 			commit: commitHash,
-			installMode: (options.admin || pkg.carbonio.type === 'carbonioAdmin') ? 'admin' : 'web',
-			pkgRel: options.pkgRel ?? 0
+			installMode: (options.admin) ? 'admin' : 'web',
+			pkgRel: options.pkgRel ?? 0,
+			maintainer: 'Zextras <packages@zextras.com>'
 		}),
 		new CopyPlugin({
 			patterns: [
 				{ from: 'translations', to: 'i18n' },
 				{ from: 'CHANGELOG.md', to: '.', noErrorOnMissing: true },
-				{ from: path.resolve(__dirname, './pacur.json'), to: '.'}
+				{ from: path.resolve(__dirname, 'pacur.json'), to: '.'}
 			]
 		})
 	];
@@ -184,7 +185,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 		moment: `__ZAPP_SHARED_LIBRARIES__['moment']`,
 		'styled-components': `__ZAPP_SHARED_LIBRARIES__['styled-components']`,
 		'@reduxjs/toolkit': `__ZAPP_SHARED_LIBRARIES__['@reduxjs/toolkit']`,
-		'@zextras/carbonio-shell-ui': `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-shell-ui']['${pkg.carbonio.name}']`,
+		'@zextras/carbonio-shell-ui': `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-shell-ui']['${options.name}']`,
 		/* Exports for App's Handlers */
 		msw: `__ZAPP_SHARED_LIBRARIES__['msw']`
 	};

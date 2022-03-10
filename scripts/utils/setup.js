@@ -6,14 +6,5 @@
 
 /* eslint-disable import/extensions */
 const { execSync } = require('child_process');
-const { pkg } = require('./pkg');
 
-const prefix = '/static/iris/';
-const commitHash = execSync('git rev-parse HEAD').toString().trim();
-const basePath = `${prefix}${pkg.carbonio.name}/${commitHash}/`;
-
-exports.buildSetup = {
-	commitHash,
-	prefix,
-	basePath
-};
+exports.commitHash = execSync('git rev-parse HEAD').toString().trim();

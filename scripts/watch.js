@@ -8,7 +8,7 @@
 const chalk = require('chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const { buildSetup } = require('./utils/setup');
+const { commitHash } = require('./utils/setup');
 const { pkg } = require('./utils/pkg');
 const { setupWebpackWatchConfig } = require('./configs/webpack.watch.config');
 const { printArgs } = require('./utils/console');
@@ -38,9 +38,10 @@ exports.builder = {
 
 exports.handler = async (options) => {
 	printArgs(options, 'Watch');
-	console.log('Building ', chalk.green(pkg.carbonio.name));
-	console.log('Using base path ', chalk.green(buildSetup.basePath));
-	const config = setupWebpackWatchConfig(options, buildSetup);
+	const basePath = `/static/iris/${options.name}/${commitHash}/`;
+	console.log('Building ', chalk.green(options.name));
+	console.log('Using base path ', chalk.green(basePath));
+	const config = setupWebpackWatchConfig(options, {basePath, commitHash});
 	const compiler = webpack(config);
 	// const watching = compiler.watch( {}, logBuild );
 	const server = new WebpackDevServer(config.devServer, compiler);

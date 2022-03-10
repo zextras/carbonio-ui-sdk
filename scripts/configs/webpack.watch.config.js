@@ -34,8 +34,8 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 						isStandalone: !!options.standalone,
 						server: server,
 						app_package: {
-							package: pkg.carbonio.name,
-							name: pkg.carbonio.name,
+							package: options.name,
+							name: options.name,
 							version: pkg.version,
 							description: pkg.description
 						}
@@ -71,14 +71,11 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 								console.log(chalk.green.bold('[Proxy] modifying components.json'));
 								let found = false;
 								const components = body.components.reduce((acc, module) => {
-									if (module.name === pkg.carbonio.name) {
+									if (module.name === options.name) {
 										found = true;
 										return [...acc, {...module, js_entrypoint: `${basePath}app.bundle.js`}];
 									}
-									if (
-										options.standalone ||
-										(!options.errorReporter && module.name === 'carbonio-error-reporter-ui')
-									)
+									if (options.standalone)
 										return acc;
 									return [...acc, module];
 								}, []);
@@ -87,7 +84,7 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 										js_entrypoint: `${basePath}app.bundle.js`,
 										commit: commitHash,
 										description: pkg.description,
-										name: pkg.carbonio.name,
+										name: options.name,
 										priority: pkg.carbonio.priority,
 										version: pkg.version,
 										type: pkg.carbonio.type,

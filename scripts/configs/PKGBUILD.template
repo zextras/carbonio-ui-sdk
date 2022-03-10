@@ -16,9 +16,8 @@ pkgdesc="<%- htmlWebpackPlugin.options.description %>"
 pkgdesclong=(
   "<%- htmlWebpackPlugin.options.description %>"
 )
-maintainer="Zextras <packages@zextras.com>"
+maintainer="Zextras (packages@zextras.com)"
 arch="all"
-#TODO: add the correct one
 license=("spdx:AGPL-3.0-only")
 section="admin"
 priority="optional"
