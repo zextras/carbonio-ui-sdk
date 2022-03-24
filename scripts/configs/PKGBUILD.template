@@ -35,10 +35,10 @@ preinst() {
 
 package() {
   cd "${srcdir}"
-  mkdir -p "/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
-  cp -a  ../dist/* "/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>" || true
-  chown root:root -R "/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
-  chmod 755 -R "/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
+  mkdir -p "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
+  cp -a  ../dist/* "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>" || true
+  chown root:root -R "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
+  chmod 755 -R "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
 }
 
 postinst() {
