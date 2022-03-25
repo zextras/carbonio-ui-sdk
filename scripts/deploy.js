@@ -9,14 +9,12 @@ const { execSync } = require('child_process');
 const chalk = require('chalk');
 const { handler: build, builder: buildOptions } = require('./build');
 const { pkg } = require('./utils/pkg');
-const { buildSetup } = require('./utils/setup');
+const { commitHash } = require('./utils/setup');
 const { printArgs } = require('./utils/console');
 
-const pathPrefix = '/opt/zextras/web/iris/';
-
-const updateJson = (appJson, carbonioJson, stats) => {
+const updateJson = (appJson, carbonioJson, options) => {
 	const components = carbonioJson.components.filter(
-		(component) => component.name !== pkg.carbonio.name
+		(component) => component.name !== options.name
 	);
 	components.push(appJson);
 	return { components };
@@ -38,30 +36,32 @@ exports.builder = Object.assign({
 }, buildOptions);
 
 exports.handler = async (options) => {
+	const pathPrefix = `/opt/zextras/${(options.admin) ? 'admin' : 'web'}/iris/`;
 	printArgs(options, 'Deploy');
 	await build(options);
 	if (options.host) {
 		const target = `${options.user}@${options.host}`;
 		console.log(`- Deploying to ${chalk.bold(target)}...`);
 		execSync(
-			`ssh ${target} "cd ${pathPrefix} && rm -rf ${pkg.carbonio.name}/* && mkdir -p ${pkg.carbonio.name}/${buildSetup.commitHash} ${pkg.carbonio.name}/current"`
+			`ssh ${target} "cd ${pathPrefix} && rm -rf ${options.name}/* && mkdir -p ${options.name}/${commitHash} ${options.name}/current"`
 		);
-		execSync(`scp -r dist/* ${target}:${pathPrefix}${pkg.carbonio.name}/${buildSetup.commitHash}`);
+		execSync(`scp -r dist/* ${target}:${pathPrefix}${options.name}/${commitHash}`);
 		console.log(`- Updating ${chalk.bold('components.json')}...`);
 		const components = JSON.stringify(
 			updateJson(
 				JSON.parse(
 					execSync(
-						`ssh ${target} cat ${pathPrefix}${pkg.carbonio.name}/${buildSetup.commitHash}/component.json`
+						`ssh ${target} cat ${pathPrefix}${options.name}/${commitHash}/component.json`
 					).toString()
 				),
 				JSON.parse(execSync(`ssh ${target} cat ${pathPrefix}components.json`).toString()),
+				options
 			)
 		).replace(/"/g, '\\"');
 		execSync(`ssh ${target} "echo '${components}' > ${pathPrefix}components.json"`);
 		console.log(`- Updating html indexes...`);
 		execSync(
-			`ssh ${target} "cp ${pathPrefix}${pkg.carbonio.name}/${buildSetup.commitHash}/*.html ${pathPrefix}${pkg.carbonio.name}/current/ 2>/dev/null || :"`
+			`ssh ${target} "cp ${pathPrefix}${options.name}/${commitHash}/*.html ${pathPrefix}${options.name}/current/ 2>/dev/null || :"`
 		);
 		console.log(chalk.bgBlue.white.bold('Deploy Completed'));
 	} else {

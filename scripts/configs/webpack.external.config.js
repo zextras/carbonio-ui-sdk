@@ -13,7 +13,7 @@ const fs = require('fs');
 
 exports.setupWebpackExternalBuildConfig = (options, { basePath }) => {
 	const defaultConfig = {
-		mode: options.devMode ? 'development' : 'production',
+		mode: options.dev ? 'development' : 'production',
 		devtool: 'source-map',
 		target: 'web',
 		module: {
@@ -22,7 +22,7 @@ exports.setupWebpackExternalBuildConfig = (options, { basePath }) => {
 					test: /\.[jt]sx?$/,
 					exclude: /node_modules/,
 					loader: require.resolve('babel-loader'),
-					options: createBabelConfig(`babel.config.js`, options, pkg)
+					options: createBabelConfig(`babel.config.js`)
 				},
 				{
 					test: /\.(png|jpg|gif|woff2?|svg|eot|ttf|ogg|mp3)$/,
@@ -51,5 +51,5 @@ exports.setupWebpackExternalBuildConfig = (options, { basePath }) => {
 	}
 
 	const molder = require(confPath);
-	return molder(defaultConfig, pkg, options, options.devMode ? 'development' : 'production');
+	return molder(defaultConfig, pkg, options, options.dev ? 'development' : 'production');
 };
