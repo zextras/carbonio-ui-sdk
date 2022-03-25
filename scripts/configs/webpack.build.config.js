@@ -104,14 +104,12 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 					test: /\.(less|css)$/,
 					use: [
 						{
-							loader: MiniCssExtractPlugin.loader
+							loader: MiniCssExtractPlugin.loader,
+							options: {}
 						},
 						{
 							loader: require.resolve('css-loader'),
 							options: {
-								modules: {
-									localIdentName: '[name]__[local]___[hash:base64:5]'
-								},
 								importLoaders: 1,
 								sourceMap: true
 							}
