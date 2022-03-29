@@ -1,6 +1,6 @@
 {
   "name": "@zextras/carbonio-ui-sdk",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Zextras Carbonio Web SDK",
   "main": "scripts/index.js",
   "bin": {
