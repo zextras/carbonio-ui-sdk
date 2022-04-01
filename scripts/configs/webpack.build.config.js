@@ -129,7 +129,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 					]
 				},
 				{
-					test: /\.(png|jpg|gif|woff2?|eot|ttf|ogg|mp3)$/,
+					test: /\.(png|jpg|gif|woff2?|eot|ttf|ogg|mp3|svg)$/,
 					use: [
 						{
 							loader: require.resolve('file-loader'),
