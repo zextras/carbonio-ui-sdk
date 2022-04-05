@@ -14,12 +14,13 @@ const { setupWebpackBuildConfig } = require('./webpack.build.config');
 exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 	const defaultConfig = setupWebpackBuildConfig(options, { basePath, commitHash}, true)
 	const server = `https://${options.host}/`;
+	const localhost = `localhost:${options.port}`;
 	defaultConfig.mode = 'development';
 	defaultConfig.output.filename = '[name].bundle.js'
 	defaultConfig.output.chunkFilename = '[name].chunk.js'
 	defaultConfig.devServer = {
 		hot: true,
-		port: 9000,
+		port: options.port,
 		historyApiFallback: {
 			index: basePath
 			// TODO: remove once confirmed that it is not needed
@@ -51,7 +52,7 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 				ws: true,
 				cookieDomainRewrite: {
 					'*': server,
-					[server]: 'localhost:9000'
+					[server]: localhost
 				}
 			},
 			{
@@ -61,7 +62,7 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 				logLevel: 'debug',
 				cookieDomainRewrite: {
 					'*': server,
-					[server]: 'localhost:9000'
+					[server]: localhost
 				},
 				selfHandleResponse: false,
 				onProxyRes(proxyRes, req, res) {
