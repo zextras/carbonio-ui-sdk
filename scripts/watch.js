@@ -22,6 +22,11 @@ exports.builder = {
 		demandOption: true,
 		alias: 'h',
 	},
+	port: {
+		desc: 'localhost port to use',
+		alias: 'p',
+		defaultOption: '9000'
+	},
 	standalone: {
 		desc: 'Only load the current module',
 		alias: 's',
