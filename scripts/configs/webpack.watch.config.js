@@ -20,7 +20,7 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 	defaultConfig.output.chunkFilename = '[name].chunk.js'
 	defaultConfig.devServer = {
 		hot: true,
-		port: options.port,
+		port: options.port ?? 9000,
 		historyApiFallback: {
 			index: basePath
 			// TODO: remove once confirmed that it is not needed

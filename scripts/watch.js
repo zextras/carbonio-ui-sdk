@@ -19,24 +19,24 @@ exports.aliases = ['start'];
 exports.builder = {
 	host: {
 		desc: 'Destination hostname',
-		demandOption: true,
+		demand: true,
 		alias: 'h',
 	},
 	port: {
 		desc: 'localhost port to use',
 		alias: 'p',
-		defaultOption: '9000'
+		default: '9000'
 	},
 	standalone: {
 		desc: 'Only load the current module',
 		alias: 's',
-		defaultOption: false,
+		default: false,
 		boolean: true
 	},
 	useLocalDS: {
 		desc: 'Use the local DS module instead of the one provided by the remote shell',
 		alias: 'u',
-		defaultOption: false,
+		default: false,
 		boolean: true
 	}
 };
