@@ -61,7 +61,7 @@ exports.handler = async (options) => {
 		execSync(`ssh ${target} "echo '${components}' > ${pathPrefix}components.json"`);
 		console.log(`- Updating html indexes...`);
 		execSync(
-			`ssh ${target} "cp ${pathPrefix}${options.name}/${commitHash}/*.html ${pathPrefix}${options.name}/current/ 2>/dev/null || :"`
+			`ssh ${target} "cd ${pathPrefix}${options.name}/${commitHash} && cp --parents **/*.html ../current/ 2>/dev/null || :"`
 		);
 		console.log(chalk.bgBlue.white.bold('Deploy Completed'));
 	} else {

@@ -51,11 +51,11 @@ exports.handler = async (options) =>
 	new Promise(async (...p) => {
 		printArgs(options, 'Build');
 		const basePath = `/static/iris/${options.name}/${commitHash}/`;
+		rmSync('dist', {recursive: true, force: true});
 		if (options.external) await runExternalBuild(options, { basePath, commitHash });
 		console.log('Building ', chalk.green(options.name));
 		console.log('Using base path ', chalk.green(basePath));
 		const config = setupWebpackBuildConfig(options, { basePath, commitHash });
 		const compiler = webpack(config);
-		rmSync('dist', {recursive: true, force: true});
 		compiler.run(logBuild(p, options));
 	});
