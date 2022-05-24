@@ -153,6 +153,14 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 							loader: path.resolve(__dirname, '../utils/properties-loader.js')
 						}
 					]
+				},
+				{
+					test: /\.svg$/,
+					use: [
+						options.svgr ? '@svgr/webpack' : {
+							loader: require.resolve('file-loader')
+						}
+					]
 				}
 			]
 		},

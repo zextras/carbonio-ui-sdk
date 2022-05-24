@@ -26,7 +26,12 @@ yargs(hideBin(process.argv))
 		name: {
 			alias: 'n',
 			desc: 'Alternative name to use for the package, overrides the carbonio.name field',
-			default: pkg.carbonio.name
+			default: pkg.carbonio?.name
+		},
+		svgr: {
+			desc: 'use svgr-loader instead of file-loader for svg files',
+			boolean: true,
+			default: pkg.sdk?.svgr ?? false
 		}
 	})
 	.command(require('./build'))

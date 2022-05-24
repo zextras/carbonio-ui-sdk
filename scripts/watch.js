@@ -38,6 +38,11 @@ exports.builder = {
 		alias: 'u',
 		default: false,
 		boolean: true
+	},
+	ws: {
+		desc: 'Enable websocket proxy',
+		default: false,
+		boolean: true
 	}
 };
 
