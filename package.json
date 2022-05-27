@@ -29,6 +29,9 @@
   ],
   "license": "AGPL-3.0-only",
   "homepage": "https://github.com/Zextras/carbonio-ui-sdk#readme",
+  "files": [
+    "scripts"
+  ],
   "dependencies": {
     "@babel/runtime": "^7.16.7",
     "arg": "^5.0.1",
