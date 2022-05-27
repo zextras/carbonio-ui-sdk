@@ -70,7 +70,7 @@ exports.handler = async (options) => {
     );
     console.log(`- Updating html indexes...`);
     execSync(
-      `ssh ${target} "cd ${pathPrefix}${options.name}/${commitHash} && find . -name "*.html" -exec cp --parents "{}" /opt/zextras/web/iris/${options.name}/current/ \;"`
+      `ssh ${target} "cd ${pathPrefix}${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${pathPrefix}${options.name}/current/ \\;"`
     );
     console.log(chalk.bgBlue.white.bold("Deploy Completed"));
   } else {
