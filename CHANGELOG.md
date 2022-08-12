@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.3.1...v1.3.2) (2022-08-12)
+
+
+### Bug Fixes
+
+* set destination folder on postinst script ([3372429](https://github.com/Zextras/carbonio-ui-sdk/commit/3372429050653ad5635a45570467d2a86be377d0))
+
 ### [1.3.1](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.3.0...v1.3.1) (2022-05-27)
 
 
