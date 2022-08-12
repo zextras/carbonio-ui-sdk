@@ -48,7 +48,7 @@ postinst() {
 
   # not every package has a index.html
   cd "/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
-  find . -name "*.html" -exec cp --parents "{}" /opt/zextras/web/iris/${pkgname}/current/ \;
+  find . -name "*.html" -exec cp --parents "{}" /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/current/ \;
 
   # re-generate the component list, for every component
   # depth should be 3 since the path should be iris/NAME/COMMIT/component.json
