@@ -6,7 +6,7 @@
 
 /* eslint-disable no-console */
 const { execSync } = require("child_process");
-const chalk = require("chalk");
+const chalkTemplate = require("chalk");
 const { handler: build, builder: buildOptions } = require("./build");
 const { pkg } = require("./utils/pkg");
 const { commitHash } = require("./utils/setup");
@@ -44,14 +44,14 @@ exports.handler = async (options) => {
   await build(options);
   if (options.host) {
     const target = `${options.user}@${options.host}`;
-    console.log(`- Deploying to ${chalk.bold(target)}...`);
+    console.log(`- Deploying to ${chalkTemplate.bold(target)}...`);
     execSync(
       `ssh ${target} "cd ${pathPrefix} && rm -rf ${options.name}/* && mkdir -p ${options.name}/${commitHash} ${options.name}/current"`
     );
     execSync(
       `scp -r dist/* ${target}:${pathPrefix}${options.name}/${commitHash}`
     );
-    console.log(`- Updating ${chalk.bold("components.json")}...`);
+    console.log(`- Updating ${chalkTemplate.bold("components.json")}...`);
     const components = JSON.stringify(
       updateJson(
         JSON.parse(
@@ -72,10 +72,10 @@ exports.handler = async (options) => {
     execSync(
       `ssh ${target} "cd ${pathPrefix}${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${pathPrefix}${options.name}/current/ \\;"`
     );
-    console.log(chalk.bgBlue.white.bold("Deploy Completed"));
+    console.log(chalkTemplate.bgBlue.white.bold("Deploy Completed"));
   } else {
     console.log(
-      chalk.bgYellow.white("Target host not specified, skipping deploy step")
+      chalkTemplate.bgYellow.white("Target host not specified, skipping deploy step")
     );
   }
 };
