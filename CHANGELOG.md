@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.4.0...v1.5.0) (2023-01-30)
+
+
+### Features
+
+* separate rule for fonts and images and replace use with type ([0e013a6](https://github.com/Zextras/carbonio-ui-sdk/commit/0e013a655694930d20a1506cf97d0e9701b41887))
+
 ## [1.4.0](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.3.2...v1.4.0) (2023-01-23)
 
 
