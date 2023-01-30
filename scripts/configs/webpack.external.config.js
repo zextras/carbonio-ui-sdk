@@ -25,13 +25,12 @@ exports.setupWebpackExternalBuildConfig = (options, { basePath }) => {
 					options: createBabelConfig(`babel.config.js`)
 				},
 				{
-					test: /\.(png|jpg|gif|woff2?|svg|eot|ttf|ogg|mp3)$/,
-					use: [
-						{
-							loader: require.resolve('file-loader'),
-							options: {}
-						}
-					]
+					test: /\.(png|jpg|gif|svg|ogg|mp3)$/,
+					type: 'asset/resource'
+				},
+				{
+					test: /\.(woff(2)?|ttf|eot)$/,
+					type: 'asset/resource'
 				}
 			]
 		},
