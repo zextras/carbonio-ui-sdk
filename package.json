@@ -55,6 +55,7 @@
     "zlib": "^1.0.5"
   },
   "devDependencies": {
+    "moment-timezone-data-webpack-plugin": "^1.5.1",
     "standard-version": "^9.5.0"
   }
 }
