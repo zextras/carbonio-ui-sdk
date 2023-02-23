@@ -35,7 +35,7 @@ exports.builder = Object.assign(
       default: 'root',
     },
     port: {
-      desc: 'Port for ssh access',
+      desc: 'Localhost port to use',
       alias: 'p',
       default: '',
     },
@@ -49,9 +49,9 @@ exports.handler = async (options) => {
   await build(options);
   if (options.host) {
     const cpTarget = `${options.user}@${options.host}`;
-    const sshTarget = `${options.user}@${options.host}${options.port && ' -p'}${
-      options.port
-    }`;
+    const sshTarget = `${options.user}@${options.host}${
+      options.port && ' -p'
+    } ${options.port}`;
     console.log(`- Deploying to ${chalkTemplate.bold(sshTarget)}...`);
     execSync(
       `ssh ${sshTarget} "cd ${pathPrefix} && rm -rf ${options.name}/* && mkdir -p ${options.name}/${commitHash} ${options.name}/current"`
