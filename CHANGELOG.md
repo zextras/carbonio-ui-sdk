@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.5.0...v1.5.1) (2023-03-01)
+
+
+### Bug Fixes
+
+* remove useless file-loader dependency ([f01a872](https://github.com/Zextras/carbonio-ui-sdk/commit/f01a872cf6223f81af057a0d90751d56bd9cd32c))
+
 ## [1.5.0](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.4.0...v1.5.0) (2023-01-30)
 
 
