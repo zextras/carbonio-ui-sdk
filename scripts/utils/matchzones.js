@@ -1,4 +1,4 @@
-export const matchZones = [
+const matchZones = [
     "Africa/Algiers",
     "America/Asuncion",
     "Africa/Cairo",
@@ -137,3 +137,5 @@ export const matchZones = [
     "America/Whitehorse",
     "Africa/Juba"
 ];
+
+module.exports = { matchZones };
