@@ -271,33 +271,6 @@ pipeline {
             }
         }
 
-        // ===================================== Build ==============================================================
-        stage("Build") {
-            agent {
-                node {
-                    label "nodejs-agent-v2"
-                }
-            }
-            when {
-                beforeAgent(true)
-                allOf {
-                    expression { isReleaseBranch == false }
-                    expression { isMergeCommit == false }
-                }
-            }
-            steps {
-                script {
-                    unstash(name: '.npmrc')
-                    script {
-                        nodeCmd(
-                            install: true,
-                            script: 'npm run build'
-                        )
-                    }
-                }
-            }
-        }
-
         // ============================================ Release Automation ==============================================
         stage("Bump Version") {
             agent {
@@ -347,30 +320,6 @@ pipeline {
                         name: 'release_updated_files_packagelockjson'
                     )
 
-                    // at the moment the bot might not have the permissions to create pull requests
-                    // returned response is: { "message": "Not Found" }
-//                     post {
-//                         success {
-//                             withCredentials([
-//                                 usernamePassword(
-//                                     credentialsId: 'tarsier-bot-pr-token-github',
-//                                     passwordVariable: 'ZXBOT_TOKEN',
-//                                     usernameVariable: 'ZXBOT_NAME'
-//                                 )
-//                             ]) {
-//                                 script {
-//                                         catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
-//                                         openGithubPr(
-//                                             TOKEN: ZXBOT_TOKEN,
-//                                             title: "Bumped version ${pkgVersionFull}",
-//                                             head: versionBumperBranch,
-//                                             base: 'devel'
-//                                         )
-//                                     }
-//                                 }
-//                             }
-//                         }
-//                     }
                 }
             }
         }
