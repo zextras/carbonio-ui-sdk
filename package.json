@@ -48,7 +48,7 @@
     "react-hot-loader": "^4.13.0",
     "rimraf": "^3.0.2",
     "semver": "^7.3.8",
-    "webpack": "^5.75.0",
+    "webpack": "^5.76.0",
     "webpack-bundle-analyzer": "^4.7.0",
     "webpack-dev-server": "^4.11.1",
     "yargs": "^17.6.2",
