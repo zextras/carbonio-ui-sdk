@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.3](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.5.2...v1.5.3) (2023-05-22)
+
+
+### Bug Fixes
+
+* fix dependency alert for webpack refs:SDKUI-1 ([#18](https://github.com/Zextras/carbonio-ui-sdk/issues/18)) ([22bee3f](https://github.com/Zextras/carbonio-ui-sdk/commit/22bee3f3690759fd5e1b32a1d5c6af180ffe5920))
+
 ### [1.5.2](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.5.1...v1.5.2) (2023-03-29)
 
 
