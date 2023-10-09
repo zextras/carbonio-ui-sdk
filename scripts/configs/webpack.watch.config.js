@@ -49,7 +49,7 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 				target: server,
 				secure: false,
 				logLevel: 'debug',
-				ws: true,
+				ws: options.ws ?? false,
 				cookieDomainRewrite: {
 					'*': server,
 					[server]: localhost
@@ -60,6 +60,7 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 				target: server,
 				secure: false,
 				logLevel: 'debug',
+				ws: options.ws ?? false,
 				cookieDomainRewrite: {
 					'*': server,
 					[server]: localhost
