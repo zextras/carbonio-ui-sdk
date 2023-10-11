@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.5.4...v1.6.0) (2023-10-11)
+
+
+### Features
+
+* add darkreader as shim dependency of shell refs:SDKUI-5 ([#25](https://github.com/Zextras/carbonio-ui-sdk/issues/25)) ([e4ace4a](https://github.com/Zextras/carbonio-ui-sdk/commit/e4ace4ad87a3e35bdec1a38278304650dc12100f))
+
+
+### Bug Fixes
+
+* fix ws param to be usable refs:SDKUI-2 ([#24](https://github.com/Zextras/carbonio-ui-sdk/issues/24)) ([6770ee3](https://github.com/Zextras/carbonio-ui-sdk/commit/6770ee368161757b740d5d86bb3beced6733ba84))
+
 ### [1.5.4](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.5.3...v1.5.4) (2023-08-30)
 
 ### [1.5.3](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.5.2...v1.5.3) (2023-05-22)
