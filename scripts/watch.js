@@ -41,6 +41,7 @@ exports.builder = {
 	},
 	ws: {
 		desc: 'Enable websocket proxy',
+		alias: 'w',
 		default: false,
 		boolean: true
 	}
