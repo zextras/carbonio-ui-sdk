@@ -5,33 +5,23 @@
 # this could lead to a loading issue if a user is loading the page exactly during the
 # upgrade, but so far there is nothing we can do about it (we would need to coordinate multiple nginx).
 
-targets=(
-  "centos"
-  "ubuntu"
-)
 pkgname="<%- htmlWebpackPlugin.options.name %>"
 pkgver="<%- htmlWebpackPlugin.options.version %>"
 pkgrel="<%- htmlWebpackPlugin.options.pkgRel %>"
 pkgdesc="<%- htmlWebpackPlugin.options.description %>"
-pkgdesclong=(
-  "<%- htmlWebpackPlugin.options.description %>"
-)
 maintainer="Zextras (packages@zextras.com)"
-arch="all"
-license=("spdx:AGPL-3.0-only")
+arch=("x86_64")
+license=("AGPL-3.0-only")
+copyright=(
+  "2022, Zextras <https://www.zextras.com>"
+)
 section="admin"
 priority="optional"
-url="https://www.zextras.com/"
+url="https://github.com/zextras"
 depends=(
   "carbonio-nginx"
   "jq"
 )
-
-build() {
-}
-
-preinst() {
-}
 
 package() {
   cd "${srcdir}"
@@ -54,10 +44,4 @@ postinst() {
   # depth should be 3 since the path should be iris/NAME/COMMIT/component.json
   find /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/ -maxdepth 3 -mindepth 3 -type f -name component.json -print |\
     xargs jq -s '{"components":.}' > /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/components.json
-}
-
-prerm() {
-}
-
-postrm() {
 }

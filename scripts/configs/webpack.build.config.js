@@ -64,7 +64,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 			patterns: [
 				{ from: 'translations', to: 'i18n' },
 				{ from: 'CHANGELOG.md', to: '.', noErrorOnMissing: true },
-				{ from: path.resolve(__dirname, 'pacur.json'), to: '.'}
+				{ from: path.resolve(__dirname, 'yap.json'), to: '.'}
 			]
 		})
 	];
