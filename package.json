@@ -7,7 +7,8 @@
     "sdk": "scripts/index.js"
   },
   "scripts": {
-    "deploy": "npm pack && rm -rf $PKG_PATH/node_modules/@zextras/carbonio-ui-sdk/* && tar -xf zextras-carbonio-ui-sdk-$npm_package_version.tgz -C $PKG_PATH/node_modules/@zextras/carbonio-ui-sdk/ --strip-components 1"
+    "deploy": "npm pack && rm -rf $PKG_PATH/node_modules/@zextras/carbonio-ui-sdk/* && tar -xf zextras-carbonio-ui-sdk-$npm_package_version.tgz -C $PKG_PATH/node_modules/@zextras/carbonio-ui-sdk/ --strip-components 1",
+    "packTo": "npm pack --pack-destination $PKG_PATH && cd $PKG_PATH && npm i zextras-carbonio-ui-sdk-$npm_package_version.tgz"
   },
   "repository": {
     "type": "git",

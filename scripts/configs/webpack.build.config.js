@@ -51,14 +51,15 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 			inject: false,
 			minify: { collapseWhitespace: false },
 			template: path.resolve(__dirname, './PKGBUILD.template'),
-			filename: 'PKGBUILD',
+			filename: 'package/PKGBUILD',
 			name: options.name ?? options.name,
 			description: pkg.description,
 			version: pkg.version,
 			commit: commitHash,
 			installMode: (options.admin) ? 'admin' : 'web',
 			pkgRel: options.pkgRel ?? 0,
-			maintainer: 'Zextras <packages@zextras.com>'
+			maintainer: 'Zextras <packages@zextras.com>',
+			copyright: '2022, Zextras <https://www.zextras.com>'
 		}),
 		new CopyPlugin({
 			patterns: [

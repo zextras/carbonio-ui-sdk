@@ -12,9 +12,7 @@ pkgdesc="<%- htmlWebpackPlugin.options.description %>"
 maintainer="Zextras (packages@zextras.com)"
 arch=("x86_64")
 license=("AGPL-3.0-only")
-copyright=(
-  "2022, Zextras <https://www.zextras.com>"
-)
+copyright=("<%- htmlWebpackPlugin.options.copyright %>")
 section="admin"
 priority="optional"
 url="https://github.com/zextras"
