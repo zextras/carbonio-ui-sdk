@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.6.0...v1.7.0) (2023-12-14)
+
+
+### Features
+
+* move to yap agent and add rhel9 support ([#29](https://github.com/Zextras/carbonio-ui-sdk/issues/29)) ([ebbbdc9](https://github.com/Zextras/carbonio-ui-sdk/commit/ebbbdc93f9efda4854f3eaf16198b3eac555c181))
+
 ## [1.6.0](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.5.4...v1.6.0) (2023-10-11)
 
 
