@@ -15,8 +15,8 @@
     "url": "git+ssh://git@github.com:Zextras/carbonio-ui-sdk.git"
   },
   "engines": {
-    "node": "v16",
-    "npm": "v8"
+    "node": "v18",
+    "npm": "v10"
   },
   "keywords": [
     "Zextras",
@@ -43,17 +43,14 @@
     "less-loader": "^11.1.0",
     "mini-css-extract-plugin": "^2.7.2",
     "node-http-proxy-json": "^0.1.9",
-    "ora": "^6.1.2",
     "path-browserify": "^1.0.1",
     "postcss-loader": "^7.0.2",
     "react-hot-loader": "^4.13.0",
-    "rimraf": "^3.0.2",
     "semver": "^7.5.4",
     "webpack": "^5.76.0",
     "webpack-bundle-analyzer": "^4.7.0",
     "webpack-dev-server": "^4.13.1",
-    "yargs": "^17.6.2",
-    "zlib": "^1.0.5"
+    "yargs": "^17.6.2"
   },
   "devDependencies": {
     "standard-version": "^9.5.0"
