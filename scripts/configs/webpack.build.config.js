@@ -9,7 +9,7 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const fs = require('fs');
+const { existsSync } = require('node:fs');
 const semver = require('semver');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
@@ -204,7 +204,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 	}
 	const confPath = path.resolve(process.cwd(), 'carbonio.webpack.js');
 
-	if (!fs.existsSync(confPath) || skipCustomization) {
+	if (!existsSync(confPath) || skipCustomization) {
 		return defaultConfig;
 	}
 
