@@ -6,7 +6,7 @@
 
 /* eslint-disable import/extensions */
 const path = require('path');
-const fs = require('fs');
+const { existsSync } = require('node:fs');
 const modifyResponse = require('node-http-proxy-json');
 const chalk = require('chalk');
 const { pkg } = require('../utils/pkg.js');
@@ -106,7 +106,7 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 	}
 
 	const confPath = path.resolve(process.cwd(), 'carbonio.webpack.js');
-	if (!fs.existsSync(confPath)) {
+	if (!existsSync(confPath)) {
 		return defaultConfig;
 	}
 

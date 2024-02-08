@@ -8,11 +8,10 @@
 const chalk = require('chalk');
 const webpack = require('webpack');
 const { commitHash } = require('./utils/setup');
-const { pkg } = require('./utils/pkg');
 const { setupWebpackBuildConfig } = require('./configs/webpack.build.config');
 const { setupWebpackExternalBuildConfig } = require('./configs/webpack.external.config');
 const {logBuild, printArgs} = require('./utils/console');
-const { rmSync } = require('fs');
+const { rmSync } = require('node:fs');
 
 exports.command = 'build';
 exports.desc = 'Compile and bundle your project';

@@ -9,7 +9,7 @@ const webpack = require('webpack');
 const { pkg } = require('../utils/pkg.js');
 const path = require('path');
 const { createBabelConfig } = require('./babelrc.build.js');
-const fs = require('fs');
+const { existsSync } = require('node:fs');
 
 exports.setupWebpackExternalBuildConfig = (options, { basePath }) => {
 	const defaultConfig = {
@@ -45,7 +45,7 @@ exports.setupWebpackExternalBuildConfig = (options, { basePath }) => {
 
 	const confPath = path.resolve(process.cwd(), 'external.webpack.js');
 
-	if (!fs.existsSync(confPath)) {
+	if (!existsSync(confPath)) {
 		return defaultConfig;
 	}
 
