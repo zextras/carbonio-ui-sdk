@@ -5,12 +5,11 @@
  */
 
 /* eslint-disable no-console */
-const { execSync } = require('child_process');
 const chalkTemplate = require('chalk');
 const { handler: build, builder: buildOptions } = require('./build');
-const { pkg } = require('./utils/pkg');
 const { commitHash } = require('./utils/setup');
 const { printArgs } = require('./utils/console');
+const { execSync } = require('node:child_process');
 
 const updateJson = (appJson, carbonioJson, options) => {
   const components = carbonioJson.components.filter(
@@ -54,25 +53,25 @@ exports.handler = async (options) => {
     } ${options.port}`;
     console.log(`- Deploying to ${chalkTemplate.bold(sshTarget)}...`);
     execSync(
-      `ssh ${sshTarget} "cd ${pathPrefix} && rm -rf ${options.name}/* && mkdir -p ${options.name}/${commitHash} ${options.name}/current"`
+        `ssh ${sshTarget} "cd ${pathPrefix} && rm -rf ${options.name}/* && mkdir -p ${options.name}/${commitHash} ${options.name}/current"`
     );
     execSync(
-      `scp -r ${options.port && '-P'} ${
-        options.port
-      } dist/* ${cpTarget}:${pathPrefix}${options.name}/${commitHash}`
+        `scp -r ${options.port && '-P'} ${
+            options.port
+        } dist/* ${cpTarget}:${pathPrefix}${options.name}/${commitHash}`
     );
     console.log(`- Updating ${chalkTemplate.bold('components.json')}...`);
     const components = JSON.stringify(
       updateJson(
         JSON.parse(
-          execSync(
-            `ssh ${sshTarget} cat ${pathPrefix}${options.name}/${commitHash}/component.json`
-          ).toString()
+            execSync(
+                `ssh ${sshTarget} cat ${pathPrefix}${options.name}/${commitHash}/component.json`
+            ).toString()
         ),
         JSON.parse(
-          execSync(
-            `ssh ${sshTarget} cat ${pathPrefix}components.json`
-          ).toString()
+            execSync(
+                `ssh ${sshTarget} cat ${pathPrefix}components.json`
+            ).toString()
         ),
         options
       )

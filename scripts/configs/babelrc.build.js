@@ -5,7 +5,7 @@
  */
 
 const path = require('path');
-const fs = require('fs');
+const fs = require('node:fs');
 
 exports.createBabelConfig = (fileName) => {
 	const confPath = path.resolve(process.cwd(), fileName);

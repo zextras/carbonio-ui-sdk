@@ -5,6 +5,6 @@
  */
 
 /* eslint-disable import/extensions */
-const { execSync } = require('child_process');
+const { execSync } = require('node:child_process');
 
 exports.commitHash = execSync('git rev-parse HEAD').toString().trim();

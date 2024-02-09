@@ -9,7 +9,6 @@ const chalk = require('chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const { commitHash } = require('./utils/setup');
-const { pkg } = require('./utils/pkg');
 const { setupWebpackWatchConfig } = require('./configs/webpack.watch.config');
 const { printArgs } = require('./utils/console');
 
