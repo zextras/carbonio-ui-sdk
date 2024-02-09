@@ -206,7 +206,7 @@ String[] pkgVersionParts
 pipeline {
     agent {
         node {
-            label "nodejs-agent-v2"
+            label "nodejs-agent-v4"
         }
     }
     options {
@@ -275,7 +275,7 @@ pipeline {
         stage("Bump Version") {
             agent {
                 node {
-                    label "nodejs-agent-v2"
+                    label "nodejs-agent-v4"
                 }
             }
             when {
@@ -327,7 +327,7 @@ pipeline {
         stage("Release in NPM") {
             agent {
                 node {
-                    label "nodejs-agent-v2"
+                    label "nodejs-agent-v4"
                 }
             }
             when {
