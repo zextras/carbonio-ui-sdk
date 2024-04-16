@@ -18,8 +18,8 @@ priority="optional"
 url="https://github.com/zextras"
 depends=(
   "carbonio-nginx"
-  "jq"
   "carbonio-webui-i18n"
+  "jq"
 )
 
 package() {
