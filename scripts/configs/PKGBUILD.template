@@ -30,7 +30,7 @@ package() {
   chmod 644 -R "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
   find "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>" -type d -exec chmod a+x "{}" \;
   rm -rf "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>/i18n"
-  ln -sf /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/i18n "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/${pkgname}/<%- htmlWebpackPlugin.options.commit %>/i18n"
+  ln -sf /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/i18n "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>/i18n"
 }
 
 postinst() {

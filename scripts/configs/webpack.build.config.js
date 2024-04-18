@@ -63,7 +63,6 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 		}),
 		new CopyPlugin({
 			patterns: [
-				{ from: 'translations', to: 'i18n' },
 				{ from: 'CHANGELOG.md', to: '.', noErrorOnMissing: true },
 				{ from: path.resolve(__dirname, 'yap.json'), to: '.'}
 			]
