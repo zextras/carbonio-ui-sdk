@@ -18,6 +18,7 @@ priority="optional"
 url="https://github.com/zextras"
 depends=(
   "carbonio-nginx"
+  "carbonio-webui-i18n"
   "jq"
 )
 
@@ -28,6 +29,7 @@ package() {
   chown root:root -R "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
   chmod 644 -R "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
   find "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>" -type d -exec chmod a+x "{}" \;
+  ln -sf /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/i18n "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>/i18n"
 }
 
 postinst() {
