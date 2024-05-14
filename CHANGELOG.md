@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.3](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.7.2...v1.7.3) (2024-05-14)
+
+
+### Bug Fixes
+
+* fix broken symlink when using deploy script refs:SDKUI-10 ([#40](https://github.com/Zextras/carbonio-ui-sdk/issues/40)) ([f8dbca5](https://github.com/Zextras/carbonio-ui-sdk/commit/f8dbca53c94362e498b0329f2e4785b7c2d2da2f))
+
 ### [1.7.2](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.7.1...v1.7.2) (2024-05-10)
 
 ### [1.7.1](https://github.com/Zextras/carbonio-ui-sdk/compare/v1.7.0...v1.7.1) (2024-02-09)
