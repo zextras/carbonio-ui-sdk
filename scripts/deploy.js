@@ -52,9 +52,12 @@ exports.handler = async (options) => {
       options.port && ' -p'
     } ${options.port}`;
     console.log(`- Deploying to ${chalkTemplate.bold(sshTarget)}...`);
-    execSync(
-        `ssh ${sshTarget} "cd ${pathPrefix} && rm -rf ${options.name}/* && mkdir -p ${options.name}/${commitHash} ${options.name}/current"`
-    );
+    execSync(`ssh ${sshTarget} '
+        find ${pathPrefix}${options.name} -mindepth 1 -name i18n -prune -o -exec rm -rf {} + &&
+        cd ${pathPrefix} && mkdir -p ${options.name}/${commitHash} ${options.name}/current &&
+        ln -sf ${pathPrefix}${options.name}/i18n "${pathPrefix}${options.name}/${commitHash}/i18n"
+    '`);
+
     execSync(
         `scp -r ${options.port && '-P'} ${
             options.port
