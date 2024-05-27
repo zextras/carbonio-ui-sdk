@@ -187,7 +187,6 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 		'react-redux': `__ZAPP_SHARED_LIBRARIES__['react-redux']`,
 		lodash: `__ZAPP_SHARED_LIBRARIES__['lodash']`,
 		'react-router-dom': `__ZAPP_SHARED_LIBRARIES__['react-router-dom']`,
-		moment: `__ZAPP_SHARED_LIBRARIES__['moment']`,
 		'styled-components': `__ZAPP_SHARED_LIBRARIES__['styled-components']`,
 		'@reduxjs/toolkit': `__ZAPP_SHARED_LIBRARIES__['@reduxjs/toolkit']`,
 		'@zextras/carbonio-ui-preview': `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-ui-preview']`,
