@@ -75,21 +75,6 @@ pipeline {
                    isPullRequest = "${BRANCH_NAME}" ==~ /PR-\d+/
                    echo "isPullRequest: ${isPullRequest}"
                 }
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: "npm-zextras-bot-auth-token",
-                        usernameVariable: "NPM_USERNAME",
-                        passwordVariable: "NPM_PASSWORD"
-                    )
-                ]) {
-                    script {
-                        npmLogin(NPM_PASSWORD)
-                    }
-                }
-                stash(
-                    includes: ".npmrc",
-                    name: ".npmrc"
-                )
             }
         }
 
