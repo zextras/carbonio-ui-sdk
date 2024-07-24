@@ -15,6 +15,7 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 	const defaultConfig = setupWebpackBuildConfig(options, { basePath, commitHash}, true)
 	const server = `https://${options.host}/`;
 	const localhost = `localhost:${options.port}`;
+	let serverZappCommitHash;
 	defaultConfig.mode = 'development';
 	defaultConfig.output.filename = '[name].bundle.js'
 	defaultConfig.output.chunkFilename = '[name].chunk.js'
@@ -23,8 +24,6 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 		port: options.port ?? 9000,
 		historyApiFallback: {
 			index: basePath
-			// TODO: remove once confirmed that it is not needed
-			// rewrites: { from: '/static/iris/carbonio-shell-ui/current', to: `${basePath}/index.html` }
 		},
 		server: 'https',
 		onBeforeSetupMiddleware(devServer) {
@@ -42,10 +41,10 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 				});
 			});
 		},
-		open: [`/${pkg.carbonio.type}/`],
+		open: [`https://localhost:${options.port ?? 9000}/${pkg.carbonio.type}/`],
 		proxy: [
 			{
-				context: [`!${basePath}/**/*`, '!/static/iris/components.json'],
+				context: [`!${basePath}/**/*`, '!/static/iris/components.json', `!/static/iris/${options.name}/${commitHash}/i18n/*.json`],
 				target: server,
 				secure: false,
 				logLevel: 'debug',
@@ -73,11 +72,13 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 							let found = false;
 							const components = body.components.reduce((acc, module) => {
 								if (module.name === options.name) {
+									serverZappCommitHash = module.commit;
 									found = true;
 									return [...acc, {...module, js_entrypoint: `${basePath}app.bundle.js`}];
 								}
-								if (options.standalone)
+								if (options.standalone) {
 									return acc;
+								}
 								return [...acc, module];
 							}, []);
 							if (!found) {
@@ -101,7 +102,21 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 						return body;
 					});
 				}
-			}
+			},
+			{
+				context: [`/static/iris/${options.name}/${commitHash}/i18n/*.json`],
+				target: server,
+				secure: false,
+				logLevel: 'debug',
+				ws: options.ws ?? false,
+				cookieDomainRewrite: {
+					'*': server,
+					[server]: localhost
+				},
+				pathRewrite: (path) => {
+					return path.replace(commitHash, serverZappCommitHash);
+				}
+			},
 		]
 	}
 
