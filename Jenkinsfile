@@ -5,177 +5,21 @@
  */
 
 // git utils
-int getCommitParentsCount() {
-    return Integer.parseInt(
-        sh(
-            script: """#!/usr/bin/env bash
-                git cat-file -p HEAD | grep -w "parent" | wc -l
-            """,
-            returnStdout: true
-        ).trim()
-    )
+String getRepositoryName() {
+    return sh(script: '''#!/bin/bash
+        git remote -v | head -n1 | cut -d$'\t' -f2 | cut -d' ' -f1 | sed -e 's!https://github.com/!!g' -e 's!git@github.com:!!g' -e 's!.git!!g'
+    ''', returnStdout: true).trim()
 }
 
-boolean gitIsMergeCommit() {
-    return 2 <= getCommitParentsCount()
-}
-
-void gitFixConfigAndRemote() {
-    sh(
-        script: """#!/usr/bin/env bash
-            git config user.email "bot@zextras.com"
-            git config user.name "Tarsier Bot"
-        """
-    )
-    String repoOriginUrl = sh(
-        script: """#!/usr/bin/env bash
-            git remote -v | head -n1 | cut -d\$'\t' -f2 | cut -d\" \" -f1
-        """,
-        returnStdout: true
-    ).trim()
-    String newOriginUrl = repoOriginUrl.replaceFirst("https://github.com/Zextras", "git@github.com:Zextras")
-    sh(
-        script: """#!/usr/bin/env bash
-            git remote set-url origin ${newOriginUrl}
-        """
-    )
-}
-
-void gitUnshallow() {
-    sh(
-      script: """#!/usr/bin/env bash
-        git fetch --unshallow
-      """
-    )
-}
-
-void gitSetup() {
-    gitFixConfigAndRemote()
-    gitUnshallow()
-}
-
-String getCommitVersion() {
-    return sh(
-        script: """#!/usr/bin/env bash
-            git log -1 | grep \'version:\' | sed -n \'s/.*version:\\s*//p\'
-        """,
-        returnStdout: true
-    ).trim()
-}
-
-String getCommitId() {
-    return sh(
-        script: """#!/usr/bin/env bash
-            git rev-parse HEAD
-        """,
-        returnStdout: true
-    ).trim()
-}
-
-void gitPush(Map opts = [:]) {
-    def gitOptions = [' ']
-    if (opts.followTags == true) {
-        gitOptions << '--follow-tags'
-    }
-    if (gitOptions.size() > 1) {
-        gitOptions << ' '
-    }
-
-    sh(
-        script: """#!/usr/bin/env bash
-            git push${gitOptions.join(' ')}origin HEAD:${opts.branch}
-        """
-    )
-}
-
-String getOriginUrl() {
-    return sh(
-      script: """#!/usr/bin/env bash
-        git remote -v | head -n1 | cut -d\$'\t' -f2 | cut -d\" \" -f1
-      """,
-      returnStdout: true
-    ).trim()
-}
-
-void openGithubPr(Map args = [:]) {
-    def ownerAndRepo = getOriginUrl().replaceAll("git@github.com:", "").replaceAll(".git", "")
-    echo "Opening PR with https://api.github.com/repos/${ownerAndRepo}/pulls"
-    sh(
-        script: """#!/usr/bin/env bash
-            curl --location https://api.github.com/repos/${ownerAndRepo}/pulls \
-            -X POST \
-            -H 'Accept: application/vnd.github+json' \
-            -H 'Authorization: Bearer ${args.TOKEN}' \
-            -d '{
-                \"title\": \"${args.title}\",
-                \"head\": \"${args.head}\",
-                \"base\": \"${args.base}\",
-                \"maintainer_can_modify\": true
-            }'
-        """
-    )
-}
-
-// Package utils
-String getPackageName() {
-    return sh(
-        script: """#!/usr/bin/env bash
-            cat package.json \
-            | jq --raw-output '.name'
-            """,
-        returnStdout: true
-    ).trim()
-}
-
-String getPackageDescription() {
-    return sh(
-        script: """#!/usr/bin/env bash
-            cat package.json \
-            | jq --raw-output '.description'
-            """,
-        returnStdout: true
-    ).trim()
-}
-
-String getPackageVersion() {
-    return sh(
-        script: """#!/usr/bin/env bash
-            cat package.json \
-            | jq --raw-output '.version'
-            """,
-        returnStdout: true
-    ).trim()
+String getLastTag() {
+    return sh(script: '''#!/bin/bash
+        git describe --tags --abbrev=0
+    ''', returnStdout: true).trim()
 }
 
 // node utils
-void nodeCmd(Map args = [:]) {
-    final boolean install = (args.install != null) ? args.install : false
-    def varEnv = []
-    ((args.varEnv != null) ? args.varEnv : []).each { k, v -> varEnv.push("$k=$v") }
-    String version
-    if (fileExists('.nvmrc')) {
-        version = ''
-    } else {
-        version = (args.version != null) ? "${args.version} " : '16'
-    }
-    sh(
-        script: """#!/usr/bin/env bash
-            ${varEnv.join(' ')} source load_nvm && nvm install ${version} && nvm use ${version} \
-            ${install ? '&& npm ci ' : ''} \
-            ${args.script != null ? "&& ${args.script} " : ''} \
-        """
-    )
-}
-
-void npxCmd(Map args = [:]) {
-    nodeCmd(
-        version: args.nodeVersion,
-        install: args.install,
-        script: """
-            npx ${args.script}
-            """,
-        varEnv: args.varEnv
-    )
+def nodeCmd(String cmd) {
+    sh '. load_nvm && nvm install && nvm use && npm ci && ' + cmd
 }
 
 void npmLogin(String npmAuthToken) {
@@ -193,15 +37,7 @@ void npmLogin(String npmAuthToken) {
 
 // FLAGS
 Boolean isReleaseBranch
-Boolean isDevelBranch
 Boolean isPullRequest
-Boolean isMergeCommit
-Boolean isBumpBuild
-// PROJECT DETAILS
-String pkgName
-String pkgVersion
-String pkgVersionFull
-String[] pkgVersionParts
 
 pipeline {
     agent {
@@ -234,128 +70,59 @@ pipeline {
         stage("Read settings") {
             steps {
                 script {
-                   isReleaseBranch = "${BRANCH_NAME}" ==~ /(release|master)/
+                   isReleaseBranch = "${BRANCH_NAME}" ==~ /release/
                    echo "isReleaseBranch: ${isReleaseBranch}"
-                   isDevelBranch = "${BRANCH_NAME}" ==~ /devel/
-                   echo "isDevelBranch: ${isDevelBranch}"
                    isPullRequest = "${BRANCH_NAME}" ==~ /PR-\d+/
                    echo "isPullRequest: ${isPullRequest}"
-                   isMergeCommit = gitIsMergeCommit()
-                   echo "isMergeCommit: ${isMergeCommit}"
-                   isBumpBuild = isReleaseBranch && isMergeCommit
-                   echo "isBumpBuild: ${isBumpBuild}"
-                   isDevBuild = !isReleaseBranch
-                   echo "isDevBuild: ${isDevBuild}"
-                   pkgName = getPackageName()
-                   echo "pkgName: ${pkgName}"
-                   pkgDescription = getPackageDescription()
-                   echo "pkgDescription: ${pkgDescription}"
-                   pkgFullVersion = getPackageVersion()
-                   echo "pkgFullVersion: ${pkgFullVersion}"
                 }
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: "npm-zextras-bot-auth-token",
-                        usernameVariable: "NPM_USERNAME",
-                        passwordVariable: "NPM_PASSWORD"
-                    )
-                ]) {
-                    script {
-                        npmLogin(NPM_PASSWORD)
-                    }
-                }
-                stash(
-                    includes: ".npmrc",
-                    name: ".npmrc"
-                )
             }
         }
 
         // ============================================ Release Automation ==============================================
-        stage("Bump Version") {
-            agent {
-                node {
-                    label "nodejs-agent-v4"
+        stage("Release") {
+            when {
+                beforeAgent true
+                allOf {
+                    expression { isPullRequest == false }
                 }
             }
-            when {
-                beforeAgent(true)
-                expression { isBumpBuild == true }
-            }
             steps {
-                gitSetup()
                 script {
-                    def commitVersion = getCommitVersion();
-                    if (commitVersion) {
-                        echo "Force bump to version ${commitVersion}"
-                        npxCmd(
-                            script: "standard-version --no-verify --release-as ${commitVersion}"
-                        )
-                    } else {
-                        npxCmd(
-                            script: "standard-version --no-verify"
-                        )
+                    withCredentials([usernamePassword(credentialsId: 'npm-zextras-bot-auth-token', usernameVariable: 'AUTH_USERNAME', passwordVariable: 'NPM_TOKEN')]) {
+                        withCredentials([usernamePassword(credentialsId: 'tarsier-bot-pr-token-github', usernameVariable: 'GH_USERNAME', passwordVariable: 'GH_TOKEN')]) {
+                            nodeCmd("npx semantic-release")
+                        }
                     }
-                    pkgVersionFull = getPackageVersion()
-                    echo("Package version: ${pkgVersionFull}")
-                    gitPush(
-                        branch: "${BRANCH_NAME}",
-                        followTags: true
-                    )
-                    def versionBumperBranch = "version-bumper/v${pkgVersionFull}"
-                    gitPush(
-                        branch: "refs/heads/${versionBumperBranch}"
-                    )
-
-                    stash(
-                        includes: 'CHANGELOG.md',
-                        name: 'release_updated_files_changelogmd'
-                    )
-                    stash(
-                        includes: 'package.json',
-                        name: 'release_updated_files_packagejson'
-                    )
-                    stash(
-                        includes: 'package-lock.json',
-                        name: 'release_updated_files_packagelockjson'
-                    )
-
                 }
             }
         }
 
-        stage("Release in NPM") {
-            agent {
-                node {
-                    label "nodejs-agent-v4"
-                }
-            }
+        stage('Open release to devel pull request') {
             when {
-                beforeAgent(true)
+                beforeAgent true
                 allOf {
                     expression { isReleaseBranch == true }
-                    expression { isBumpBuild == false }
                 }
             }
             steps {
                 script {
-                    def commitId = getCommitId()
-                    checkout(scm: [
-                        $class: "GitSCM",
-                        branches: [[
-                            name: commitId
-                        ]],
-                        userRemoteConfigs: scm.userRemoteConfigs
-                    ])
-                    unstash(name: ".npmrc")
-                    catchError(buildResult: "UNSTABLE", stageResult: "FAILURE") {
-                        nodeCmd(
-                            install: true,
-                            script: "npm publish",
-                            varEnv: [
-                                NODE_ENV: 'production'
-                            ]
-                        )
+                    String versionBumperBranchName = "version-bumper/${getLastTag()}"
+                    sh(script: """#!/bin/bash
+                        git push origin HEAD:refs/heads/${versionBumperBranchName}
+                    """)
+                    withCredentials([usernamePassword(credentialsId: 'tarsier-bot-pr-token-github', usernameVariable: 'GH_USERNAME', passwordVariable: 'GH_TOKEN')]) {
+                        sh(script: """
+                            curl https://api.github.com/repos/${getRepositoryName()}/pulls \
+                            -X POST \
+                            -H 'Accept: application/vnd.github.v3+json' \
+                            -H 'Authorization: token ${GH_TOKEN}' \
+                            -d '{
+                                \"title\": \"chore(release): ${getLastTag()}\",
+                                \"head\": \"${versionBumperBranchName}\",
+                                \"base\": \"devel\",
+                                \"maintainer_can_modify\": true
+                            }'
+                        """)
                     }
                 }
             }
