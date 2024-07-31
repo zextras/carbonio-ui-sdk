@@ -193,11 +193,13 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 		/* Exports for App's Handlers */
 		msw: `__ZAPP_SHARED_LIBRARIES__['msw']`
 	};
+
 	if (!options.useLocalDS) {
 		defaultConfig.externals[
 			'@zextras/carbonio-design-system'
 		] = `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-design-system']`;
 	}
+
 	const confPath = path.resolve(process.cwd(), 'carbonio.webpack.js');
 
 	if (!existsSync(confPath) || skipCustomization) {
