@@ -11,6 +11,17 @@ String getRepositoryName() {
     ''', returnStdout: true).trim()
 }
 
+Boolean tagExistsAtHead() {
+    try {
+        sh(script: '''#!/bin/bash
+            git describe --tags --exact-match
+        ''', returnStdout: true)
+        return true
+    } catch (err) {
+        return false
+    }
+}
+
 String getLastTag() {
     return sh(script: '''#!/bin/bash
         git describe --tags --abbrev=0
@@ -102,6 +113,7 @@ pipeline {
                 beforeAgent true
                 allOf {
                     expression { isReleaseBranch == true }
+                    expression { tagExistsAtHead() == true }
                 }
             }
             steps {
