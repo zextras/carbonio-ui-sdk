@@ -46,6 +46,7 @@ const runExternalBuild = (options, buildSetup) => new Promise((...p) => {
 		const compilerExternal = webpack(externalConfig);
 		compilerExternal.run(logBuild(p, options));
 });
+
 exports.handler = async (options) =>
 	new Promise(async (...p) => {
 		printArgs(options, 'Build');
