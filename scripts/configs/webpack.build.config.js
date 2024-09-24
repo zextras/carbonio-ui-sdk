@@ -14,7 +14,6 @@ const semver = require('semver');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { createBabelConfig } = require('./babelrc.build.js');
 const { pkg } = require('../utils/pkg.js');
 
 exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustomization = false) => {
@@ -98,7 +97,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 					test: /\.[jt]sx?$/,
 					exclude: /node_modules/,
 					loader: require.resolve('babel-loader'),
-					options: createBabelConfig(`babel.config.js`)
+					options: {}
 				},
 				{
 					test: /\.(less|css)$/,

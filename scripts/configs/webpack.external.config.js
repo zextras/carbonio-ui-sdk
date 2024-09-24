@@ -8,7 +8,6 @@ const webpack = require('webpack');
 
 const { pkg } = require('../utils/pkg.js');
 const path = require('path');
-const { createBabelConfig } = require('./babelrc.build.js');
 const { existsSync } = require('node:fs');
 
 exports.setupWebpackExternalBuildConfig = (options, { basePath }) => {
@@ -22,7 +21,7 @@ exports.setupWebpackExternalBuildConfig = (options, { basePath }) => {
 					test: /\.[jt]sx?$/,
 					exclude: /node_modules/,
 					loader: require.resolve('babel-loader'),
-					options: createBabelConfig(`babel.config.js`)
+					options: {}
 				},
 				{
 					test: /\.(png|jpg|gif|svg|ogg|mp3)$/,
