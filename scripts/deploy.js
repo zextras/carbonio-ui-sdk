@@ -6,7 +6,6 @@
 
 /* eslint-disable no-console */
 const chalkTemplate = require('chalk');
-const { builder: buildOptions } = require('./build');
 const { commitHash } = require('./utils/setup');
 const { printArgs } = require('./utils/console');
 const { execSync } = require('node:child_process');
@@ -40,8 +39,7 @@ exports.builder = Object.assign(
       alias: 'p',
       default: '',
     },
-  },
-  buildOptions
+  }
 );
 
 exports.handler = async (options) => {

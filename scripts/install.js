@@ -10,8 +10,28 @@ const chalkTemplate = require('chalk');
 
 exports.command = 'install';
 exports.desc = 'Build and deploy the project to a Carbonio instance';
-exports.builder = Object.assign(
-  {
+exports.builder = Object.assign({
+    analyze: {
+      desc: 'Apply the BundleAnalyzerPlugin and launch its web ui after the compilation',
+      default: false,
+      boolean: true
+    },
+    dev: {
+      desc: 'Build in devMode',
+      alias: 'd',
+      default: false,
+      boolean: true
+    },
+    external: {
+      desc: 'Run an additional build for external resources',
+      alias: 'e',
+      default: false,
+      boolean: true
+    },
+    pkgRel: {
+      desc: 'pkgRel value to pass to the PKGBUILD template',
+      default: '1',
+    },
     host: {
       desc: 'Destination hostname',
       demandOption: true,
@@ -27,11 +47,10 @@ exports.builder = Object.assign(
       alias: 'p',
       default: '',
     },
-  }
-);
+});
 
 exports.handler = async (options) => {
-  await build(options);
-  await deploy(options);
-  console.log(chalkTemplate.bgBlue.white.bold('Install Completed'));
+    await build(options);
+    await deploy(options);
+    console.log(chalkTemplate.bgBlue.white.bold('Install Completed'));
 };
