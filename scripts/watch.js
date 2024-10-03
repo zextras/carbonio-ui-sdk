@@ -18,7 +18,7 @@ exports.aliases = ['start'];
 exports.builder = {
 	host: {
 		desc: 'Destination hostname',
-		demand: true,
+		demandOption: true,
 		alias: 'h',
 	},
 	port: {

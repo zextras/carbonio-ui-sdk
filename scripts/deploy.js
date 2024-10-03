@@ -6,10 +6,11 @@
 
 /* eslint-disable no-console */
 const chalkTemplate = require('chalk');
-const { handler: build, builder: buildOptions } = require('./build');
 const { commitHash } = require('./utils/setup');
 const { printArgs } = require('./utils/console');
 const { execSync } = require('node:child_process');
+const path = require('path');
+const { existsSync } = require('node:fs');
 
 const updateJson = (appJson, carbonioJson, options) => {
   const components = carbonioJson.components.filter(
@@ -20,7 +21,7 @@ const updateJson = (appJson, carbonioJson, options) => {
 };
 
 exports.command = 'deploy';
-exports.desc = 'Build and inject the project to a Carbonio instance';
+exports.desc = 'Deploy the project to a Carbonio instance';
 exports.builder = Object.assign(
   {
     host: {
@@ -38,14 +39,21 @@ exports.builder = Object.assign(
       alias: 'p',
       default: '',
     },
-  },
-  buildOptions
+  }
 );
 
 exports.handler = async (options) => {
   const pathPrefix = `/opt/zextras/${options.admin ? 'admin' : 'web'}/iris/`;
   printArgs(options, 'Deploy');
-  await build(options);
+  const distPath = path.resolve(process.cwd(), 'dist');
+  if (!existsSync(distPath)) {
+      console.log(
+          chalkTemplate.red(
+              'Missing dist folder, skipping deploy step. Run build step before'
+          )
+      );
+      return;
+  }
   if (options.host) {
     const cpTarget = `${options.user}@${options.host}`;
     const sshTarget = `${options.user}@${options.host}${
