@@ -84,6 +84,10 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 		);
 	}
 
+	// Declare possible app entry points
+	const jsxPath = path.resolve(process.cwd(), 'src/app.jsx');
+	const tsxPath = path.resolve(process.cwd(), 'src/app.tsx');
+
 	const defaultConfig = {
 		entry: {
 			app: path.resolve(__dirname, '../utils/entry.js')
@@ -165,7 +169,7 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 		resolve: {
 			extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
 			alias: {
-				"app-entrypoint": path.resolve(process.cwd(), 'src/app.jsx')
+				"app-entrypoint": existsSync(tsxPath) ? tsxPath : jsxPath
 			},
 			fallback: { path: require.resolve('path-browserify') }
 		},
