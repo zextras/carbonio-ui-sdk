@@ -26,20 +26,25 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 			index: basePath
 		},
 		server: 'https',
-		onBeforeSetupMiddleware(devServer) {
-			devServer.app.get('/_cli', (req, res) => {
-				res.json({
-					isWatch: true,
-					isStandalone: !!options.standalone,
-					server: server,
-					app_package: {
-						package: options.name,
-						name: options.name,
-						version: pkg.version,
-						description: pkg.description
-					}
-				});
+		setupMiddlewares: (middlewares, devServer) => {
+			middlewares.unshift({
+				path: '/_cli',
+				middleware: (req, res) => {
+					res.json({
+						isWatch: true,
+						isStandalone: !!options.standalone,
+						server: server,
+						app_package: {
+							package: options.name,
+							name: options.name,
+							version: pkg.version,
+							description: pkg.description
+						}
+					});
+				},
 			});
+
+			return middlewares;
 		},
 		open: [`https://localhost:${options.port ?? 9000}/${pkg.carbonio.type}/`],
 		proxy: [
