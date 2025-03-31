@@ -22,8 +22,7 @@ export default {
 				"releaseRules": [
 					// enable release also for refactor and build commits
 					{ type: 'refactor', release: 'patch' },
-					{ type: 'build', release: 'patch' },
-					{ type: 'chore', release: 'patch' }
+					{ type: 'build', release: 'patch' }
 				],
 			}
 		],
