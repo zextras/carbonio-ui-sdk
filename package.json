@@ -31,7 +31,7 @@
   ],
   "dependencies": {
     "babel-loader": "^9.2.1",
-    "chalk": "^4.1.2",
+    "chalk": "^5.4.1",
     "circular-dependency-plugin": "^5.2.2",
     "copy-webpack-plugin": "^13.0.0",
     "css-loader": "^6.9.1",
