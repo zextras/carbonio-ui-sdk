@@ -139,8 +139,10 @@ exports.handler = async (options) => {
     );
 
     execSync(`
-        find ${options.dir}/${options.name} -mindepth 1 -o -exec rm -rf {} + &&
-        cd ${options.dir} && mkdir -p ${options.name}/${commitHash} ${options.name}/current
+        find ${options.dir}/${options.name} -mindepth 1 -name i18n -prune -o -exec rm -rf {} + &&
+        cd ${options.dir} && mkdir -p ${options.name}/${commitHash} ${options.name}/current &&
+        cd ${options.dir}/${options.name}/${commitHash} &&
+        ln -sf "../i18n" "i18n"
     `);
     execSync(`cp -r dist/* ${options.dir}/${options.name}/${commitHash}`);
 
@@ -172,8 +174,9 @@ exports.handler = async (options) => {
       `- Deploying to container ${chalkTemplate.bold(options.container)}...`
     );
     execSync(`docker exec ${options.container} sh -c '
-        find ${pathPrefix}${options.name} -mindepth 1 -o -exec rm -rf {} + &&
-        cd ${pathPrefix} && mkdir -p ${options.name}/${commitHash} ${options.name}/current
+        find ${pathPrefix}${options.name} -mindepth 1 -name i18n -prune -o -exec rm -rf {} + &&
+        cd ${pathPrefix} && mkdir -p ${options.name}/${commitHash} ${options.name}/current &&
+        ln -sf ${pathPrefix}/${options.name}/i18n "${pathPrefix}/${options.name}/${commitHash}/i18n"
     '`);
 
     execSync(
