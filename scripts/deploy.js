@@ -33,6 +33,11 @@ exports.builder = Object.assign({
     demandOption: false,
     alias: "d",
   },
+  container: {
+    desc: "Destination container",
+    demandOption: false,
+    alias: "c",
+  },
   user: {
     desc: "Username for ssh access",
     alias: "u",
@@ -58,10 +63,10 @@ exports.handler = async (options) => {
     return;
   }
 
-  if (!options.host && !options.dir) {
+  if (!options.host && !options.dir && !options.container) {
     console.log(
       chalkTemplate.red(
-        "No target host or directory specified, skipping deploy step"
+        "No target (host, directory or container) specified, skipping deploy step"
       )
     );
     return;
@@ -133,13 +138,12 @@ exports.handler = async (options) => {
       `- Deploying to local directory ${chalkTemplate.bold(options.dir)}...`
     );
 
-    // execSync(`
-    //     find ${options.dir}/${options.name} -mindepth 1 -name i18n -prune -o -exec rm -rf {} + &&
-    //     cd ${options.dir} && mkdir -p ${options.name}/${commitHash} ${options.name}/current &&
-    //     ln -sf ${options.dir}/${options.name}/i18n "${options.dir}/${options.name}/${commitHash}/i18n"
-    // `);
-
+    execSync(`
+        find ${options.dir}/${options.name} -mindepth 1 -o -exec rm -rf {} + &&
+        cd ${options.dir} && mkdir -p ${options.name}/${commitHash} ${options.name}/current
+    `);
     execSync(`cp -r dist/* ${options.dir}/${options.name}/${commitHash}`);
+
     console.log(`- Updating ${chalkTemplate.bold("components.json")}...`);
     const components = JSON.stringify(
       updateJson(
@@ -156,6 +160,47 @@ exports.handler = async (options) => {
     console.log(`- Updating html indexes...`);
     execSync(
       `cd ${options.dir}/${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${options.dir}/${options.name}/current/ \\;`
+    );
+    console.log(chalkTemplate.bgBlue.white.bold("Deploy Completed"));
+  }
+
+  /**
+   * Container deploy
+   */
+  if (options.container) {
+    console.log(
+      `- Deploying to container ${chalkTemplate.bold(options.container)}...`
+    );
+    execSync(`docker exec ${options.container} sh -c '
+        find ${pathPrefix}${options.name} -mindepth 1 -o -exec rm -rf {} + &&
+        cd ${pathPrefix} && mkdir -p ${options.name}/${commitHash} ${options.name}/current
+    '`);
+
+    execSync(
+      `docker cp dist/. ${options.container}:${pathPrefix}${options.name}/${commitHash}`
+    );
+    console.log(`- Updating ${chalkTemplate.bold("components.json")}...`);
+    const components = JSON.stringify(
+      updateJson(
+        JSON.parse(
+          execSync(
+            `docker exec ${options.container} sh -c "cat ${pathPrefix}${options.name}/${commitHash}/component.json"`
+          ).toString()
+        ),
+        JSON.parse(
+          execSync(
+            `docker exec ${options.container} sh -c "cat ${pathPrefix}components.json"`
+          ).toString()
+        ),
+        options
+      )
+    ).replace(/"/g, '\\"');
+    execSync(
+      `docker exec ${options.container} sh -c "echo '${components}' > ${pathPrefix}components.json"`
+    );
+    console.log(`- Updating html indexes...`);
+    execSync(
+      `docker exec ${options.container} sh -c "cd ${pathPrefix}${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${pathPrefix}${options.name}/current/ \\;"`
     );
     console.log(chalkTemplate.bgBlue.white.bold("Deploy Completed"));
   }
