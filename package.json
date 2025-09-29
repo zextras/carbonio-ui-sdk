@@ -36,7 +36,7 @@
     "copy-webpack-plugin": "^13.0.0",
     "css-loader": "^6.9.1",
     "handlebars-loader": "^1.7.3",
-    "html-webpack-plugin": "^5.6.0",
+    "html-webpack-plugin": "^5.6.4",
     "less-loader": "^12.1.0",
     "mini-css-extract-plugin": "^2.7.7",
     "node-http-proxy-json": "^0.1.9",
