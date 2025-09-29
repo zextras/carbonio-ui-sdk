@@ -38,7 +38,7 @@
     "handlebars-loader": "^1.7.3",
     "html-webpack-plugin": "^5.6.4",
     "less-loader": "^12.1.0",
-    "mini-css-extract-plugin": "^2.7.7",
+    "mini-css-extract-plugin": "^2.9.4",
     "node-http-proxy-json": "^0.1.9",
     "path-browserify": "^1.0.1",
     "postcss-loader": "^8.0.0",
