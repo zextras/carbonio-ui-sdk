@@ -189,7 +189,6 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 		'react-i18next': `__ZAPP_SHARED_LIBRARIES__['react-i18next']`,
 		lodash: `__ZAPP_SHARED_LIBRARIES__['lodash']`,
 		'react-router-dom': `__ZAPP_SHARED_LIBRARIES__['react-router-dom']`,
-		'styled-components': `__ZAPP_SHARED_LIBRARIES__['styled-components']`,
 		'@emotion/react': `__ZAPP_SHARED_LIBRARIES__['@emotion/react']`,
 		'@emotion/styled': `__ZAPP_SHARED_LIBRARIES__['@emotion/styled']`,
 		'@zextras/carbonio-ui-preview': `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-ui-preview']`,
