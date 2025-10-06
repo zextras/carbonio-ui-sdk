@@ -21,15 +21,20 @@ depends=(
   "carbonio-webui-i18n"
   "jq"
 )
+source=(
+  '<%- htmlWebpackPlugin.options.name %>-dist.tar.gz'
+)
+sha256sums=(
+  'SKIP'
+)
 
 package() {
-  cd "${srcdir}"
-  mkdir -p "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
-  cp -a  ../../dist/* "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
-  chown root:root -R "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
-  chmod 644 -R "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
-  find "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>" -type d -exec chmod a+x "{}" \;
-  ln -sf /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/i18n "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>/i18n"
+  install -dm755 \
+    "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
+  cp -a  "${srcdir}/dist/"* \
+    "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
+  ln -sf /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/i18n \
+    "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>/i18n"
 }
 
 postinst() {
