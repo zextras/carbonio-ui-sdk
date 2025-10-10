@@ -11,42 +11,52 @@ const chalkTemplate = require('chalk');
 exports.command = 'install';
 exports.desc = 'Build and deploy the project to a Carbonio instance';
 exports.builder = Object.assign({
-    analyze: {
-      desc: 'Apply the BundleAnalyzerPlugin and launch its web ui after the compilation',
-      default: false,
-      boolean: true
-    },
-    dev: {
-      desc: 'Build in devMode',
-      alias: 'd',
-      default: false,
-      boolean: true
-    },
-    external: {
-      desc: 'Run an additional build for external resources',
-      alias: 'e',
-      default: false,
-      boolean: true
-    },
-    pkgRel: {
-      desc: 'pkgRel value to pass to the PKGBUILD template',
-      default: '1',
-    },
-    host: {
-      desc: 'Destination hostname',
-      demandOption: true,
-      alias: 'h',
-    },
-    user: {
-      desc: 'Username for ssh access',
-      alias: 'u',
-      default: 'root',
-    },
-    port: {
-      desc: 'Localhost port to use',
-      alias: 'p',
-      default: '',
-    },
+  analyze: {
+    desc: "Apply the BundleAnalyzerPlugin and launch its web ui after the compilation",
+    default: false,
+    boolean: true,
+  },
+  dev: {
+    desc: "Build in devMode",
+    alias: "d",
+    default: false,
+    boolean: true,
+  },
+  external: {
+    desc: "Run an additional build for external resources",
+    alias: "e",
+    default: false,
+    boolean: true,
+  },
+  pkgRel: {
+    desc: "pkgRel value to pass to the PKGBUILD template",
+    default: "1",
+  },
+  host: {
+    desc: "Destination hostname",
+    demandOption: false,
+    alias: "h",
+  },
+  dir: {
+    desc: "Destination directory",
+    demandOption: false,
+    alias: "d",
+  },
+  container: {
+    desc: "Destination container",
+    demandOption: false,
+    alias: "c",
+  },
+  user: {
+    desc: "Username for ssh access",
+    alias: "u",
+    default: "root",
+  },
+  port: {
+    desc: "Localhost port to use",
+    alias: "p",
+    default: "",
+  },
 });
 
 exports.handler = async (options) => {
