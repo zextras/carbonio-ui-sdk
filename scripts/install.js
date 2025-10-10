@@ -34,7 +34,7 @@ exports.builder = Object.assign({
   },
   host: {
     desc: "Destination hostname",
-    demandOption: true,
+    demandOption: false,
     alias: "h",
   },
   dir: {
