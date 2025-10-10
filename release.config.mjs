@@ -9,6 +9,10 @@
 export default {
 	branches: [
 		'release',
+        {
+            name: 'beta',
+            prerelease: true
+        },
 		{
 			name: 'devel',
 			prerelease: true
@@ -18,7 +22,12 @@ export default {
 		[
 			'@semantic-release/commit-analyzer',
 			{
-				preset: 'conventionalcommits'
+				preset: 'conventionalcommits',
+				"releaseRules": [
+					// enable release also for refactor and build commits
+					{ type: 'refactor', release: 'patch' },
+					{ type: 'build', release: 'patch' }
+				],
 			}
 		],
 		[
