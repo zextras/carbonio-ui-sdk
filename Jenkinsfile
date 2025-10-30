@@ -124,7 +124,7 @@ pipeline {
                         sh(script: """
                             git push origin HEAD:refs/heads/${versionBumperBranchName}
                         """)
-                        withCredentials([usernamePassword(credentialsId: 'tarsier-bot-pr-token-github', usernameVariable: 'GH_USERNAME', passwordVariable: 'GH_TOKEN')]) {
+                        withCredentials([usernamePassword(credentialsId: 'jenkins-integration-with-github-account', usernameVariable: 'GH_USERNAME', passwordVariable: 'GH_TOKEN')]) {
                             sh(script: """
                                 curl https://api.github.com/repos/${getRepositoryName()}/pulls \
                                 -X POST \
