@@ -38,9 +38,9 @@ exports.builder = Object.assign({
     alias: "h",
   },
   dir: {
-    desc: "Destination directory",
+    desc: "Destination folder",
     demandOption: false,
-    alias: "d",
+    alias: "f",
   },
   container: {
     desc: "Destination container",

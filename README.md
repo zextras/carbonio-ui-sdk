@@ -31,7 +31,7 @@ npm install @zextras/carbonio-ui-sdk
 Build and deploy your app:
 
 ```
-sdk install (-h <HOST_NAME> | -d <LOCAL_DIRECTORY> | -c <CONTAINER_NAME>)
+sdk install (-h <HOST_NAME> | -f <LOCAL_FOLDER> | -c <CONTAINER_NAME>)
 ```
 
 Build your app
@@ -45,7 +45,7 @@ sdk build
 Deploy the app in the machine
 
 ```
-sdk build (-h <HOST_NAME> | -d <LOCAL_DIRECTORY> | -c <CONTAINER_NAME>)
+sdk deploy (-h <HOST_NAME> | -f <LOCAL_FOLDER> | -c <CONTAINER_NAME>)
 ```
 
 Run your app in watch mode, proxying against a Carbonio instance
