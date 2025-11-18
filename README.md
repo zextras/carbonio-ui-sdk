@@ -28,28 +28,33 @@ Install SDK using [`npm`](https://www.npmjs.com/package/@zextras/carbonio-ui-sdk
 npm install @zextras/carbonio-ui-sdk
 ```
 
-Build and deploy your app in the machine:
+Build and deploy your app:
+
 ```
-sdk install -h <HOST_NAME>
+sdk install (-h <HOST_NAME> | -f <LOCAL_FOLDER> | -c <CONTAINER_NAME>)
 ```
 
 Build your app
+
 ```
 sdk build
 ```
+
 <i>The output will be placed under the `dist ` directory</i>
 
 Deploy the app in the machine
+
 ```
-sdk deploy -h <HOST_NAME>
+sdk deploy (-h <HOST_NAME> | -f <LOCAL_FOLDER> | -c <CONTAINER_NAME>)
 ```
 
 Run your app in watch mode, proxying against a Carbonio instance
+
 ```
 sdk watch -h <HOST_NAME>
 ```
 
-<h2>Contributing</h2> 
+<h2>Contributing</h2>
 
 All contributions are accepted! Please refer to the CONTRIBUTING file, if
 present, for more details on how to contribute. If the repository has a Code of

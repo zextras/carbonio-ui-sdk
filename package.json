@@ -15,7 +15,7 @@
     "url": "git+https://github.com/zextras/carbonio-ui-sdk.git"
   },
   "engines": {
-    "node": ">=18.0.0 <19.0.0 || >=20.0.0 <21.0.0",
+    "node": ">=20.0.0 <21.0.0",
     "npm": "v10"
   },
   "keywords": [
@@ -33,25 +33,25 @@
     "babel-loader": "^9.2.1",
     "chalk": "^4.1.2",
     "circular-dependency-plugin": "^5.2.2",
-    "copy-webpack-plugin": "^13.0.0",
+    "copy-webpack-plugin": "^13.0.1",
     "css-loader": "^6.9.1",
     "handlebars-loader": "^1.7.3",
-    "html-webpack-plugin": "^5.6.0",
+    "html-webpack-plugin": "^5.6.4",
     "less-loader": "^12.1.0",
-    "mini-css-extract-plugin": "^2.7.7",
+    "mini-css-extract-plugin": "^2.9.4",
     "node-http-proxy-json": "^0.1.9",
     "path-browserify": "^1.0.1",
     "postcss-loader": "^8.0.0",
     "react-hot-loader": "^4.13.1",
-    "semver": "^7.7.1",
-    "webpack": "^5.84.0",
+    "semver": "^7.7.2",
+    "webpack": "^5.101.3",
     "webpack-bundle-analyzer": "^4.10.0",
     "webpack-dev-server": "^5.2.0",
-    "yargs": "^17.7.2"
+    "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "conventional-changelog-conventionalcommits": "^8.0.0",
-    "semantic-release": "^24.2.3",
+    "conventional-changelog-conventionalcommits": "^9.1.0",
+    "semantic-release": "^24.2.7",
     "standard-version": "^9.5.0"
   }
 }
