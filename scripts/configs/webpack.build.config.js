@@ -43,7 +43,6 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 			attrKey: pkg.carbonio.attrKey ?? '',
 			icon: pkg.carbonio.icon ?? 'CubeOutline',
 			display: pkg.carbonio.display,
-			sentryDsn: pkg.carbonio.sentryDsn,
 			minify: { collapseWhitespace: false }
 		}),
 		new HtmlWebpackPlugin({
