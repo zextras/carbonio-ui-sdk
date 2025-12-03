@@ -97,8 +97,7 @@ exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 									type: pkg.carbonio.type,
 									attrKey: pkg.carbonio.attrKey,
 									icon: pkg.carbonio.icon,
-									display: pkg.carbonio.display,
-									sentryDsn: pkg.carbonio.sentryDsn
+									display: pkg.carbonio.display
 								})
 							}
 							return JSON.stringify({ components });
