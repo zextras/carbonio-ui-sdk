@@ -15,7 +15,7 @@
     "url": "git+https://github.com/zextras/carbonio-ui-sdk.git"
   },
   "engines": {
-    "node": ">=20.0.0 <21.0.0",
+    "node": "v22",
     "npm": "v10"
   },
   "keywords": [
