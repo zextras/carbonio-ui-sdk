@@ -83,9 +83,10 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 		);
 	}
 
-	// Declare possible app entry points
-	const jsxPath = path.resolve(process.cwd(), 'src/app.jsx');
 	const tsxPath = path.resolve(process.cwd(), 'src/app.tsx');
+	if (!existsSync(tsxPath)) {
+		throw new Error('Required entrypoint src/app.tsx not found. Please create this file to proceed.');
+	}
 
 	const defaultConfig = {
 		entry: {
@@ -166,9 +167,10 @@ exports.setupWebpackBuildConfig = (options, { basePath, commitHash }, skipCustom
 			]
 		},
 		resolve: {
+            // Only .tsx entry points are now supported. src/app.tsx is required.
 			extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
 			alias: {
-				"app-entrypoint": existsSync(tsxPath) ? tsxPath : jsxPath
+				"app-entrypoint": tsxPath
 			},
 			fallback: { path: require.resolve('path-browserify') }
 		},

@@ -22,12 +22,6 @@ exports.builder = Object.assign({
     default: false,
     boolean: true,
   },
-  external: {
-    desc: "Run an additional build for external resources",
-    alias: "e",
-    default: false,
-    boolean: true,
-  },
   pkgRel: {
     desc: "pkgRel value to pass to the PKGBUILD template",
     default: "1",
