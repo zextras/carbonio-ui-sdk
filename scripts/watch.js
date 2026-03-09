@@ -53,7 +53,6 @@ exports.handler = async (options) => {
 	console.log('Using base path ', chalk.green(basePath));
 	const config = setupWebpackWatchConfig(options, {basePath, commitHash});
 	const compiler = webpack(config);
-	// const watching = compiler.watch( {}, logBuild );
 	const server = new WebpackDevServer(config.devServer, compiler);
 	const runServer = async () => {
 		console.log(chalk.bgBlue.whiteBright.bold('Starting server...'));
