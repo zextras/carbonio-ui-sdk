@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-const { handler: build } = require('./build');
-const { handler: deploy } = require('./deploy');
-const chalkTemplate = require('chalk');
+const { handler: build } = require("./build");
+const { handler: deploy } = require("./deploy");
+const chalkTemplate = require("chalk");
 
-exports.command = 'install';
-exports.desc = 'Build and deploy the project to a Carbonio instance';
-exports.builder = Object.assign({
+exports.command = "install";
+exports.desc = "Build and deploy the project to a Carbonio instance";
+exports.builder = {
   analyze: {
     desc: "Apply the BundleAnalyzerPlugin and launch its web ui after the compilation",
     default: false,
@@ -51,10 +51,10 @@ exports.builder = Object.assign({
     alias: "p",
     default: "",
   },
-});
+};
 
 exports.handler = async (options) => {
-    await build(options);
-    await deploy(options);
-    console.log(chalkTemplate.bgBlue.white.bold('Install Completed'));
+  await build(options);
+  await deploy(options);
+  console.log(chalkTemplate.bgBlue.white.bold("Install Completed"));
 };

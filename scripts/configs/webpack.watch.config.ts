@@ -9,7 +9,7 @@ const path = require('path');
 const { existsSync } = require('node:fs');
 const modifyResponse = require('node-http-proxy-json');
 const chalk = require('chalk');
-const { pkg } = require('../utils/pkg.js');
+const { pkg } = require('../utils/pkg');
 const { setupWebpackBuildConfig } = require('./webpack.build.config');
 exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
 	const defaultConfig = setupWebpackBuildConfig(options, { basePath, commitHash}, true)

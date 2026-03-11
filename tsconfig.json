@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleDetection": "force",
+    "moduleResolution": "node",
+    "rootDir": "scripts",
+    "outDir": "dist",
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "noEmitOnError": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["scripts/**/*.ts", "scripts/**/*.d.ts"],
+  "exclude": ["node_modules"]
+}
