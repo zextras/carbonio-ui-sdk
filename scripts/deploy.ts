@@ -4,7 +4,34 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-/* eslint-disable no-console */
+export type DeployOptions = {
+  name: string;
+  admin?: boolean;
+  verbose?: boolean;
+  host?: string;
+  dir?: string;
+  container?: string;
+  user: string;
+  port?: string;
+};
+
+type ComponentEntry = {
+  name: string;
+  commit: string;
+  description: string;
+  priority: number;
+  version: string;
+  type: string;
+  attrKey?: string;
+  icon?: string;
+  display: string;
+  js_entrypoint?: string;
+};
+
+type ComponentsJson = {
+  components: ComponentEntry[];
+};
+
 const chalkTemplate = require("chalk");
 const { commitHash } = require("./utils/setup");
 const { printArgs } = require("./utils/console");
@@ -12,7 +39,11 @@ const { execSync } = require("node:child_process");
 const path = require("path");
 const { existsSync } = require("node:fs");
 
-const updateJson = (appJson, carbonioJson, options) => {
+const updateJson = (
+  appJson: ComponentEntry,
+  carbonioJson: ComponentsJson,
+  options: Pick<DeployOptions, "name">,
+): ComponentsJson => {
   const components = carbonioJson.components.filter(
     (component) => component.name !== options.name
   );
@@ -22,7 +53,7 @@ const updateJson = (appJson, carbonioJson, options) => {
 
 exports.command = "deploy";
 exports.desc = "Deploy the project to a Carbonio instance";
-exports.builder = Object.assign({
+exports.builder = {
   host: {
     desc: "Destination hostname",
     demandOption: false,
@@ -48,9 +79,9 @@ exports.builder = Object.assign({
     alias: "p",
     default: "",
   },
-});
+};
 
-exports.handler = async (options) => {
+exports.handler = async (options: DeployOptions) => {
   const pathPrefix = `/opt/zextras/${options.admin ? "admin" : "web"}/iris/`;
   printArgs(options, "Deploy");
   const distPath = path.resolve(process.cwd(), "dist");

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import type { BuildOptions } from "./configs/webpack.build.config";
+
 const chalk = require("chalk");
 const webpack = require("webpack");
 const { commitHash } = require("./utils/setup");
@@ -32,7 +34,7 @@ exports.builder = {
   },
 };
 
-exports.handler = async (options) =>
+exports.handler = async (options: BuildOptions) =>
   new Promise(async (...p) => {
     printArgs(options, "Build");
     const basePath = `/static/iris/${options.name}/${commitHash}/`;

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import type { WatchOptions } from "./configs/webpack.watch.config";
+
 const chalk = require("chalk");
 const webpack = require("webpack");
 const WebpackDevServer = require("webpack-dev-server");
@@ -46,7 +48,7 @@ exports.builder = {
   },
 };
 
-exports.handler = async (options) => {
+exports.handler = async (options: WatchOptions) => {
   printArgs(options, "Watch");
   const basePath = `/static/iris/${options.name}/${commitHash}/`;
   console.log("Building ", chalk.green(options.name));
@@ -58,5 +60,5 @@ exports.handler = async (options) => {
     console.log(chalk.bgBlue.whiteBright.bold("Starting server..."));
     await server.start();
   };
-  runServer();
+  return runServer();
 };

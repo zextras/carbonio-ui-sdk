@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { WebpackConfiguration } from "webpack-dev-server";
+import type { Configuration } from "webpack";
 
 const path = require("path");
 const webpack = require("webpack");
@@ -17,11 +17,27 @@ const CircularDependencyPlugin = require("circular-dependency-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { pkg } = require("../utils/pkg");
 
+export type BuildOptions = {
+  name: string;
+  dev?: boolean;
+  admin?: boolean;
+  pkgRel?: number;
+  analyze?: boolean;
+  svgr?: boolean;
+  useLocalDS?: boolean;
+  verbose?: boolean;
+};
+
+export type BuildContext = {
+  basePath: string;
+  commitHash: string;
+};
+
 exports.setupWebpackBuildConfig = (
-  options,
-  { basePath, commitHash },
+  options: BuildOptions,
+  { basePath, commitHash }: BuildContext,
   skipCustomization = false,
-): WebpackConfiguration => {
+): Configuration => {
   const plugins = [
     new webpack.DefinePlugin({
       PACKAGE_VERSION: JSON.stringify(pkg.version),
@@ -96,9 +112,9 @@ exports.setupWebpackBuildConfig = (
     );
   }
 
-  const defaultConfig: any = {
+  const defaultConfig: Configuration = {
     entry: {
-      app: path.resolve(__dirname, "../utils/entry.js"),
+      app: path.resolve(__dirname, "../utils/entry"),
     },
     mode: options.dev ? "development" : "production",
     devtool: "source-map",
@@ -155,14 +171,6 @@ exports.setupWebpackBuildConfig = (
           test: /\.(js|jsx)$/,
           use: require.resolve("react-hot-loader/webpack"),
           include: /node_modules/,
-        },
-        {
-          test: /\.properties$/,
-          use: [
-            {
-              loader: path.resolve(__dirname, "../utils/properties-loader.js"),
-            },
-          ],
         },
         {
           test: /\.svg$/,

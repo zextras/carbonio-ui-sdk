@@ -12,14 +12,16 @@ interface Window {
   __ZAPP_HMR_HANDLERS__: Record<string, (handlers: unknown) => void>;
 }
 
-declare module 'app-entrypoint';
-declare module 'app-handlers';
+declare module "app-entrypoint";
+declare module "app-handlers";
 
-declare module 'node-http-proxy-json' {
+declare module "node-http-proxy-json" {
+  import type { IncomingMessage, ServerResponse } from "node:http";
+
   const modifyResponse: (
-    res: unknown,
-    proxyRes: unknown,
-    transform: (body: any) => any
+    res: ServerResponse,
+    proxyRes: IncomingMessage,
+    transform: (body: unknown) => unknown,
   ) => void;
 
   export = modifyResponse;

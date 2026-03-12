@@ -4,131 +4,172 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-/* eslint-disable import/extensions */
-const path = require('path');
-const { existsSync } = require('node:fs');
-const modifyResponse = require('node-http-proxy-json');
-const chalk = require('chalk');
-const { pkg } = require('../utils/pkg');
-const { setupWebpackBuildConfig } = require('./webpack.build.config');
-exports.setupWebpackWatchConfig = (options, {basePath, commitHash}) => {
-	const defaultConfig = setupWebpackBuildConfig(options, { basePath, commitHash}, true)
-	const server = `https://${options.host}/`;
-	const localhost = `localhost:${options.port}`;
-	let serverZappCommitHash;
-	defaultConfig.mode = 'development';
-	defaultConfig.output.filename = '[name].bundle.js'
-	defaultConfig.output.chunkFilename = '[name].chunk.js'
-	defaultConfig.devServer = {
-		hot: true,
-		port: options.port ?? 9000,
-		historyApiFallback: {
-			index: basePath
-		},
-		server: 'https',
-		setupMiddlewares: (middlewares, devServer) => {
-			middlewares.unshift({
-				path: '/_cli',
-				middleware: (req, res) => {
-					res.json({
-						isWatch: true,
-						isStandalone: !!options.standalone,
-						server: server,
-						app_package: {
-							package: options.name,
-							name: options.name,
-							version: pkg.version,
-							description: pkg.description
-						}
-					});
-				},
-			});
+import type { Configuration } from "webpack";
+import type { Configuration as DevServerConfiguration } from "webpack-dev-server";
+import type { IncomingMessage, ServerResponse } from "node:http";
+import type { BuildOptions, BuildContext } from "./webpack.build.config";
 
-			return middlewares;
-		},
-		open: [`https://localhost:${options.port ?? 9000}/${pkg.carbonio.type}/`],
-		proxy: [
-			{
-				context: [`!${basePath}/**/*`, '!/static/iris/components.json', `!/static/iris/${options.name}/${commitHash}/i18n/*.json`],
-				target: server,
-				secure: false,
-				logLevel: 'debug',
-				ws: options.ws ?? false,
-				cookieDomainRewrite: {
-					'*': server,
-					[server]: localhost
-				}
-			},
-			{
-				context: ['/static/iris/components.json'],
-				target: server,
-				secure: false,
-				logLevel: 'debug',
-				ws: options.ws ?? false,
-				cookieDomainRewrite: {
-					'*': server,
-					[server]: localhost
-				},
-				selfHandleResponse: false,
-				onProxyRes(proxyRes, req, res) {
-					modifyResponse(res, proxyRes, function (body) {
-						if (body?.components) {
-							console.log(chalk.green.bold('[Proxy] modifying components.json'));
-							let found = false;
-							const components = body.components.reduce((acc, module) => {
-								if (module.name === options.name) {
-									serverZappCommitHash = module.commit;
-									found = true;
-									return [...acc, {...module, js_entrypoint: `${basePath}app.bundle.js`}];
-								}
-								if (options.standalone) {
-									return acc;
-								}
-								return [...acc, module];
-							}, []);
-							if (!found) {
-								components.push({
-									js_entrypoint: `${basePath}app.bundle.js`,
-									commit: commitHash,
-									description: pkg.description,
-									name: options.name,
-									priority: pkg.carbonio.priority,
-									version: pkg.version,
-									type: pkg.carbonio.type,
-									attrKey: pkg.carbonio.attrKey,
-									icon: pkg.carbonio.icon,
-									display: pkg.carbonio.display
-								})
-							}
-							return JSON.stringify({ components });
-						}
-						console.log(chalk.green.bold('[Proxy] components.json: no content'));
-						return body;
-					});
-				}
-			},
-			{
-				context: [`/static/iris/${options.name}/${commitHash}/i18n/*.json`],
-				target: server,
-				secure: false,
-				logLevel: 'debug',
-				ws: options.ws ?? false,
-				cookieDomainRewrite: {
-					'*': server,
-					[server]: localhost
-				},
-				pathRewrite: (path) => {
-					return path.replace(commitHash, serverZappCommitHash);
-				}
-			},
-		]
-	}
+const path = require("path");
+const { existsSync } = require("node:fs");
+const modifyResponse = require("node-http-proxy-json");
+const chalk = require("chalk");
+const { pkg } = require("../utils/pkg");
+const { setupWebpackBuildConfig } = require("./webpack.build.config");
 
-	const confPath = path.resolve(process.cwd(), 'carbonio.webpack.js');
-	if (!existsSync(confPath)) {
-		return defaultConfig;
-	}
+export type WatchOptions = BuildOptions & {
+  host: string;
+  port?: number;
+  ws?: boolean;
+  standalone?: boolean;
+};
 
-	const molder = require(confPath);
-	return molder(defaultConfig, pkg, options, 'development');
+type WatchConfiguration = Configuration & {
+  devServer?: DevServerConfiguration;
+};
+
+exports.setupWebpackWatchConfig = (
+  options: WatchOptions,
+  { basePath, commitHash }: BuildContext,
+): WatchConfiguration => {
+  const defaultConfig = setupWebpackBuildConfig(
+    options,
+    { basePath, commitHash },
+    true,
+  ) as WatchConfiguration;
+  const server = `https://${options.host}/`;
+  const localhost = `localhost:${options.port}`;
+  let serverZappCommitHash: string | undefined;
+  defaultConfig.mode = "development";
+  defaultConfig.output.filename = "[name].bundle.js";
+  defaultConfig.output.chunkFilename = "[name].chunk.js";
+  defaultConfig.devServer = {
+    hot: true,
+    port: options.port ?? 9000,
+    historyApiFallback: {
+      index: basePath,
+    },
+    server: "https",
+    setupMiddlewares: (middlewares, devServer) => {
+      middlewares.unshift({
+        path: "/_cli",
+        middleware: (req, res) => {
+          res.json({
+            isWatch: true,
+            isStandalone: !!options.standalone,
+            server: server,
+            app_package: {
+              package: options.name,
+              name: options.name,
+              version: pkg.version,
+              description: pkg.description,
+            },
+          });
+        },
+      });
+
+      return middlewares;
+    },
+    open: [`https://localhost:${options.port ?? 9000}/${pkg.carbonio.type}/`],
+    proxy: [
+      {
+        context: [
+          `!${basePath}/**/*`,
+          "!/static/iris/components.json",
+          `!/static/iris/${options.name}/${commitHash}/i18n/*.json`,
+        ],
+        target: server,
+        secure: false,
+        logLevel: "debug",
+        ws: options.ws ?? false,
+        cookieDomainRewrite: {
+          "*": server,
+          [server]: localhost,
+        },
+      },
+      {
+        context: ["/static/iris/components.json"],
+        target: server,
+        secure: false,
+        logLevel: "debug",
+        ws: options.ws ?? false,
+        cookieDomainRewrite: {
+          "*": server,
+          [server]: localhost,
+        },
+        selfHandleResponse: false,
+        onProxyRes(
+          proxyRes: IncomingMessage,
+          req: IncomingMessage,
+          res: ServerResponse,
+        ) {
+          modifyResponse(res, proxyRes, function (body) {
+            if (body?.components) {
+              console.log(
+                chalk.green.bold("[Proxy] modifying components.json"),
+              );
+              let found = false;
+              const components = body.components.reduce((acc, module) => {
+                if (module.name === options.name) {
+                  serverZappCommitHash = module.commit;
+                  found = true;
+                  return [
+                    ...acc,
+                    { ...module, js_entrypoint: `${basePath}app.bundle.js` },
+                  ];
+                }
+                if (options.standalone) {
+                  return acc;
+                }
+                return [...acc, module];
+              }, []);
+              if (!found) {
+                components.push({
+                  js_entrypoint: `${basePath}app.bundle.js`,
+                  commit: commitHash,
+                  description: pkg.description,
+                  name: options.name,
+                  priority: pkg.carbonio.priority,
+                  version: pkg.version,
+                  type: pkg.carbonio.type,
+                  attrKey: pkg.carbonio.attrKey,
+                  icon: pkg.carbonio.icon,
+                  display: pkg.carbonio.display,
+                });
+              }
+              return JSON.stringify({ components });
+            }
+            console.log(
+              chalk.green.bold("[Proxy] components.json: no content"),
+            );
+            return body;
+          });
+        },
+      },
+      {
+        context: [`/static/iris/${options.name}/${commitHash}/i18n/*.json`],
+        target: server,
+        secure: false,
+        logLevel: "debug",
+        ws: options.ws ?? false,
+        cookieDomainRewrite: {
+          "*": server,
+          [server]: localhost,
+        },
+        pathRewrite: (urlPath: string): string => {
+          return urlPath.replace(
+            commitHash,
+            serverZappCommitHash ?? commitHash,
+          );
+        },
+      },
+    ],
+  };
+
+  const confPath = path.resolve(process.cwd(), "carbonio.webpack.js");
+  if (!existsSync(confPath)) {
+    return defaultConfig;
+  }
+
+  const molder = require(confPath);
+  return molder(defaultConfig, pkg, options, "development");
 };

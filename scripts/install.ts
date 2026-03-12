@@ -4,9 +4,14 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import type { BuildOptions } from "./configs/webpack.build.config";
+import type { DeployOptions } from "./deploy";
+
 const { handler: build } = require("./build");
 const { handler: deploy } = require("./deploy");
 const chalkTemplate = require("chalk");
+
+type InstallOptions = BuildOptions & DeployOptions;
 
 exports.command = "install";
 exports.desc = "Build and deploy the project to a Carbonio instance";
@@ -53,7 +58,7 @@ exports.builder = {
   },
 };
 
-exports.handler = async (options) => {
+exports.handler = async (options: InstallOptions) => {
   await build(options);
   await deploy(options);
   console.log(chalkTemplate.bgBlue.white.bold("Install Completed"));
