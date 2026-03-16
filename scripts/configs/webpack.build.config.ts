@@ -4,18 +4,16 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import type { Configuration } from "webpack";
-
-const path = require("path");
-const webpack = require("webpack");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
-const { existsSync } = require("node:fs");
-const semver = require("semver");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const CircularDependencyPlugin = require("circular-dependency-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { pkg } = require("../utils/pkg");
+import CopyPlugin from "copy-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import { existsSync } from "node:fs";
+import path from "node:path";
+import webpack, { type Configuration } from "webpack";
+import semver from "semver";
+import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
+import CircularDependencyPlugin from "circular-dependency-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import { pkg } from "../utils/pkg";
 
 export type BuildOptions = {
   name: string;
@@ -33,12 +31,12 @@ export type BuildContext = {
   commitHash: string;
 };
 
-exports.setupWebpackBuildConfig = (
+export const setupWebpackBuildConfig = (
   options: BuildOptions,
   { basePath, commitHash }: BuildContext,
   skipCustomization = false,
 ): Configuration => {
-  const plugins = [
+  const plugins: webpack.WebpackPluginInstance[] = [
     new webpack.DefinePlugin({
       PACKAGE_VERSION: JSON.stringify(pkg.version),
       ZIMBRA_PACKAGE_VERSION: semver.valid(semver.coerce(pkg.version)),

@@ -1,6 +1,5 @@
 import type { Stats } from "webpack";
-
-const chalk = require("chalk");
+import chalk from "chalk";
 
 type ErrorLike = {
   message: string;
@@ -11,7 +10,7 @@ type ErrorLike = {
   stack?: string;
 };
 
-exports.printArgs = (
+export const printArgs = (
   opts: Record<string, unknown>,
   label: string,
 ): Record<string, unknown> => {
@@ -47,7 +46,7 @@ const logErrors = (
   });
 };
 
-exports.logBuild =
+export const logBuild =
   (
     [resolve, reject]: [(value: Stats) => void, ((reason?: unknown) => void)?],
     options: { verbose?: boolean },
@@ -59,9 +58,9 @@ exports.logBuild =
       if (reject) reject(err);
     }
 
-    const info = stats.toJson();
+    const info = stats?.toJson();
 
-    if (stats.hasWarnings()) {
+    if (stats?.hasWarnings() && info?.warnings) {
       console.log(
         chalk.bgYellow.white.bold(
           `Webpack Compilation Warning${info.warnings.length > 1 ? "s" : ""}`,
@@ -70,7 +69,7 @@ exports.logBuild =
       logErrors(info.warnings as ErrorLike[], "warning", options.verbose);
     }
 
-    if (stats.hasErrors()) {
+    if (stats?.hasErrors() && info?.errors) {
       console.log(
         chalk.bgRed.white.bold(
           `Webpack Compilation Error${info.errors.length > 1 ? "s" : ""}`,
@@ -81,5 +80,5 @@ exports.logBuild =
     } else {
       console.log(chalk.bgBlue.white.bold("Compiled Successfully!"));
     }
-    if (resolve) resolve(stats);
+    if (resolve && stats) resolve(stats);
   };

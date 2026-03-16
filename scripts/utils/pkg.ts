@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-const { readFileSync } = require("node:fs");
-const path = require("path");
+import path from "node:path";
+import { readFileSync } from "node:fs";
 
 export type CarbonioPkg = {
   name: string;
@@ -24,6 +24,6 @@ export type CarbonioPkg = {
   };
 };
 
-exports.pkg = JSON.parse(
+export const pkg = JSON.parse(
   readFileSync(path.resolve(process.cwd(), "package.json"), "utf-8"),
 ) as CarbonioPkg;

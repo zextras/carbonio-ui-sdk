@@ -4,19 +4,19 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import type { BuildOptions } from "./configs/webpack.build.config";
+import chalk from "chalk";
+import {
+  setupWebpackBuildConfig,
+  type BuildOptions,
+} from "./configs/webpack.build.config";
+import webpack from "webpack";
+import { commitHash } from "./utils/setup";
+import { logBuild, printArgs } from "./utils/console";
+import { rmSync } from "node:fs";
 
-const chalk = require("chalk");
-const webpack = require("webpack");
-const { commitHash } = require("./utils/setup");
-const { setupWebpackBuildConfig } = require("./configs/webpack.build.config");
-
-const { logBuild, printArgs } = require("./utils/console");
-const { rmSync } = require("node:fs");
-
-exports.command = "build";
-exports.desc = "Compile and bundle your project";
-exports.builder = {
+export const command = "build";
+export const desc = "Compile and bundle your project";
+export const builder = {
   analyze: {
     desc: "Apply the BundleAnalyzerPlugin and launch its web ui after the compilation",
     default: false,
@@ -34,7 +34,7 @@ exports.builder = {
   },
 };
 
-exports.handler = async (options: BuildOptions) =>
+export const handler = async (options: BuildOptions) =>
   new Promise(async (...p) => {
     printArgs(options, "Build");
     const basePath = `/static/iris/${options.name}/${commitHash}/`;

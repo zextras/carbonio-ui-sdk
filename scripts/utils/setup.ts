@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-/* eslint-disable import/extensions */
-const { execSync } = require('node:child_process');
+import { execSync } from "node:child_process";
 
-exports.commitHash = execSync('git rev-parse HEAD').toString().trim();
+export const commitHash = execSync("git rev-parse HEAD").toString().trim();

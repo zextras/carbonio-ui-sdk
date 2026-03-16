@@ -4,17 +4,19 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import type { Configuration } from "webpack";
 import type { Configuration as DevServerConfiguration } from "webpack-dev-server";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import type { BuildOptions, BuildContext } from "./webpack.build.config";
-
-const path = require("path");
-const { existsSync } = require("node:fs");
-const modifyResponse = require("node-http-proxy-json");
-const chalk = require("chalk");
-const { pkg } = require("../utils/pkg");
-const { setupWebpackBuildConfig } = require("./webpack.build.config");
+import {
+  type BuildOptions,
+  type BuildContext,
+  setupWebpackBuildConfig,
+} from "./webpack.build.config";
+import { Configuration } from "webpack";
+import path from "node:path";
+import { existsSync } from "node:fs";
+import chalk from "chalk";
+import { pkg } from "../utils/pkg";
+import modifyResponse from "node-http-proxy-json";
 
 export type WatchOptions = BuildOptions & {
   host: string;
@@ -27,7 +29,7 @@ type WatchConfiguration = Configuration & {
   devServer?: DevServerConfiguration;
 };
 
-exports.setupWebpackWatchConfig = (
+export const setupWebpackWatchConfig = (
   options: WatchOptions,
   { basePath, commitHash }: BuildContext,
 ): WatchConfiguration => {
@@ -37,22 +39,25 @@ exports.setupWebpackWatchConfig = (
     true,
   ) as WatchConfiguration;
   const server = `https://${options.host}/`;
-  const localhost = `localhost:${options.port}`;
+  const devServerPort = options.port ?? 9000;
+  const localhost = `localhost:${devServerPort}`;
   let serverZappCommitHash: string | undefined;
   defaultConfig.mode = "development";
-  defaultConfig.output.filename = "[name].bundle.js";
-  defaultConfig.output.chunkFilename = "[name].chunk.js";
+  if (defaultConfig.output) {
+    defaultConfig.output.filename = "[name].bundle.js";
+    defaultConfig.output.chunkFilename = "[name].chunk.js";
+  }
   defaultConfig.devServer = {
     hot: true,
-    port: options.port ?? 9000,
+    port: devServerPort,
     historyApiFallback: {
       index: basePath,
     },
     server: "https",
-    setupMiddlewares: (middlewares, devServer) => {
+    setupMiddlewares: (middlewares) => {
       middlewares.unshift({
         path: "/_cli",
-        middleware: (req, res) => {
+        middleware: (res: any) => {
           res.json({
             isWatch: true,
             isStandalone: !!options.standalone,
@@ -69,7 +74,7 @@ exports.setupWebpackWatchConfig = (
 
       return middlewares;
     },
-    open: [`https://localhost:${options.port ?? 9000}/${pkg.carbonio.type}/`],
+    open: [`https://localhost:${devServerPort}/${pkg.carbonio.type}/`],
     proxy: [
       {
         context: [
@@ -102,26 +107,29 @@ exports.setupWebpackWatchConfig = (
           req: IncomingMessage,
           res: ServerResponse,
         ) {
-          modifyResponse(res, proxyRes, function (body) {
+          modifyResponse(res, proxyRes, function (body: any) {
             if (body?.components) {
               console.log(
                 chalk.green.bold("[Proxy] modifying components.json"),
               );
               let found = false;
-              const components = body.components.reduce((acc, module) => {
-                if (module.name === options.name) {
-                  serverZappCommitHash = module.commit;
-                  found = true;
-                  return [
-                    ...acc,
-                    { ...module, js_entrypoint: `${basePath}app.bundle.js` },
-                  ];
-                }
-                if (options.standalone) {
-                  return acc;
-                }
-                return [...acc, module];
-              }, []);
+              const components = body.components.reduce(
+                (acc: any, module: any) => {
+                  if (module.name === options.name) {
+                    serverZappCommitHash = module.commit;
+                    found = true;
+                    return [
+                      ...acc,
+                      { ...module, js_entrypoint: `${basePath}app.bundle.js` },
+                    ];
+                  }
+                  if (options.standalone) {
+                    return acc;
+                  }
+                  return [...acc, module];
+                },
+                [],
+              );
               if (!found) {
                 components.push({
                   js_entrypoint: `${basePath}app.bundle.js`,

@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import path from "node:path";
+import { printArgs } from "./utils/console";
+import { commitHash } from "./utils/setup";
+import { existsSync } from "node:fs";
+import { execSync } from "node:child_process";
+
 export type DeployOptions = {
   name: string;
   admin?: boolean;
@@ -33,11 +39,6 @@ type ComponentsJson = {
 };
 
 const chalkTemplate = require("chalk");
-const { commitHash } = require("./utils/setup");
-const { printArgs } = require("./utils/console");
-const { execSync } = require("node:child_process");
-const path = require("path");
-const { existsSync } = require("node:fs");
 
 const updateJson = (
   appJson: ComponentEntry,
@@ -45,15 +46,15 @@ const updateJson = (
   options: Pick<DeployOptions, "name">,
 ): ComponentsJson => {
   const components = carbonioJson.components.filter(
-    (component) => component.name !== options.name
+    (component) => component.name !== options.name,
   );
   components.push(appJson);
   return { components };
 };
 
-exports.command = "deploy";
-exports.desc = "Deploy the project to a Carbonio instance";
-exports.builder = {
+export const command = "deploy";
+export const desc = "Deploy the project to a Carbonio instance";
+export const builder = {
   host: {
     desc: "Destination hostname",
     demandOption: false,
@@ -81,15 +82,15 @@ exports.builder = {
   },
 };
 
-exports.handler = async (options: DeployOptions) => {
+export const handler = async (options: DeployOptions) => {
   const pathPrefix = `/opt/zextras/${options.admin ? "admin" : "web"}/iris/`;
   printArgs(options, "Deploy");
   const distPath = path.resolve(process.cwd(), "dist");
   if (!existsSync(distPath)) {
     console.log(
       chalkTemplate.red(
-        "Missing dist folder, skipping deploy step. Run build step before"
-      )
+        "Missing dist folder, skipping deploy step. Run build step before",
+      ),
     );
     return;
   }
@@ -97,8 +98,8 @@ exports.handler = async (options: DeployOptions) => {
   if (!options.host && !options.dir && !options.container) {
     console.log(
       chalkTemplate.red(
-        "No target (host, directory or container) specified, skipping deploy step"
-      )
+        "No target (host, directory or container) specified, skipping deploy step",
+      ),
     );
     return;
   }
@@ -121,30 +122,30 @@ exports.handler = async (options: DeployOptions) => {
     execSync(
       `scp -r ${options.port && "-P"} ${
         options.port
-      } dist/* ${cpTarget}:${pathPrefix}${options.name}/${commitHash}`
+      } dist/* ${cpTarget}:${pathPrefix}${options.name}/${commitHash}`,
     );
     console.log(`- Updating ${chalkTemplate.bold("components.json")}...`);
     const components = JSON.stringify(
       updateJson(
         JSON.parse(
           execSync(
-            `ssh ${sshTarget} cat ${pathPrefix}${options.name}/${commitHash}/component.json`
-          ).toString()
+            `ssh ${sshTarget} cat ${pathPrefix}${options.name}/${commitHash}/component.json`,
+          ).toString(),
         ),
         JSON.parse(
           execSync(
-            `ssh ${sshTarget} cat ${pathPrefix}components.json`
-          ).toString()
+            `ssh ${sshTarget} cat ${pathPrefix}components.json`,
+          ).toString(),
         ),
-        options
-      )
+        options,
+      ),
     ).replace(/"/g, '\\"');
     execSync(
-      `ssh ${sshTarget} "echo '${components}' > ${pathPrefix}components.json"`
+      `ssh ${sshTarget} "echo '${components}' > ${pathPrefix}components.json"`,
     );
     console.log(`- Updating html indexes...`);
     execSync(
-      `ssh ${sshTarget} "cd ${pathPrefix}${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${pathPrefix}${options.name}/current/ \\;"`
+      `ssh ${sshTarget} "cd ${pathPrefix}${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${pathPrefix}${options.name}/current/ \\;"`,
     );
     console.log(chalkTemplate.bgBlue.white.bold("Deploy Completed"));
   }
@@ -158,15 +159,15 @@ exports.handler = async (options: DeployOptions) => {
       console.log(
         chalkTemplate.red(
           `Target directory ${chalkTemplate.bold(
-            options.dir
-          )} does not exist, skipping deploy step`
-        )
+            options.dir,
+          )} does not exist, skipping deploy step`,
+        ),
       );
       return;
     }
 
     console.log(
-      `- Deploying to local directory ${chalkTemplate.bold(options.dir)}...`
+      `- Deploying to local directory ${chalkTemplate.bold(options.dir)}...`,
     );
 
     execSync(`
@@ -182,17 +183,17 @@ exports.handler = async (options: DeployOptions) => {
       updateJson(
         JSON.parse(
           execSync(
-            `cat ${options.dir}/${options.name}/${commitHash}/component.json`
-          ).toString()
+            `cat ${options.dir}/${options.name}/${commitHash}/component.json`,
+          ).toString(),
         ),
         JSON.parse(execSync(`cat ${options.dir}/components.json`).toString()),
-        options
-      )
+        options,
+      ),
     );
     execSync(`echo '${components}' > ${options.dir}/components.json`);
     console.log(`- Updating html indexes...`);
     execSync(
-      `cd ${options.dir}/${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${options.dir}/${options.name}/current/ \\;`
+      `cd ${options.dir}/${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${options.dir}/${options.name}/current/ \\;`,
     );
     console.log(chalkTemplate.bgBlue.white.bold("Deploy Completed"));
   }
@@ -202,7 +203,7 @@ exports.handler = async (options: DeployOptions) => {
    */
   if (options.container) {
     console.log(
-      `- Deploying to container ${chalkTemplate.bold(options.container)}...`
+      `- Deploying to container ${chalkTemplate.bold(options.container)}...`,
     );
     execSync(`docker exec ${options.container} sh -c '
         find ${pathPrefix}${options.name} -mindepth 1 -name i18n -prune -o -exec rm -rf {} + &&
@@ -211,30 +212,30 @@ exports.handler = async (options: DeployOptions) => {
     '`);
 
     execSync(
-      `docker cp dist/. ${options.container}:${pathPrefix}${options.name}/${commitHash}`
+      `docker cp dist/. ${options.container}:${pathPrefix}${options.name}/${commitHash}`,
     );
     console.log(`- Updating ${chalkTemplate.bold("components.json")}...`);
     const components = JSON.stringify(
       updateJson(
         JSON.parse(
           execSync(
-            `docker exec ${options.container} sh -c "cat ${pathPrefix}${options.name}/${commitHash}/component.json"`
-          ).toString()
+            `docker exec ${options.container} sh -c "cat ${pathPrefix}${options.name}/${commitHash}/component.json"`,
+          ).toString(),
         ),
         JSON.parse(
           execSync(
-            `docker exec ${options.container} sh -c "cat ${pathPrefix}components.json"`
-          ).toString()
+            `docker exec ${options.container} sh -c "cat ${pathPrefix}components.json"`,
+          ).toString(),
         ),
-        options
-      )
+        options,
+      ),
     ).replace(/"/g, '\\"');
     execSync(
-      `docker exec ${options.container} sh -c "echo '${components}' > ${pathPrefix}components.json"`
+      `docker exec ${options.container} sh -c "echo '${components}' > ${pathPrefix}components.json"`,
     );
     console.log(`- Updating html indexes...`);
     execSync(
-      `docker exec ${options.container} sh -c "cd ${pathPrefix}${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${pathPrefix}${options.name}/current/ \\;"`
+      `docker exec ${options.container} sh -c "cd ${pathPrefix}${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${pathPrefix}${options.name}/current/ \\;"`,
     );
     console.log(chalkTemplate.bgBlue.white.bold("Deploy Completed"));
   }

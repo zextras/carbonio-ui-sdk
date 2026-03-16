@@ -20,8 +20,8 @@ declare module "node-http-proxy-json" {
 
   const modifyResponse: (
     res: ServerResponse,
-    proxyRes: IncomingMessage,
-    transform: (body: unknown) => unknown,
+    proxyRes: IncomingMessage | String | undefined,
+    transform: (body: any) => any,
   ) => void;
 
   export = modifyResponse;
