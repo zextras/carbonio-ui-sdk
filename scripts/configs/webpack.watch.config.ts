@@ -14,9 +14,9 @@ import {
 import { Configuration } from "webpack";
 import path from "node:path";
 import { existsSync } from "node:fs";
-import chalk from "chalk";
 import { pkg } from "../utils/pkg";
 import modifyResponse from "node-http-proxy-json";
+import { styleText } from "node:util";
 
 export type WatchOptions = BuildOptions & {
   host: string;
@@ -57,7 +57,7 @@ export const setupWebpackWatchConfig = (
     setupMiddlewares: (middlewares) => {
       middlewares.unshift({
         path: "/_cli",
-        middleware: (req: any,res: any) => {
+        middleware: (req: any, res: any) => {
           res.json({
             isWatch: true,
             isStandalone: !!options.standalone,
@@ -110,7 +110,10 @@ export const setupWebpackWatchConfig = (
           modifyResponse(res, proxyRes, function (body: any) {
             if (body?.components) {
               console.log(
-                chalk.green.bold("[Proxy] modifying components.json"),
+                styleText(
+                  ["green", "bold"],
+                  "[Proxy] modifying components.json",
+                ),
               );
               let found = false;
               const components = body.components.reduce(
@@ -147,7 +150,10 @@ export const setupWebpackWatchConfig = (
               return JSON.stringify({ components });
             }
             console.log(
-              chalk.green.bold("[Proxy] components.json: no content"),
+              styleText(
+                ["green", "bold"],
+                "[Proxy] components.json: no content",
+              ),
             );
             return body;
           });

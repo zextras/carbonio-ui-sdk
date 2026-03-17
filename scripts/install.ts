@@ -7,8 +7,7 @@
 import { handler as build } from "./build";
 import type { BuildOptions } from "./configs/webpack.build.config";
 import { handler as deploy, type DeployOptions } from "./deploy";
-
-const chalkTemplate = require("chalk");
+import { styleText } from "node:util";
 
 type InstallOptions = BuildOptions & DeployOptions;
 
@@ -60,5 +59,5 @@ export const builder = {
 export const handler = async (options: InstallOptions) => {
   await build(options);
   await deploy(options);
-  console.log(chalkTemplate.bgBlue.white.bold("Install Completed"));
+  console.log(styleText(["blue", "bold"], "Install Completed"));
 };

@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import chalk from "chalk";
 import {
   setupWebpackWatchConfig,
   type WatchOptions,
@@ -13,6 +12,7 @@ import webpack from "webpack";
 import { commitHash } from "./utils/setup";
 import WebpackDevServer from "webpack-dev-server";
 import { printArgs } from "./utils/console";
+import { styleText } from "node:util";
 
 export const command = "watch";
 export const desc =
@@ -52,13 +52,13 @@ export const builder = {
 export const handler = async (options: WatchOptions) => {
   printArgs(options, "Watch");
   const basePath = `/static/iris/${options.name}/${commitHash}/`;
-  console.log("Building ", chalk.green(options.name));
-  console.log("Using base path ", chalk.green(basePath));
+  console.log("Building ", styleText(["green", "bold"], options.name));
+  console.log("Using base path ", styleText(["green", "bold"], basePath));
   const config = setupWebpackWatchConfig(options, { basePath, commitHash });
   const compiler = webpack(config);
   const server = new WebpackDevServer(config.devServer ?? {}, compiler);
   const runServer = async () => {
-    console.log(chalk.bgBlue.whiteBright.bold("Starting server..."));
+    console.log(styleText(["blue", "bold"], "Starting server..."));
     await server.start();
   };
   return runServer();

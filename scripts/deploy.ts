@@ -9,6 +9,7 @@ import { printArgs } from "./utils/console";
 import { commitHash } from "./utils/setup";
 import { existsSync } from "node:fs";
 import { execSync } from "node:child_process";
+import { styleText } from "node:util";
 
 export type DeployOptions = {
   name: string;
@@ -37,8 +38,6 @@ type ComponentEntry = {
 type ComponentsJson = {
   components: ComponentEntry[];
 };
-
-const chalkTemplate = require("chalk");
 
 const updateJson = (
   appJson: ComponentEntry,
@@ -88,7 +87,8 @@ export const handler = async (options: DeployOptions) => {
   const distPath = path.resolve(process.cwd(), "dist");
   if (!existsSync(distPath)) {
     console.log(
-      chalkTemplate.red(
+      styleText(
+        ["red", "bold"],
         "Missing dist folder, skipping deploy step. Run build step before",
       ),
     );
@@ -97,7 +97,8 @@ export const handler = async (options: DeployOptions) => {
 
   if (!options.host && !options.dir && !options.container) {
     console.log(
-      chalkTemplate.red(
+      styleText(
+        ["red", "bold"],
         "No target (host, directory or container) specified, skipping deploy step",
       ),
     );
@@ -112,7 +113,9 @@ export const handler = async (options: DeployOptions) => {
     const sshTarget = `${options.user}@${options.host}${
       options.port && " -p"
     } ${options.port}`;
-    console.log(`- Deploying to server ${chalkTemplate.bold(sshTarget)}...`);
+    console.log(
+      `- Deploying to server ${styleText(["blue", "bold"], sshTarget)}...`,
+    );
     execSync(`ssh ${sshTarget} '
         find ${pathPrefix}${options.name} -mindepth 1 -name i18n -prune -o -exec rm -rf {} + &&
         cd ${pathPrefix} && mkdir -p ${options.name}/${commitHash} ${options.name}/current &&
@@ -124,7 +127,9 @@ export const handler = async (options: DeployOptions) => {
         options.port
       } dist/* ${cpTarget}:${pathPrefix}${options.name}/${commitHash}`,
     );
-    console.log(`- Updating ${chalkTemplate.bold("components.json")}...`);
+    console.log(
+      `- Updating ${styleText(["blue", "bold"], "components.json")}...`,
+    );
     const components = JSON.stringify(
       updateJson(
         JSON.parse(
@@ -147,7 +152,7 @@ export const handler = async (options: DeployOptions) => {
     execSync(
       `ssh ${sshTarget} "cd ${pathPrefix}${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${pathPrefix}${options.name}/current/ \\;"`,
     );
-    console.log(chalkTemplate.bgBlue.white.bold("Deploy Completed"));
+    console.log(styleText(["blue", "bold"], "Deploy Completed"));
   }
 
   /**
@@ -157,17 +162,16 @@ export const handler = async (options: DeployOptions) => {
     // Check if target directory exists
     if (!existsSync(options.dir)) {
       console.log(
-        chalkTemplate.red(
-          `Target directory ${chalkTemplate.bold(
-            options.dir,
-          )} does not exist, skipping deploy step`,
+        styleText(
+          ["red", "bold"],
+          `Target directory ${styleText(["blue", "bold"], options.dir)} does not exist, skipping deploy step`,
         ),
       );
       return;
     }
 
     console.log(
-      `- Deploying to local directory ${chalkTemplate.bold(options.dir)}...`,
+      `- Deploying to local directory ${styleText(["blue", "bold"], options.dir)}...`,
     );
 
     execSync(`
@@ -178,7 +182,9 @@ export const handler = async (options: DeployOptions) => {
     `);
     execSync(`cp -r dist/* ${options.dir}/${options.name}/${commitHash}`);
 
-    console.log(`- Updating ${chalkTemplate.bold("components.json")}...`);
+    console.log(
+      `- Updating ${styleText(["blue", "bold"], "components.json")}...`,
+    );
     const components = JSON.stringify(
       updateJson(
         JSON.parse(
@@ -195,7 +201,7 @@ export const handler = async (options: DeployOptions) => {
     execSync(
       `cd ${options.dir}/${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${options.dir}/${options.name}/current/ \\;`,
     );
-    console.log(chalkTemplate.bgBlue.white.bold("Deploy Completed"));
+    console.log(styleText(["blue", "bold"], "Deploy Completed"));
   }
 
   /**
@@ -203,7 +209,7 @@ export const handler = async (options: DeployOptions) => {
    */
   if (options.container) {
     console.log(
-      `- Deploying to container ${chalkTemplate.bold(options.container)}...`,
+      `- Deploying to container ${styleText(["blue", "bold"], options.container)}...`,
     );
     execSync(`docker exec ${options.container} sh -c '
         find ${pathPrefix}${options.name} -mindepth 1 -name i18n -prune -o -exec rm -rf {} + &&
@@ -214,7 +220,9 @@ export const handler = async (options: DeployOptions) => {
     execSync(
       `docker cp dist/. ${options.container}:${pathPrefix}${options.name}/${commitHash}`,
     );
-    console.log(`- Updating ${chalkTemplate.bold("components.json")}...`);
+    console.log(
+      `- Updating ${styleText(["blue", "bold"], "components.json")}...`,
+    );
     const components = JSON.stringify(
       updateJson(
         JSON.parse(
@@ -237,6 +245,6 @@ export const handler = async (options: DeployOptions) => {
     execSync(
       `docker exec ${options.container} sh -c "cd ${pathPrefix}${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${pathPrefix}${options.name}/current/ \\;"`,
     );
-    console.log(chalkTemplate.bgBlue.white.bold("Deploy Completed"));
+    console.log(styleText(["blue", "bold"], "Deploy Completed"));
   }
 };
