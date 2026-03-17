@@ -57,7 +57,7 @@ export const setupWebpackWatchConfig = (
     setupMiddlewares: (middlewares) => {
       middlewares.unshift({
         path: "/_cli",
-        middleware: (res: any) => {
+        middleware: (req: any,res: any) => {
           res.json({
             isWatch: true,
             isStandalone: !!options.standalone,
