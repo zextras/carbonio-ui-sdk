@@ -102,11 +102,13 @@ export const setupWebpackBuildConfig = (
     );
   }
 
-  const tsxPath = path.resolve(process.cwd(), "src/app.tsx");
+  const appTsxPath = path.resolve(process.cwd(), "src/app.tsx");
+  const indexTsxPath = path.resolve(process.cwd(), "src/index.tsx");
+  const tsxPath = existsSync(appTsxPath) ? appTsxPath : indexTsxPath;
 
   if (!existsSync(tsxPath)) {
     throw new Error(
-      "Required entrypoint src/app.tsx not found. Please create this file to proceed.",
+      "Required entrypoint src/app.tsx or src/index.tsx not found. Please create this file to proceed.",
     );
   }
 
@@ -183,7 +185,6 @@ export const setupWebpackBuildConfig = (
       ],
     },
     resolve: {
-      // Only .tsx entry points are now supported. src/app.tsx is required.
       extensions: ["*", ".js", ".jsx", ".ts", ".tsx"],
       alias: {
         "app-entrypoint": tsxPath,
