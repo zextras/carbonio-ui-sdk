@@ -19,7 +19,7 @@
     "url": "git+https://github.com/zextras/carbonio-ui-sdk.git"
   },
   "engines": {
-    "node": "v22",
+    "node": "22.22.2",
     "npm": "v10"
   },
   "keywords": [
@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@types/circular-dependency-plugin": "^5.0.8",
-    "@types/node": "^22.15.30",
+    "@types/node": "^22.19.15",
     "@types/semver": "^7.7.1",
     "@types/webpack-bundle-analyzer": "^4.7.0",
     "@types/yargs": "^17.0.35",
