@@ -20,7 +20,7 @@
   },
   "engines": {
     "node": "v22",
-    "npm": "v10"
+    "npm": "11.12.1"
   },
   "keywords": [
     "Zextras",
