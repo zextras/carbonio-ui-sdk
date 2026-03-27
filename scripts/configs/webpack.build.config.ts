@@ -168,11 +168,6 @@ export const setupWebpackBuildConfig = (
           loader: require.resolve("handlebars-loader"),
         },
         {
-          test: /\.(js|jsx)$/,
-          use: require.resolve("react-hot-loader/webpack"),
-          include: /node_modules/,
-        },
-        {
           test: /\.svg$/,
           ...(options.svgr
             ? {
@@ -221,7 +216,7 @@ export const setupWebpackBuildConfig = (
   }
   const confPath = path.resolve(process.cwd(), "carbonio.webpack.js");
 
-  if (!existsSync(confPath) || skipCustomization) {
+  if (!existsSync(confPath)) {
     return defaultConfig;
   }
 

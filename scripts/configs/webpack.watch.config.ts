@@ -48,7 +48,7 @@ export const setupWebpackWatchConfig = (
     defaultConfig.output.chunkFilename = "[name].chunk.js";
   }
   defaultConfig.devServer = {
-    hot: true,
+    liveReload: true,
     port: devServerPort,
     historyApiFallback: {
       index: basePath,
