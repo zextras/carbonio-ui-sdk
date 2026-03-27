@@ -35,8 +35,7 @@ export const setupWebpackWatchConfig = (
 ): WatchConfiguration => {
   const defaultConfig = setupWebpackBuildConfig(
     options,
-    { basePath, commitHash },
-    true,
+    { basePath, commitHash }
   ) as WatchConfiguration;
   const server = `https://${options.host}/`;
   const devServerPort = options.port ?? 9000;

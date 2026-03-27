@@ -33,8 +33,7 @@ export type BuildContext = {
 
 export const setupWebpackBuildConfig = (
   options: BuildOptions,
-  { basePath, commitHash }: BuildContext,
-  skipCustomization = false,
+  { basePath, commitHash }: BuildContext
 ): Configuration => {
   const plugins: webpack.WebpackPluginInstance[] = [
     new webpack.DefinePlugin({
