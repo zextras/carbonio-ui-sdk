@@ -45,7 +45,6 @@
     "node-http-proxy-json": "^0.1.9",
     "path-browserify": "^1.0.1",
     "postcss-loader": "^8.2.0",
-    "react-hot-loader": "^4.13.1",
     "semver": "^7.7.3",
     "webpack": "^5.101.3",
     "webpack-bundle-analyzer": "^4.10.0",

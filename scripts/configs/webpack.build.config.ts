@@ -33,8 +33,7 @@ export type BuildContext = {
 
 export const setupWebpackBuildConfig = (
   options: BuildOptions,
-  { basePath, commitHash }: BuildContext,
-  skipCustomization = false,
+  { basePath, commitHash }: BuildContext
 ): Configuration => {
   const plugins: webpack.WebpackPluginInstance[] = [
     new webpack.DefinePlugin({
@@ -168,11 +167,6 @@ export const setupWebpackBuildConfig = (
           loader: require.resolve("handlebars-loader"),
         },
         {
-          test: /\.(js|jsx)$/,
-          use: require.resolve("react-hot-loader/webpack"),
-          include: /node_modules/,
-        },
-        {
           test: /\.svg$/,
           ...(options.svgr
             ? {
@@ -221,7 +215,7 @@ export const setupWebpackBuildConfig = (
   }
   const confPath = path.resolve(process.cwd(), "carbonio.webpack.js");
 
-  if (!existsSync(confPath) || skipCustomization) {
+  if (!existsSync(confPath)) {
     return defaultConfig;
   }
 

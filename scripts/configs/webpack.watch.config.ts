@@ -35,8 +35,7 @@ export const setupWebpackWatchConfig = (
 ): WatchConfiguration => {
   const defaultConfig = setupWebpackBuildConfig(
     options,
-    { basePath, commitHash },
-    true,
+    { basePath, commitHash }
   ) as WatchConfiguration;
   const server = `https://${options.host}/`;
   const devServerPort = options.port ?? 9000;
@@ -48,7 +47,7 @@ export const setupWebpackWatchConfig = (
     defaultConfig.output.chunkFilename = "[name].chunk.js";
   }
   defaultConfig.devServer = {
-    hot: true,
+    liveReload: true,
     port: devServerPort,
     historyApiFallback: {
       index: basePath,
