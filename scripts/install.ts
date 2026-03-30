@@ -4,13 +4,16 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-const { handler: build } = require('./build');
-const { handler: deploy } = require('./deploy');
-const chalkTemplate = require('chalk');
+import { handler as build } from "./build";
+import type { BuildOptions } from "./configs/webpack.build.config";
+import { handler as deploy, type DeployOptions } from "./deploy";
+import { styleText } from "node:util";
 
-exports.command = 'install';
-exports.desc = 'Build and deploy the project to a Carbonio instance';
-exports.builder = Object.assign({
+type InstallOptions = BuildOptions & DeployOptions;
+
+export const command = "install";
+export const desc = "Build and deploy the project to a Carbonio instance";
+export const builder = {
   analyze: {
     desc: "Apply the BundleAnalyzerPlugin and launch its web ui after the compilation",
     default: false,
@@ -19,12 +22,6 @@ exports.builder = Object.assign({
   dev: {
     desc: "Build in devMode",
     alias: "d",
-    default: false,
-    boolean: true,
-  },
-  external: {
-    desc: "Run an additional build for external resources",
-    alias: "e",
     default: false,
     boolean: true,
   },
@@ -57,10 +54,10 @@ exports.builder = Object.assign({
     alias: "p",
     default: "",
   },
-});
+};
 
-exports.handler = async (options) => {
-    await build(options);
-    await deploy(options);
-    console.log(chalkTemplate.bgBlue.white.bold('Install Completed'));
+export const handler = async (options: InstallOptions) => {
+  await build(options);
+  await deploy(options);
+  console.log(styleText(["blue", "bold"], "Install Completed"));
 };

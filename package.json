@@ -2,11 +2,15 @@
   "name": "@zextras/carbonio-ui-sdk",
   "version": "0.0.0-semantically-released",
   "description": "Zextras Carbonio Web SDK",
-  "main": "scripts/index.js",
+  "main": "dist/index.js",
   "bin": {
-    "sdk": "scripts/index.js"
+    "sdk": "dist/index.js"
   },
   "scripts": {
+    "build:scripts": "rm -rf dist && tsc -p tsconfig.json && mkdir -p dist/configs && cp scripts/configs/*.template scripts/configs/yap.json dist/configs/ && chmod +x dist/index.js",
+    "type-check": "tsc --noEmit",
+    "prepare": "npm run build:scripts",
+    "prepack": "npm run build:scripts",
     "deploy": "npm pack && rm -rf $PKG_PATH/node_modules/@zextras/carbonio-ui-sdk/* && tar -xf zextras-carbonio-ui-sdk-$npm_package_version.tgz -C $PKG_PATH/node_modules/@zextras/carbonio-ui-sdk/ --strip-components 1",
     "packTo": "npm pack --pack-destination $PKG_PATH && cd $PKG_PATH && npm i zextras-carbonio-ui-sdk-$npm_package_version.tgz"
   },
@@ -27,31 +31,35 @@
   "license": "AGPL-3.0-only",
   "homepage": "https://github.com/Zextras/carbonio-ui-sdk#readme",
   "files": [
-    "scripts"
+    "dist"
   ],
   "dependencies": {
     "babel-loader": "^9.2.1",
-    "chalk": "^4.1.2",
     "circular-dependency-plugin": "^5.2.2",
     "copy-webpack-plugin": "^13.0.1",
-    "css-loader": "^6.9.1",
+    "css-loader": "^6.11.0",
     "handlebars-loader": "^1.7.3",
-    "html-webpack-plugin": "^5.6.4",
-    "less-loader": "^12.1.0",
-    "mini-css-extract-plugin": "^2.9.4",
+    "html-webpack-plugin": "^5.6.6",
+    "less-loader": "^12.3.2",
+    "mini-css-extract-plugin": "^2.10.2",
     "node-http-proxy-json": "^0.1.9",
     "path-browserify": "^1.0.1",
-    "postcss-loader": "^8.0.0",
-    "react-hot-loader": "^4.13.1",
-    "semver": "^7.7.2",
-    "webpack": "^5.101.3",
-    "webpack-bundle-analyzer": "^4.10.0",
-    "webpack-dev-server": "^5.2.0",
+    "postcss-loader": "^8.2.1",
+    "semver": "^7.7.4",
+    "webpack": "^5.105.4",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-dev-server": "^5.2.3",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "conventional-changelog-conventionalcommits": "^9.1.0",
+    "@types/circular-dependency-plugin": "^5.0.8",
+    "@types/node": "^22.15.30",
+    "@types/semver": "^7.7.1",
+    "@types/webpack-bundle-analyzer": "^4.7.0",
+    "@types/yargs": "^17.0.35",
+    "conventional-changelog-conventionalcommits": "^9.3.0",
     "semantic-release": "^24.2.9",
-    "standard-version": "^9.5.0"
+    "standard-version": "^9.5.0",
+    "typescript": "^5.9.3"
   }
 }
