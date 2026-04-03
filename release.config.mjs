@@ -7,32 +7,26 @@
  * @type {import('semantic-release').GlobalConfig}
  */
 export default {
-	branches: [
-		'release',
-		{
-			name: 'devel',
-			prerelease: true
-		}
-	],
-	plugins: [
-		[
-			'@semantic-release/commit-analyzer',
-			{
-				preset: 'conventionalcommits',
-				"releaseRules": [
-					// enable release also for refactor and build commits
-					{ type: 'refactor', release: 'patch' },
-					{ type: 'build', release: 'patch' }
-				],
-			}
-		],
-		[
-			'@semantic-release/release-notes-generator',
-			{
-				preset: 'conventionalcommits'
-			}
-		],
-		'@semantic-release/npm',
-		'@semantic-release/github'
-	]
+  branches: ["devel"],
+  plugins: [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        preset: "conventionalcommits",
+        releaseRules: [
+          // enable release also for refactor and build commits
+          { type: "refactor", release: "patch" },
+          { type: "build", release: "patch" },
+        ],
+      },
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        preset: "conventionalcommits",
+      },
+    ],
+    "@semantic-release/npm",
+    "@semantic-release/github",
+  ],
 };
