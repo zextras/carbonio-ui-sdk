@@ -7,8 +7,6 @@ SPDX-License-Identifier: AGPL-3.0-only
   <h1>Carbonio UI SDK</h1>
 </div>
 
-The SDK for Carbonio Apps development
-
 <p align="center">
   <a href="https://github.com/zextras/carbonio-ui-sdk/graphs/contributors" alt="Contributors">
   <img src="https://img.shields.io/github/contributors/zextras/carbonio-ui-sdk" /></a>
@@ -20,9 +18,43 @@ The SDK for Carbonio Apps development
   <img src="https://img.shields.io/twitter/follow/zextras?style=social&logo=twitter" alt="Follow on Twitter"></a>
 </p>
 
-The Carbonio UI SDK is a collection of node scripts used for the development of Carbonio ui modules.
+The Carbonio UI SDK is a collection of node scripts used for the development of Carbonio UI modules.
 
-<h2>Contributing</h2> 
+<h2>Getting started</h2>
+
+Install SDK using [`pnpm`](https://www.npmjs.com/package/@zextras/carbonio-ui-sdk):
+
+```
+pnpm add @zextras/carbonio-ui-sdk
+```
+
+Build and deploy your app:
+
+```
+sdk install (-h <HOST_NAME> | -f <LOCAL_FOLDER> | -c <CONTAINER_NAME>)
+```
+
+Build your app
+
+```
+sdk build
+```
+
+<i>The output will be placed under the `dist ` directory</i>
+
+Deploy the app in the machine
+
+```
+sdk deploy (-h <HOST_NAME> | -f <LOCAL_FOLDER> | -c <CONTAINER_NAME>)
+```
+
+Run your app in watch mode, proxying against a Carbonio instance
+
+```
+sdk watch -h <HOST_NAME>
+```
+
+<h2>Contributing</h2>
 
 All contributions are accepted! Please refer to the CONTRIBUTING file, if
 present, for more details on how to contribute. If the repository has a Code of

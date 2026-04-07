@@ -21,15 +21,20 @@ depends=(
   "carbonio-webui-i18n"
   "jq"
 )
+source=(
+  '<%- htmlWebpackPlugin.options.name %>-dist.tar.gz'
+)
+sha256sums=(
+  'SKIP'
+)
 
 package() {
-  cd "${srcdir}"
-  mkdir -p "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
-  cp -a  ../../dist/* "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
-  chown root:root -R "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
-  chmod 644 -R "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
-  find "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>" -type d -exec chmod a+x "{}" \;
-  ln -sf /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/i18n "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>/i18n"
+  install -dm755 \
+    "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
+  cp -a  "${srcdir}/dist/"* \
+    "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>"
+  ln -sf /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/i18n \
+    "${pkgdir}/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/${pkgname}/<%- htmlWebpackPlugin.options.commit %>/i18n"
 }
 
 postinst() {
@@ -42,6 +47,20 @@ postinst() {
 
   # re-generate the component list, for every component
   # depth should be 3 since the path should be iris/NAME/COMMIT/component.json
-  find /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/ -maxdepth 3 -mindepth 3 -type f -name component.json -print |\
-    xargs jq -s '{"components":.}' > /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/components.json
+  find /opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/ \
+    -maxdepth 3 \
+    -mindepth 3 \
+    -type f \
+    -name component.json \
+    -printf '%T@ %p\n' \
+    | sort -rn \
+    | awk '{
+        n = split($2, path, "/")
+        component = path[6]
+
+        if (!seen[component]++) {
+            print $2
+        }
+    }' \
+    | xargs jq -s '{"components":.}' >/opt/zextras/<%- htmlWebpackPlugin.options.installMode %>/iris/components.json
 }
