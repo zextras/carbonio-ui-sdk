@@ -4,6 +4,13 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+def getNodeVersion() {
+    return sh(
+        script: 'sed "s/^[vV]//" .nvmrc | cut -d. -f1',
+        returnStdout: true
+    ).trim()
+}
+
 // FLAGS
 Boolean isReleaseBranch
 Boolean isPullRequest
@@ -46,6 +53,8 @@ pipeline {
                    echo "isReleaseBranch: ${isReleaseBranch}"
                    isPullRequest = "${BRANCH_NAME}" ==~ /PR-\d+/
                    echo "isPullRequest: ${isPullRequest}"
+                   nodeVersion = getNodeVersion()
+                   echo "NodeJS Major Version: $nodeVersion"
                 }
             }
         }
