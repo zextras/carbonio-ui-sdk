@@ -22,10 +22,10 @@ The Carbonio UI SDK is a collection of node scripts used for the development of 
 
 <h2>Getting started</h2>
 
-Install SDK using [`npm`](https://www.npmjs.com/package/@zextras/carbonio-ui-sdk):
+Install SDK using [`pnpm`](https://www.npmjs.com/package/@zextras/carbonio-ui-sdk):
 
 ```
-npm install @zextras/carbonio-ui-sdk
+pnpm add @zextras/carbonio-ui-sdk
 ```
 
 Build and deploy your app:
