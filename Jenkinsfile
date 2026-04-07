@@ -13,7 +13,6 @@ pipeline {
     agent {
         node {
             label "nodejs-v1"
-            label "nodejs-v1"
         }
     }
     options {
@@ -22,20 +21,6 @@ pipeline {
     }
     post {
         always {
-            container('base') {
-                script {
-                    def commitEmail = sh(
-                        script: "git --no-pager show -s --format='%ae'",
-                        returnStdout: true
-                    ).trim()
-                    emailext(
-                        attachLog: true,
-                        body: "\$DEFAULT_CONTENT",
-                        recipientProviders: [requestor()],
-                        subject: "\$DEFAULT_SUBJECT",
-                        to: "${commitEmail}"
-                    )
-                }
             container('base') {
                 script {
                     def commitEmail = sh(
