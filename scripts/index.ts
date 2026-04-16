@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --experimental-transform-types
 /*
  * SPDX-FileCopyrightText: 2021 Zextras <https://www.zextras.com>
  *

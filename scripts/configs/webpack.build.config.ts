@@ -213,13 +213,17 @@ export const setupWebpackBuildConfig = (
     defaultConfig.externals["@zextras/carbonio-design-system"] =
       `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-design-system']`;
   }
-  const confPath = path.resolve(process.cwd(), "carbonio.webpack.js");
+  const mtsConfPath = path.resolve(process.cwd(), "carbonio.webpack.mts");
+  const tsConfPath = path.resolve(process.cwd(), "carbonio.webpack.ts");
+  const jsConfPath = path.resolve(process.cwd(), "carbonio.webpack.js");
+  const confPath = existsSync(mtsConfPath) ? mtsConfPath : existsSync(tsConfPath) ? tsConfPath : existsSync(jsConfPath) ? jsConfPath : undefined;
 
-  if (!existsSync(confPath)) {
+  if (!confPath) {
     return defaultConfig;
   }
 
-  const molder = require(confPath);
+  const imported = require(confPath);
+  const molder = imported.default ?? imported;
   return molder(
     defaultConfig,
     pkg,
