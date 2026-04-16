@@ -4,30 +4,6 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-// git utils
-String getRepositoryName() {
-    return sh(script: '''
-        git remote -v | head -n1 | cut -d$'\t' -f2 | cut -d' ' -f1 | sed -e 's!https://github.com/!!g' -e 's!git@github.com:!!g' -e 's!.git!!g'
-    ''', returnStdout: true).trim()
-}
-
-Boolean tagExistsAtHead() {
-    try {
-        sh(script: '''
-            git describe --tags --exact-match
-        ''', returnStdout: true)
-        return true
-    } catch (err) {
-        return false
-    }
-}
-
-String getLastTag() {
-    return sh(script: '''
-        git describe --tags --abbrev=0
-    ''', returnStdout: true).trim()
-}
-
 def getNodeVersion() {
     return sh(
         script: 'sed "s/^[vV]//" .nvmrc | cut -d. -f1',
@@ -84,13 +60,30 @@ pipeline {
         }
         stage('Install dependencies') {
             steps {
-                container('nodejs-' + nodeVersion) {
+                container('pnpm') {
                     script {
-                        sh 'npm ci'
+                        sh 'pnpm install --frozen-lockfile'
                     }
                 }
             }
-        }        
+        }
+
+        stage('Checks') {
+            parallel {
+                stage('TypeCheck') {
+                    steps {
+                        container('pnpm') {
+                            script {
+                                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                                    sh 'pnpm run type-check'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
         stage("Release") {
             when {
                 allOf {
@@ -102,7 +95,7 @@ pipeline {
                     script {
                         withCredentials([usernamePassword(credentialsId: 'npm-zextras-bot-auth-token', usernameVariable: 'AUTH_USERNAME', passwordVariable: 'NPM_TOKEN')]) {
                             withCredentials([usernamePassword(credentialsId: 'jenkins-integration-with-github-account', usernameVariable: 'GH_USERNAME', passwordVariable: 'GH_TOKEN')]) {
-                                sh 'npx semantic-release'
+                                sh 'corepack enable && npx semantic-release'
                             }
                         }
                     }
