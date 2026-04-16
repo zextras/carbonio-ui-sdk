@@ -31,6 +31,15 @@ export default {
       "@semantic-release/release-notes-generator",
       {
         preset: "conventionalcommits",
+        presetConfig: {
+          types: [
+            { type: "feat", section: "Features" },
+            { type: "fix", section: "Bug Fixes" },
+            { type: "perf", section: "Performance Improvements" },
+            { type: "refactor", section: "Code Refactoring" },
+            { type: "build", section: "Build System" },
+          ],
+        },
       },
     ],
     "@semantic-release/npm",
