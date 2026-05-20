@@ -27,20 +27,20 @@ importers:
         specifier: 6.11.0
         version: 6.11.0(webpack@5.105.4(postcss@8.5.3))
       handlebars:
-        specifier: 4.7.8
-        version: 4.7.8
+        specifier: 4.7.9
+        version: 4.7.9
       handlebars-loader:
         specifier: 1.7.3
-        version: 1.7.3(handlebars@4.7.8)
+        version: 1.7.3(handlebars@4.7.9)
       html-webpack-plugin:
         specifier: 5.6.7
         version: 5.6.7(webpack@5.105.4(postcss@8.5.3))
       less:
-        specifier: 4.2.2
-        version: 4.2.2
+        specifier: 4.6.4
+        version: 4.6.4
       less-loader:
         specifier: 12.3.2
-        version: 12.3.2(less@4.2.2)(webpack@5.105.4(postcss@8.5.3))
+        version: 12.3.2(less@4.6.4)(webpack@5.105.4(postcss@8.5.3))
       mini-css-extract-plugin:
         specifier: 2.10.2
         version: 2.10.2(webpack@5.105.4(postcss@8.5.3))
@@ -1639,8 +1639,9 @@ packages:
     resolution: {integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==}
     engines: {node: '>= 0.6'}
 
-  copy-anything@2.0.6:
-    resolution: {integrity: sha512-1j20GZTsvKNkc4BY3NpMOM8tt///wY3FpIzozTOFO2ffuZcV61nojHXVKIy3WM+7ADCy5FVhdZYHYDdgTU0yJw==}
+  copy-anything@3.0.5:
+    resolution: {integrity: sha512-yCEafptTtb4bk7GLEQoM8KVJpxAfdBJYaXyzQEgQQQgYrZiDp8SJmGKlYza6CYjEDNstAdNdKA3UuoULlEbS6w==}
+    engines: {node: '>=12.13'}
 
   copy-webpack-plugin@13.0.1:
     resolution: {integrity: sha512-J+YV3WfhY6W/Xf9h+J1znYuqTye2xkBUIGyTPWuBAT27qajBa5mR4f8WBmfDY3YjRftT2kqZZiLi1qf0H+UOFw==}
@@ -2250,8 +2251,8 @@ packages:
     peerDependencies:
       handlebars: '>= 1.3.0 < 5'
 
-  handlebars@4.7.8:
-    resolution: {integrity: sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==}
+  handlebars@4.7.9:
+    resolution: {integrity: sha512-4E71E0rpOaQuJR2A3xDZ+GM1HyWYv1clR58tC8emQNeQe3RH7MAzSbat+V0wG78LQBo6m6bzSG/L4pBuCsgnUQ==}
     engines: {node: '>=0.4.7'}
     hasBin: true
 
@@ -2606,8 +2607,9 @@ packages:
     resolution: {integrity: sha512-mfcwb6IzQyOKTs84CQMrOwW4gQcaTOAWJ0zzJCl2WSPDrWk/OzDaImWFH3djXhb24g4eudZfLRozAvPGw4d9hQ==}
     engines: {node: '>= 0.4'}
 
-  is-what@3.14.1:
-    resolution: {integrity: sha512-sNxgpk9793nzSs7bA6JQJGeIuRBQhAaNGG77kzYQgMkrID+lS6SlK07K5LaptscDlSaIgH+GPFzf+d75FVxozA==}
+  is-what@4.1.16:
+    resolution: {integrity: sha512-ZhMwEosbFJkA0YhFnNDgTM4ZxDRsS6HqTo7qsZM08fehyRYIYa0yHu5R6mgo1n/8MgaPBXiPimPD77baVFYg+A==}
+    engines: {node: '>=12.13'}
 
   is-wsl@3.1.1:
     resolution: {integrity: sha512-e6rvdUCiQCAuumZslxRJWR/Doq4VpPR82kqclvcS0efgt430SlGIk05vdCN58+VrzgtIcfNODjozVielycD4Sw==}
@@ -2705,9 +2707,9 @@ packages:
       webpack:
         optional: true
 
-  less@4.2.2:
-    resolution: {integrity: sha512-tkuLHQlvWUTeQ3doAqnHbNn8T6WX1KA8yvbKG9x4VtKtIjHsVKQZCH11zRgAfbDAXC2UNIg/K9BYAAcEzUIrNg==}
-    engines: {node: '>=6'}
+  less@4.6.4:
+    resolution: {integrity: sha512-OJmO5+HxZLLw0RLzkqaNHzcgEAQG7C0y3aMbwtCzIUFZsLMNNq/1IdAdHEycQ58CwUO3jPTHmoN+tE5I7FQxNg==}
+    engines: {node: '>=18'}
     hasBin: true
 
   lines-and-columns@1.2.4:
@@ -6203,7 +6205,7 @@ snapshots:
     dependencies:
       conventional-commits-filter: 2.0.7
       dateformat: 3.0.3
-      handlebars: 4.7.8
+      handlebars: 4.7.9
       json-stringify-safe: 5.0.1
       lodash: 4.18.1
       meow: 8.1.2
@@ -6215,7 +6217,7 @@ snapshots:
     dependencies:
       '@simple-libs/stream-utils': 1.2.0
       conventional-commits-filter: 5.0.0
-      handlebars: 4.7.8
+      handlebars: 4.7.9
       meow: 13.2.0
       semver: 7.7.4
 
@@ -6273,9 +6275,9 @@ snapshots:
 
   cookie@0.7.2: {}
 
-  copy-anything@2.0.6:
+  copy-anything@3.0.5:
     dependencies:
-      is-what: 3.14.1
+      is-what: 4.1.16
 
   copy-webpack-plugin@13.0.1(webpack@5.105.4(postcss@8.5.3)):
     dependencies:
@@ -6953,15 +6955,15 @@ snapshots:
 
   handle-thing@2.0.1: {}
 
-  handlebars-loader@1.7.3(handlebars@4.7.8):
+  handlebars-loader@1.7.3(handlebars@4.7.9):
     dependencies:
       async: 3.2.6
       fastparse: 1.1.2
-      handlebars: 4.7.8
+      handlebars: 4.7.9
       loader-utils: 1.4.2
       object-assign: 4.1.1
 
-  handlebars@4.7.8:
+  handlebars@4.7.9:
     dependencies:
       minimist: 1.2.8
       neo-async: 2.6.2
@@ -7304,7 +7306,7 @@ snapshots:
       call-bound: 1.0.4
       get-intrinsic: 1.3.0
 
-  is-what@3.14.1: {}
+  is-what@4.1.16: {}
 
   is-wsl@3.1.1:
     dependencies:
@@ -7378,17 +7380,16 @@ snapshots:
       picocolors: 1.1.1
       shell-quote: 1.8.3
 
-  less-loader@12.3.2(less@4.2.2)(webpack@5.105.4(postcss@8.5.3)):
+  less-loader@12.3.2(less@4.6.4)(webpack@5.105.4(postcss@8.5.3)):
     dependencies:
-      less: 4.2.2
+      less: 4.6.4
     optionalDependencies:
       webpack: 5.105.4(postcss@8.5.3)
 
-  less@4.2.2:
+  less@4.6.4:
     dependencies:
-      copy-anything: 2.0.6
+      copy-anything: 3.0.5
       parse-node-version: 1.0.1
-      tslib: 2.8.1
     optionalDependencies:
       errno: 0.1.8
       graceful-fs: 4.2.11
