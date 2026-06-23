@@ -55,7 +55,7 @@
     "webpack-bundle-analyzer": "4.10.2",
     "webpack-dev-server": "5.2.4",
     "yargs": "18.0.0",
-    "@svgr/webpack": "5.5.0"
+    "@svgr/webpack": "6.5.1"
   },
   "devDependencies": {
     "@types/circular-dependency-plugin": "5.0.8",
