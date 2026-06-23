@@ -20,9 +20,9 @@
   },
   "engines": {
     "node": "v22",
-    "pnpm": ">=9"
+    "pnpm": ">=10.34.4"
   },
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.34.4",
   "keywords": [
     "Zextras",
     "Carbonio",
