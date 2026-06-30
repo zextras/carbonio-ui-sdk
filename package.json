@@ -51,7 +51,7 @@
     "postcss": "8.5.10",
     "postcss-loader": "8.2.1",
     "semver": "7.7.4",
-    "webpack": "5.105.4",
+    "webpack": "5.108.3",
     "webpack-bundle-analyzer": "4.10.2",
     "webpack-dev-server": "5.2.4",
     "yargs": "18.0.0",
