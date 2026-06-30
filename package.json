@@ -50,7 +50,7 @@
     "path-browserify": "1.0.1",
     "postcss": "8.5.10",
     "postcss-loader": "8.2.1",
-    "semver": "7.7.4",
+    "semver": "7.8.5",
     "webpack": "5.105.4",
     "webpack-bundle-analyzer": "4.10.2",
     "webpack-dev-server": "5.2.4",
