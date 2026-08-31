@@ -66,8 +66,8 @@ importers:
         specifier: 4.10.2
         version: 4.10.2
       webpack-dev-server:
-        specifier: 5.2.5
-        version: 5.2.5(webpack@5.108.3(postcss@8.5.10))
+        specifier: 5.2.6
+        version: 5.2.6(webpack@5.108.3(postcss@8.5.10))
       yargs:
         specifier: 18.0.0
         version: 18.0.0
@@ -4173,8 +4173,8 @@ packages:
       webpack:
         optional: true
 
-  webpack-dev-server@5.2.5:
-    resolution: {integrity: sha512-4wZtCquSuv9CKX8oybo+mqxtxZqWz47uM1Ch94lxowBztOhWCbhqvRbfC/mODOwxgV2brY+JGZpHq58/SuVFYg==}
+  webpack-dev-server@5.2.6:
+    resolution: {integrity: sha512-HNLRmamRvVavZQ+avceZifmv8hmdUjg43t6MI4SqJDwFdW7RPQwH5vzGhDRZSX59SgfbeHhLnq3g+uooWo7pVw==}
     engines: {node: '>= 18.12.0'}
     hasBin: true
     peerDependencies:
@@ -8867,7 +8867,7 @@ snapshots:
     optionalDependencies:
       webpack: 5.108.3(postcss@8.5.10)
 
-  webpack-dev-server@5.2.5(webpack@5.108.3(postcss@8.5.10)):
+  webpack-dev-server@5.2.6(webpack@5.108.3(postcss@8.5.10)):
     dependencies:
       '@types/bonjour': 3.5.13
       '@types/connect-history-api-fallback': 1.5.4
