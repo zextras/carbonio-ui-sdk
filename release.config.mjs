@@ -9,7 +9,7 @@
 
 export default {
   branches: [
-    "devel",
+    "main",
     {
       name: "beta",
       prerelease: true,
