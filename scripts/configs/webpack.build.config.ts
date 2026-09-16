@@ -206,8 +206,6 @@ export const setupWebpackBuildConfig = (
     "@zextras/carbonio-ui-preview": `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-ui-preview']`,
     "@zextras/carbonio-shell-ui": `__ZAPP_SHARED_LIBRARIES__['@zextras/carbonio-shell-ui']['${options.name}']`,
     darkreader: `__ZAPP_SHARED_LIBRARIES__['darkreader']`,
-    /* Exports for App's Handlers */
-    msw: `__ZAPP_SHARED_LIBRARIES__['msw']`,
   };
   if (!options.useLocalDS) {
     defaultConfig.externals["@zextras/carbonio-design-system"] =
