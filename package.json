@@ -10,6 +10,7 @@
     "build:scripts": "rm -rf dist && tsc -p tsconfig.json && mkdir -p dist/configs && cp scripts/configs/*.template scripts/configs/yap.json dist/configs/ && chmod +x dist/index.js",
     "type-check": "tsc --noEmit",
     "lint": "eslint --ext .ts --resolve-plugins-relative-to node_modules/@zextras/carbonio-ui-configs scripts",
+    "test": "echo 'carbonio-ui-sdk has no test suite yet - nothing to run'",
     "prepare": "pnpm run build:scripts",
     "prepack": "pnpm run build:scripts",
     "deploy": "pnpm pack && rm -rf $PKG_PATH/node_modules/@zextras/carbonio-ui-sdk/* && tar -xf zextras-carbonio-ui-sdk-$npm_package_version.tgz -C $PKG_PATH/node_modules/@zextras/carbonio-ui-sdk/ --strip-components 1",
