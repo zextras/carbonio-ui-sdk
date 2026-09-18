@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { styleText } from 'node:util';
+
 import { handler as build } from './build';
 import type { BuildOptions } from './configs/webpack.build.config';
 import { handler as deploy, type DeployOptions } from './deploy';
-import { styleText } from 'node:util';
 
 type InstallOptions = BuildOptions & DeployOptions;
 
@@ -56,7 +57,7 @@ export const builder = {
 	}
 };
 
-export const handler = async (options: InstallOptions) => {
+export const handler = async (options: InstallOptions): Promise<void> => {
 	await build(options);
 	await deploy(options);
 	console.log(styleText(['blue', 'bold'], 'Install Completed'));

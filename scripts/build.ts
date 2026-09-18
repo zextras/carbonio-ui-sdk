@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { setupWebpackBuildConfig, type BuildOptions } from './configs/webpack.build.config';
-import webpack from 'webpack';
-import { commitHash } from './utils/setup';
-import { logBuild, printArgs } from './utils/console';
 import { rmSync } from 'node:fs';
 import { styleText } from 'node:util';
+import webpack from 'webpack';
+
+import { setupWebpackBuildConfig, type BuildOptions } from './configs/webpack.build.config';
+import { logBuild, printArgs } from './utils/console';
+import { commitHash } from './utils/setup';
 
 export const command = 'build';
 export const desc = 'Compile and bundle your project';
@@ -31,8 +32,8 @@ export const builder = {
 	}
 };
 
-export const handler = async (options: BuildOptions) =>
-	new Promise(async (...p) => {
+export const handler = async (options: BuildOptions): Promise<unknown> =>
+	new Promise((...p) => {
 		printArgs(options, 'Build');
 		const basePath = `/static/iris/${options.name}/${commitHash}/`;
 		rmSync('dist', { recursive: true, force: true });

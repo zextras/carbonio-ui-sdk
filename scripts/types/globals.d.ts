@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2026 Zextras <https://www.zextras.com>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
 declare const PACKAGE_NAME: string;
 
 declare const module: {
@@ -17,7 +22,10 @@ declare module 'node-http-proxy-json' {
 
 	const modifyResponse: (
 		res: ServerResponse,
-		proxyRes: IncomingMessage | String | undefined,
+		proxyRes: IncomingMessage | string | undefined,
+		// The library hands over an arbitrary JSON body and accepts either an object
+		// or a string back, so `any` is what this untyped dependency actually offers.
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		transform: (body: any) => any
 	) => void;
 

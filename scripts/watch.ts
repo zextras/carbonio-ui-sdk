@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { setupWebpackWatchConfig, type WatchOptions } from './configs/webpack.watch.config';
-import webpack from 'webpack';
-import { commitHash } from './utils/setup';
-import WebpackDevServer from 'webpack-dev-server';
-import { printArgs } from './utils/console';
 import { styleText } from 'node:util';
+import webpack from 'webpack';
+import WebpackDevServer from 'webpack-dev-server';
+
+import { setupWebpackWatchConfig, type WatchOptions } from './configs/webpack.watch.config';
+import { printArgs } from './utils/console';
+import { commitHash } from './utils/setup';
 
 export const command = 'watch';
 export const desc = 'Run the project in watch mode, proxying against a Carbonio instance';
@@ -45,7 +46,7 @@ export const builder = {
 	}
 };
 
-export const handler = async (options: WatchOptions) => {
+export const handler = async (options: WatchOptions): Promise<void> => {
 	printArgs(options, 'Watch');
 	const basePath = `/static/iris/${options.name}/${commitHash}/`;
 	console.log('Building ', styleText(['green', 'bold'], options.name));
@@ -53,7 +54,7 @@ export const handler = async (options: WatchOptions) => {
 	const config = setupWebpackWatchConfig(options, { basePath, commitHash });
 	const compiler = webpack(config);
 	const server = new WebpackDevServer(config.devServer ?? {}, compiler);
-	const runServer = async () => {
+	const runServer = async (): Promise<void> => {
 		console.log(styleText(['blue', 'bold'], 'Starting server...'));
 		await server.start();
 	};

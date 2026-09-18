@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2026 Zextras <https://www.zextras.com>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
 import { styleText } from 'node:util';
 import type { Stats } from 'webpack';
 
@@ -25,6 +30,7 @@ export const printArgs = (
 };
 
 const logErrors = (errors: ErrorLike[], gravity: 'error' | 'warning', verbose?: boolean): void => {
+	// eslint-disable-next-line sonarjs/cognitive-complexity -- pre-existing; refactor tracked separately, out of scope for the lint setup
 	errors.forEach((error, i) => {
 		console.log(
 			styleText(
@@ -64,6 +70,7 @@ export const logBuild =
 		[resolve, reject]: [(value: Stats) => void, ((reason?: unknown) => void)?],
 		options: { verbose?: boolean }
 	) =>
+	// eslint-disable-next-line sonarjs/cognitive-complexity -- pre-existing; refactor tracked separately, out of scope for the lint setup
 	(err: Error | null, stats?: Stats): void => {
 		if (err) {
 			console.log(styleText(['bgRed', 'white', 'bold'], 'Webpack Runtime Error'));

@@ -4,12 +4,17 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { execSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { styleText } from 'node:util';
+
 import { printArgs } from './utils/console';
 import { commitHash } from './utils/setup';
-import { existsSync } from 'node:fs';
-import { execSync } from 'node:child_process';
-import { styleText } from 'node:util';
+
+const COMPONENTS_JSON = 'components.json';
+const DEPLOY_COMPLETED = 'Deploy Completed';
+const UPDATING_HTML_INDEXES = '- Updating html indexes...';
 
 export type DeployOptions = {
 	name: string;
@@ -79,7 +84,7 @@ export const builder = {
 	}
 };
 
-export const handler = async (options: DeployOptions) => {
+export const handler = async (options: DeployOptions): Promise<void> => {
 	const pathPrefix = `/opt/zextras/${options.admin ? 'admin' : 'web'}/iris/`;
 	printArgs(options, 'Deploy');
 	const distPath = path.resolve(process.cwd(), 'dist');
@@ -118,7 +123,7 @@ export const handler = async (options: DeployOptions) => {
 				options.port
 			} dist/* ${cpTarget}:${pathPrefix}${options.name}/${commitHash}`
 		);
-		console.log(`- Updating ${styleText(['blue', 'bold'], 'components.json')}...`);
+		console.log(`- Updating ${styleText(['blue', 'bold'], COMPONENTS_JSON)}...`);
 		const components = JSON.stringify(
 			updateJson(
 				JSON.parse(
@@ -131,11 +136,11 @@ export const handler = async (options: DeployOptions) => {
 			)
 		).replace(/"/g, '\\"');
 		execSync(`ssh ${sshTarget} "echo '${components}' > ${pathPrefix}components.json"`);
-		console.log(`- Updating html indexes...`);
+		console.log(UPDATING_HTML_INDEXES);
 		execSync(
-			`ssh ${sshTarget} "cd ${pathPrefix}${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${pathPrefix}${options.name}/current/ \\;"`
+			`ssh ${sshTarget} "cd ${pathPrefix}${options.name}/${commitHash} && find . -name "*.html" -exec cp --parents "{}" ${pathPrefix}${options.name}/current/ \\;"`
 		);
-		console.log(styleText(['blue', 'bold'], 'Deploy Completed'));
+		console.log(styleText(['blue', 'bold'], DEPLOY_COMPLETED));
 	}
 
 	/**
@@ -163,7 +168,7 @@ export const handler = async (options: DeployOptions) => {
     `);
 		execSync(`cp -r dist/* ${options.dir}/${options.name}/${commitHash}`);
 
-		console.log(`- Updating ${styleText(['blue', 'bold'], 'components.json')}...`);
+		console.log(`- Updating ${styleText(['blue', 'bold'], COMPONENTS_JSON)}...`);
 		const components = JSON.stringify(
 			updateJson(
 				JSON.parse(
@@ -174,11 +179,11 @@ export const handler = async (options: DeployOptions) => {
 			)
 		);
 		execSync(`echo '${components}' > ${options.dir}/components.json`);
-		console.log(`- Updating html indexes...`);
+		console.log(UPDATING_HTML_INDEXES);
 		execSync(
-			`cd ${options.dir}/${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${options.dir}/${options.name}/current/ \\;`
+			`cd ${options.dir}/${options.name}/${commitHash} && find . -name "*.html" -exec cp --parents "{}" ${options.dir}/${options.name}/current/ \\;`
 		);
-		console.log(styleText(['blue', 'bold'], 'Deploy Completed'));
+		console.log(styleText(['blue', 'bold'], DEPLOY_COMPLETED));
 	}
 
 	/**
@@ -194,7 +199,7 @@ export const handler = async (options: DeployOptions) => {
     '`);
 
 		execSync(`docker cp dist/. ${options.container}:${pathPrefix}${options.name}/${commitHash}`);
-		console.log(`- Updating ${styleText(['blue', 'bold'], 'components.json')}...`);
+		console.log(`- Updating ${styleText(['blue', 'bold'], COMPONENTS_JSON)}...`);
 		const components = JSON.stringify(
 			updateJson(
 				JSON.parse(
@@ -213,10 +218,10 @@ export const handler = async (options: DeployOptions) => {
 		execSync(
 			`docker exec ${options.container} sh -c "echo '${components}' > ${pathPrefix}components.json"`
 		);
-		console.log(`- Updating html indexes...`);
+		console.log(UPDATING_HTML_INDEXES);
 		execSync(
-			`docker exec ${options.container} sh -c "cd ${pathPrefix}${options.name}/${commitHash} && find . -name \"*.html\" -exec cp --parents \"{}\" ${pathPrefix}${options.name}/current/ \\;"`
+			`docker exec ${options.container} sh -c "cd ${pathPrefix}${options.name}/${commitHash} && find . -name "*.html" -exec cp --parents "{}" ${pathPrefix}${options.name}/current/ \\;"`
 		);
-		console.log(styleText(['blue', 'bold'], 'Deploy Completed'));
+		console.log(styleText(['blue', 'bold'], DEPLOY_COMPLETED));
 	}
 };

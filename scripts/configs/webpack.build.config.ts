@@ -4,16 +4,19 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import CircularDependencyPlugin from 'circular-dependency-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import webpack, { type Configuration } from 'webpack';
 import semver from 'semver';
+import webpack, { type Configuration } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import CircularDependencyPlugin from 'circular-dependency-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+
 import { pkg } from '../utils/pkg';
+
+const ASSET_RESOURCE = 'asset/resource';
 
 export type BuildOptions = {
 	name: string;
@@ -156,11 +159,11 @@ export const setupWebpackBuildConfig = (
 				},
 				{
 					test: /\.(png|jpg|gif|ogg|mp3)$/,
-					type: 'asset/resource'
+					type: ASSET_RESOURCE
 				},
 				{
 					test: /\.(woff(2)?|ttf|eot)$/,
-					type: 'asset/resource'
+					type: ASSET_RESOURCE
 				},
 				{
 					test: /\.hbs$/,
@@ -173,7 +176,7 @@ export const setupWebpackBuildConfig = (
 								use: ['@svgr/webpack']
 							}
 						: {
-								type: 'asset/resource'
+								type: ASSET_RESOURCE
 							})
 				}
 			]
@@ -217,6 +220,11 @@ export const setupWebpackBuildConfig = (
 		return defaultConfig;
 	}
 
+	/*
+	 * Dynamic require by design: this loads the consumer project's optional
+	 * carbonio.webpack.js at runtime, from its cwd. The path is only known then.
+	 */
+	// eslint-disable-next-line import/no-dynamic-require, global-require, @typescript-eslint/no-var-requires
 	const molder = require(confPath);
 	return molder(defaultConfig, pkg, options, options.dev ? 'development' : 'production');
 };

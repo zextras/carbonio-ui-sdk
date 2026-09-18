@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import path from 'node:path';
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
 
 export type CarbonioPkg = {
 	name: string;
