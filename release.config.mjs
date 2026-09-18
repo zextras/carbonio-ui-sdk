@@ -8,13 +8,7 @@
  */
 
 export default {
-  branches: [
-    "main",
-    {
-      name: "beta",
-      prerelease: true,
-    },
-  ],
+  branches: ["main"],
   plugins: [
     [
       "@semantic-release/commit-analyzer",
