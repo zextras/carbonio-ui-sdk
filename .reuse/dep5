@@ -17,3 +17,19 @@ License: CC0-1.0
 Files: .husky/*
 Copyright: 2021 Zextras <https://www.zextras.com>
 License: CC0-1.0
+
+Files: .github/*
+Copyright: 2021 Zextras <https://www.zextras.com>
+License: CC0-1.0
+
+Files: CHANGELOG.md
+Copyright: 2021 Zextras <https://www.zextras.com>
+License: CC0-1.0
+
+Files: pnpm-lock.yaml
+Copyright: 2021 Zextras <https://www.zextras.com>
+License: CC0-1.0
+
+Files: tsconfig.json
+Copyright: 2021 Zextras <https://www.zextras.com>
+License: AGPL-3.0-only
