@@ -36,6 +36,7 @@
   ],
   "dependencies": {
     "@babel/core": "7.29.6",
+    "@svgr/webpack": "5.5.0",
     "babel-loader": "9.2.1",
     "circular-dependency-plugin": "5.2.2",
     "copy-webpack-plugin": "13.0.1",
@@ -54,8 +55,7 @@
     "webpack": "5.108.3",
     "webpack-bundle-analyzer": "4.10.2",
     "webpack-dev-server": "5.2.5",
-    "yargs": "18.0.0",
-    "@svgr/webpack": "5.5.0"
+    "yargs": "18.0.0"
   },
   "devDependencies": {
     "@types/circular-dependency-plugin": "5.0.8",
@@ -63,6 +63,7 @@
     "@types/semver": "7.8.0",
     "@types/webpack-bundle-analyzer": "4.7.0",
     "@types/yargs": "17.0.35",
+    "@zextras/carbonio-ui-configs": "2.1.0",
     "conventional-changelog-conventionalcommits": "9.3.1",
     "semantic-release": "24.2.9",
     "standard-version": "9.5.0",

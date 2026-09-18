@@ -5,10 +5,10 @@
  */
 
 async function bootApp() {
-  const appEntrypoint = await import("app-entrypoint");
+	const appEntrypoint = await import('app-entrypoint');
 
-  const App = appEntrypoint?.default || appEntrypoint;
-  window.__ZAPP_HMR_EXPORT__[PACKAGE_NAME](App);
+	const App = appEntrypoint?.default || appEntrypoint;
+	window.__ZAPP_HMR_EXPORT__[PACKAGE_NAME](App);
 }
 
 bootApp();
