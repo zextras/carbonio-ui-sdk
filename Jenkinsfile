@@ -71,7 +71,7 @@ pipeline {
         }
         stage('Install dependencies') {
             steps {
-                container('pnpm') {
+                container('pnpm-' + nodeVersion) {
                     script {
                         sh 'pnpm install --frozen-lockfile'
                     }
@@ -83,7 +83,7 @@ pipeline {
             parallel {
                 stage('TypeCheck') {
                     steps {
-                        container('pnpm') {
+                        container('pnpm-' + nodeVersion) {
                             script {
                                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                                     sh 'pnpm run type-check'
