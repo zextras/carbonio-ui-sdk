@@ -54,7 +54,7 @@
     "webpack": "5.108.3",
     "webpack-bundle-analyzer": "4.10.2",
     "webpack-dev-server": "5.2.5",
-    "yargs": "18.0.0",
+    "yargs": "18.2.0",
     "@svgr/webpack": "5.5.0"
   },
   "devDependencies": {
