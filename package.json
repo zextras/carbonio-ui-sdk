@@ -41,7 +41,7 @@
     "dist"
   ],
   "dependencies": {
-    "@babel/core": "7.29.6",
+    "@babel/core": "7.29.7",
     "@svgr/webpack": "5.5.0",
     "babel-loader": "9.2.1",
     "circular-dependency-plugin": "5.2.2",
