@@ -36,7 +36,9 @@ export type BuildContext = {
 
 export const setupWebpackBuildConfig = (
 	options: BuildOptions,
-	{ basePath, commitHash }: BuildContext
+	{ basePath, commitHash }: BuildContext,
+	// `sdk watch` passes true: it applies carbonio.webpack.js once itself, on its own final config
+	skipCustomization = false
 ): Configuration => {
 	const plugins: webpack.WebpackPluginInstance[] = [
 		new webpack.DefinePlugin({
@@ -216,7 +218,7 @@ export const setupWebpackBuildConfig = (
 	}
 	const confPath = path.resolve(process.cwd(), 'carbonio.webpack.js');
 
-	if (!existsSync(confPath)) {
+	if (!existsSync(confPath) || skipCustomization) {
 		return defaultConfig;
 	}
 

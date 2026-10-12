@@ -48,10 +48,12 @@ export const setupWebpackWatchConfig = (
 	options: WatchOptions,
 	{ basePath, commitHash }: BuildContext
 ): WatchConfiguration => {
-	const defaultConfig = setupWebpackBuildConfig(options, {
-		basePath,
-		commitHash
-	}) as WatchConfiguration;
+	// carbonio.webpack.js is applied once, below, on the complete watch config
+	const defaultConfig = setupWebpackBuildConfig(
+		options,
+		{ basePath, commitHash },
+		true
+	) as WatchConfiguration;
 	const server = `https://${options.host}/`;
 	const devServerPort = options.port ?? 9000;
 	const localhost = `localhost:${devServerPort}`;
