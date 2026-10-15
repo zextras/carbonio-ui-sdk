@@ -31,7 +31,7 @@ pnpm add @zextras/carbonio-ui-sdk
 Build and deploy your app:
 
 ```
-sdk install (-h <HOST_NAME> | -f <LOCAL_FOLDER> | -c <CONTAINER_NAME>)
+sdk install (-h <HOST_NAME> | -f <LOCAL_FOLDER> | -c <CONTAINER_NAME> | -k <POD_NAME> [--namespace <NAMESPACE>])
 ```
 
 Build your app
@@ -45,7 +45,7 @@ sdk build
 Deploy the app in the machine
 
 ```
-sdk deploy (-h <HOST_NAME> | -f <LOCAL_FOLDER> | -c <CONTAINER_NAME>)
+sdk deploy (-h <HOST_NAME> | -f <LOCAL_FOLDER> | -c <CONTAINER_NAME> | -k <POD_NAME> [--namespace <NAMESPACE>])
 ```
 
 Run your app in watch mode, proxying against a Carbonio instance
