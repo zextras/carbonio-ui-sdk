@@ -45,6 +45,15 @@ export const builder = {
 		demandOption: false,
 		alias: 'c'
 	},
+	pod: {
+		desc: 'Destination Kubernetes pod (e.g. carbonio-composed-ui-0 on a local k3d cluster)',
+		demandOption: false,
+		alias: 'k'
+	},
+	namespace: {
+		desc: 'Kubernetes namespace of the destination pod',
+		default: 'carbonio'
+	},
 	user: {
 		desc: 'Username for ssh access',
 		alias: 'u',

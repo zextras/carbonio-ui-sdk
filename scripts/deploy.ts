@@ -23,6 +23,8 @@ export type DeployOptions = {
 	host?: string;
 	dir?: string;
 	container?: string;
+	pod?: string;
+	namespace: string;
 	user: string;
 	port?: string;
 };
@@ -72,6 +74,15 @@ export const builder = {
 		demandOption: false,
 		alias: 'c'
 	},
+	pod: {
+		desc: 'Destination Kubernetes pod (e.g. carbonio-composed-ui-0 on a local k3d cluster)',
+		demandOption: false,
+		alias: 'k'
+	},
+	namespace: {
+		desc: 'Kubernetes namespace of the destination pod',
+		default: 'carbonio'
+	},
 	user: {
 		desc: 'Username for ssh access',
 		alias: 'u',
@@ -82,6 +93,41 @@ export const builder = {
 		alias: 'p',
 		default: ''
 	}
+};
+
+const deployToContainer = (
+	target: string,
+	execPrefix: string,
+	copyCommand: (dest: string) => string,
+	pathPrefix: string,
+	options: Pick<DeployOptions, 'name'>
+): void => {
+	const appPath = `${pathPrefix}${options.name}`;
+	console.log(`- Deploying to ${styleText(['blue', 'bold'], target)}...`);
+	execSync(`${execPrefix} sh -c '
+        find ${appPath} -mindepth 1 -name i18n -prune -o -exec rm -rf {} + &&
+        cd ${pathPrefix} && mkdir -p ${options.name}/${commitHash} ${options.name}/current &&
+        cd ${options.name}/${commitHash} &&
+        ln -sf "../i18n" "i18n"
+    '`);
+
+	execSync(copyCommand(`${appPath}/${commitHash}`));
+	console.log(`- Updating ${styleText(['blue', 'bold'], COMPONENTS_JSON)}...`);
+	const components = JSON.stringify(
+		updateJson(
+			JSON.parse(
+				execSync(`${execPrefix} sh -c "cat ${appPath}/${commitHash}/component.json"`).toString()
+			),
+			JSON.parse(execSync(`${execPrefix} sh -c "cat ${pathPrefix}components.json"`).toString()),
+			options
+		)
+	).replace(/"/g, '\\"');
+	execSync(`${execPrefix} sh -c "echo '${components}' > ${pathPrefix}components.json"`);
+	console.log(UPDATING_HTML_INDEXES);
+	execSync(
+		`${execPrefix} sh -c "cd ${appPath}/${commitHash} && find . -name "*.html" -exec cp --parents "{}" ${appPath}/current/ \\;"`
+	);
+	console.log(styleText(['blue', 'bold'], DEPLOY_COMPLETED));
 };
 
 export const handler = async (options: DeployOptions): Promise<void> => {
@@ -95,11 +141,11 @@ export const handler = async (options: DeployOptions): Promise<void> => {
 		return;
 	}
 
-	if (!options.host && !options.dir && !options.container) {
+	if (!options.host && !options.dir && !options.container && !options.pod) {
 		console.log(
 			styleText(
 				['red', 'bold'],
-				'No target (host, directory or container) specified, skipping deploy step'
+				'No target (host, directory, container or pod) specified, skipping deploy step'
 			)
 		);
 		return;
@@ -190,38 +236,27 @@ export const handler = async (options: DeployOptions): Promise<void> => {
 	 * Container deploy
 	 */
 	if (options.container) {
-		console.log(`- Deploying to container ${styleText(['blue', 'bold'], options.container)}...`);
-		execSync(`docker exec ${options.container} sh -c '
-        find ${pathPrefix}${options.name} -mindepth 1 -name i18n -prune -o -exec rm -rf {} + &&
-        cd ${pathPrefix} && mkdir -p ${options.name}/${commitHash} ${options.name}/current &&
-        cd ${options.name}/${commitHash} &&
-        ln -sf "../i18n" "i18n"
-    '`);
+		deployToContainer(
+			`container ${options.container}`,
+			`docker exec ${options.container}`,
+			(dest) => `docker cp dist/. ${options.container}:${dest}`,
+			pathPrefix,
+			options
+		);
+	}
 
-		execSync(`docker cp dist/. ${options.container}:${pathPrefix}${options.name}/${commitHash}`);
-		console.log(`- Updating ${styleText(['blue', 'bold'], COMPONENTS_JSON)}...`);
-		const components = JSON.stringify(
-			updateJson(
-				JSON.parse(
-					execSync(
-						`docker exec ${options.container} sh -c "cat ${pathPrefix}${options.name}/${commitHash}/component.json"`
-					).toString()
-				),
-				JSON.parse(
-					execSync(
-						`docker exec ${options.container} sh -c "cat ${pathPrefix}components.json"`
-					).toString()
-				),
-				options
-			)
-		).replace(/"/g, '\\"');
-		execSync(
-			`docker exec ${options.container} sh -c "echo '${components}' > ${pathPrefix}components.json"`
+	/**
+	 * Kubernetes pod deploy (e.g. a local k3d cluster)
+	 */
+	if (options.pod) {
+		const kubectl = `kubectl -n ${options.namespace}`;
+		deployToContainer(
+			`pod ${options.namespace}/${options.pod}`,
+			`${kubectl} exec ${options.pod} --`,
+			(dest) =>
+				`COPYFILE_DISABLE=1 tar --no-xattrs -C dist -cf - . | ${kubectl} exec -i ${options.pod} -- tar --no-same-owner -C ${dest} -xf -`,
+			pathPrefix,
+			options
 		);
-		console.log(UPDATING_HTML_INDEXES);
-		execSync(
-			`docker exec ${options.container} sh -c "cd ${pathPrefix}${options.name}/${commitHash} && find . -name "*.html" -exec cp --parents "{}" ${pathPrefix}${options.name}/current/ \\;"`
-		);
-		console.log(styleText(['blue', 'bold'], DEPLOY_COMPLETED));
 	}
 };
