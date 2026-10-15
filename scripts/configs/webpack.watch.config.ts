@@ -43,6 +43,24 @@ type WatchConfiguration = Configuration & {
 	devServer?: DevServerConfiguration;
 };
 
+/*
+ * The backend builds redirects (e.g. to /static/login/) from the Host header without its
+ * port, so they would leave the dev server and land on https://localhost/
+ */
+const keepDevServerPortOnRedirect = (proxyRes: IncomingMessage, req: IncomingMessage): void => {
+	const { location } = proxyRes.headers;
+	if (!location || !req.headers.host) {
+		return;
+	}
+	const devServerUrl = new URL(`https://${req.headers.host}`);
+	const redirectUrl = new URL(location, devServerUrl);
+	if (redirectUrl.hostname === devServerUrl.hostname && redirectUrl.port !== devServerUrl.port) {
+		redirectUrl.port = devServerUrl.port;
+		// eslint-disable-next-line no-param-reassign
+		proxyRes.headers.location = redirectUrl.toString();
+	}
+};
+
 /* eslint-disable sonarjs/cognitive-complexity -- pre-existing; refactor tracked separately, out of scope for the lint setup */
 export const setupWebpackWatchConfig = (
 	options: WatchOptions,
@@ -96,7 +114,10 @@ export const setupWebpackWatchConfig = (
 				context: [
 					`!${basePath}/**/*`,
 					'!/static/iris/components.json',
-					`!/static/iris/${options.name}/${commitHash}/i18n/*.json`
+					`!/static/iris/${options.name}/${commitHash}/i18n/*.json`,
+					// With the websocket proxy the dev server live reload socket would be forwarded
+					// to the backend, which corrupts it and makes it reconnect forever
+					...(options.ws ? ['!/ws'] : [])
 				],
 				target: server,
 				secure: false,
@@ -105,7 +126,8 @@ export const setupWebpackWatchConfig = (
 				cookieDomainRewrite: {
 					'*': server,
 					[server]: localhost
-				}
+				},
+				onProxyRes: keepDevServerPortOnRedirect
 			},
 			{
 				context: ['/static/iris/components.json'],
