@@ -103,8 +103,8 @@ importers:
         specifier: 24.2.9
         version: 24.2.9(typescript@5.9.3)
       sonarqube-scanner:
-        specifier: 5.0.0
-        version: 5.0.0
+        specifier: 5.0.2
+        version: 5.0.2
       standard-version:
         specifier: 9.5.0
         version: 9.5.0
@@ -1530,8 +1530,8 @@ packages:
   add-stream@1.0.0:
     resolution: {integrity: sha512-qQLMr+8o0WC4FZGQTcJiKBVC59JylcPSrTtk6usvmIDFUOCKegapy1VHQwRbFMOFyb/inzUVqHs+eMYKDM1YeQ==}
 
-  adm-zip@0.6.0:
-    resolution: {integrity: sha512-XleryMhbuksdKtofnWZ9Sk+4CUTbms4Mb/EU32SZwToAyZ5RgVos/ki8n+yr0LWHOGKuakbXTuuYNHLQjhddgg==}
+  adm-zip@0.6.1:
+    resolution: {integrity: sha512-Xwrja8nx9e5o2N1my4DsKCeKpdrnACyr1wtbPxBDgGzKzKyE9kRtBFA8mWldI+RVlD7CBZNWY/wQ2+ydwOR6kQ==}
     engines: {node: '>=14.0'}
 
   agent-base@6.0.2:
@@ -1701,8 +1701,8 @@ packages:
     resolution: {integrity: sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==}
     engines: {node: '>=4'}
 
-  axios@1.18.1:
-    resolution: {integrity: sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==}
+  axios@1.20.0:
+    resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -4386,8 +4386,8 @@ packages:
   prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
 
-  properties-file@5.0.5:
-    resolution: {integrity: sha512-Gfi6UgMENAzww1P4hloKhLIQxqcYmUS5z+Lhm/jmFV+ushbE416NalT42oEfJbF9vd0a02B3AaLHiQGmNSQ9EA==}
+  properties-file@5.0.7:
+    resolution: {integrity: sha512-Hoae9SnNTJebHujv5gdOtb7stArj27GcKzWxerrQgjuHasE+VT7G10Q6rR2wRWTjaACkT4zRigAtqnkMOz9BIA==}
     engines: {node: '>=0.4.0'}
 
   proto-list@1.2.4:
@@ -4754,8 +4754,8 @@ packages:
   sockjs@0.3.24:
     resolution: {integrity: sha512-GJgLTZ7vYb/JtPSSZ10hsOYIvEYsjbNU+zPdIHcUaWVNUEPivzxku31865sSSud0Da0W4lEeOPlmw93zLQchuQ==}
 
-  sonarqube-scanner@5.0.0:
-    resolution: {integrity: sha512-kGCadeZXiF3Bh1knbK9RVMxaOKxPvLQk45Q4kk6s1hhMU0KvVptRTL9fx6wgsLEMCSubo1lEwmDDzr6icWsgTg==}
+  sonarqube-scanner@5.0.2:
+    resolution: {integrity: sha512-2bfwauqwuC7gcLs9H3pWhDkQLkcys7Q6B0M7qmgb9DRo7KG/Pza2VNVeDgabyVlLD/EyS4lTkUo7oCYQ4Xeu4g==}
     engines: {node: '>=22.12.0'}
     hasBin: true
 
@@ -4957,8 +4957,8 @@ packages:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
     engines: {node: '>=6'}
 
-  tar-stream@3.2.0:
-    resolution: {integrity: sha512-ojzvCvVaNp6aOTFmG7jaRD0meowIAuPc3cMMhSgKiVWws1GyHbGd/xvnyuRKcKlMpt3qvxx6r0hreCNITP9hIg==}
+  tar-stream@3.2.2:
+    resolution: {integrity: sha512-+8NeqHRjQWH9nYlwo2gamAMImZCVzI4UoEgDpWorBt9OEfppiZn+uSkskzQKPWIZyji/C8fpWO7u69G0DX0tbg==}
 
   teex@1.0.1:
     resolution: {integrity: sha512-eYE6iEI62Ni1H8oIa7KlDU6uQBtqr4Eajni3wX7rpfXD8ysFx8z0+dri+KWEPWpBsxXfxu58x/0jvTVT1ekOSg==}
@@ -7244,7 +7244,7 @@ snapshots:
 
   add-stream@1.0.0: {}
 
-  adm-zip@0.6.0: {}
+  adm-zip@0.6.1: {}
 
   agent-base@6.0.2:
     dependencies:
@@ -7431,7 +7431,7 @@ snapshots:
 
   axe-core@4.14.0: {}
 
-  axios@1.18.1:
+  axios@1.20.0:
     dependencies:
       follow-redirects: 1.16.1
       form-data: 4.0.6
@@ -10190,7 +10190,7 @@ snapshots:
       object-assign: 4.1.1
       react-is: 16.13.1
 
-  properties-file@5.0.5: {}
+  properties-file@5.0.7: {}
 
   proto-list@1.2.4: {}
 
@@ -10639,18 +10639,18 @@ snapshots:
       uuid: 8.3.2
       websocket-driver: 0.7.5
 
-  sonarqube-scanner@5.0.0:
+  sonarqube-scanner@5.0.2:
     dependencies:
-      adm-zip: 0.6.0
-      axios: 1.18.1
+      adm-zip: 0.6.1
+      axios: 1.20.0
       commander: 15.0.0
       hpagent: 1.2.0
       node-forge: 1.4.0
-      properties-file: 5.0.5
+      properties-file: 5.0.7
       proxy-from-env: 2.1.0
       semver: 7.8.5
       slugify: 1.6.9
-      tar-stream: 3.2.0
+      tar-stream: 3.2.2
     transitivePeerDependencies:
       - bare-abort-controller
       - bare-buffer
@@ -10912,7 +10912,7 @@ snapshots:
 
   tapable@2.3.3: {}
 
-  tar-stream@3.2.0:
+  tar-stream@3.2.2:
     dependencies:
       b4a: 1.9.0
       bare-fs: 4.8.4
