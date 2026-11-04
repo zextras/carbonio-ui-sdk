@@ -105,6 +105,7 @@ const deployToContainer = (
 	const appPath = `${pathPrefix}${options.name}`;
 	console.log(`- Deploying to ${styleText(['blue', 'bold'], target)}...`);
 	execSync(`${execPrefix} sh -c '
+        mkdir -p ${appPath} &&
         find ${appPath} -mindepth 1 -name i18n -prune -o -exec rm -rf {} + &&
         cd ${pathPrefix} && mkdir -p ${options.name}/${commitHash} ${options.name}/current &&
         cd ${options.name}/${commitHash} &&
@@ -159,6 +160,7 @@ export const handler = async (options: DeployOptions): Promise<void> => {
 		const sshTarget = `${options.user}@${options.host}${options.port && ' -p'} ${options.port}`;
 		console.log(`- Deploying to server ${styleText(['blue', 'bold'], sshTarget)}...`);
 		execSync(`ssh ${sshTarget} '
+        mkdir -p ${pathPrefix}${options.name} &&
         find ${pathPrefix}${options.name} -mindepth 1 -name i18n -prune -o -exec rm -rf {} + &&
         cd ${pathPrefix} && mkdir -p ${options.name}/${commitHash} ${options.name}/current &&
         ln -sf ${pathPrefix}${options.name}/i18n "${pathPrefix}${options.name}/${commitHash}/i18n"
@@ -207,6 +209,7 @@ export const handler = async (options: DeployOptions): Promise<void> => {
 		console.log(`- Deploying to local directory ${styleText(['blue', 'bold'], options.dir)}...`);
 
 		execSync(`
+        mkdir -p ${options.dir}/${options.name} &&
         find ${options.dir}/${options.name} -mindepth 1 -name i18n -prune -o -exec rm -rf {} + &&
         cd ${options.dir} && mkdir -p ${options.name}/${commitHash} ${options.name}/current &&
         cd ${options.dir}/${options.name}/${commitHash} &&
