@@ -103,8 +103,8 @@ importers:
         specifier: 24.2.9
         version: 24.2.9(typescript@5.9.3)
       sonarqube-scanner:
-        specifier: 5.0.2
-        version: 5.0.2(bare-buffer@3.7.3)
+        specifier: 5.1.0
+        version: 5.1.0(bare-buffer@3.7.3)
       standard-version:
         specifier: 9.5.0
         version: 9.5.0
@@ -1684,8 +1684,8 @@ packages:
     resolution: {integrity: sha512-FHfa+lmNjQZfJz1q8wKqIDwC6DExcHt/pkjNQb09a3NPjCKg2rhu5qb2S4r76ASyFNNtuFooJpZe37OgudVGtQ==}
     engines: {node: '>=4'}
 
-  axios@1.20.0:
-    resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
+  axios@1.21.0:
+    resolution: {integrity: sha512-YCzXMB53Q9PZBsh7yN7wtapit4WepwcHS2fP8QhGsBxSz5YtgYobV7GGlWlAJi+RxfU77GQTQi2DSLUma42EYA==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -3894,8 +3894,8 @@ packages:
     resolution: {integrity: sha512-kXs9Go0cah0qHVV2v389IXQLdLCeE1xfFtjOAF+iobu0OIoG1pje8At2vMHyaPMiPMnG/LWP50twML21eMcAag==}
     engines: {node: '>= 0.4'}
 
-  node-forge@1.4.0:
-    resolution: {integrity: sha512-LarFH0+6VfriEhqMMcLX2F7SwSXeWwnEAJEsYm5QKWchiVYVvJyV9v7UDvUv+w5HO23ZpQTXDv/GxdDdMyOuoQ==}
+  node-forge@1.4.3:
+    resolution: {integrity: sha512-P6wzfh6t70avmV8FrVEAd/36sOPJQ+hkaJVX1Laap9J/77m7M0eyozDvc8SwnDf4P7MP94gwbAAo0rg3YVXT+g==}
     engines: {node: '>= 6.13.0'}
 
   node-http-proxy-json@0.1.9:
@@ -4646,6 +4646,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  semver@7.8.6:
+    resolution: {integrity: sha512-9lpSSU4Mly3mrtruwLs1eLK6+gzbzqeBFwRNjIjE+9LuDpWdYctrQlQ3ej1Ilgi7gknpsTRnPoLP8DpCHqHIJw==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   send@0.19.2:
     resolution: {integrity: sha512-VMbMxbDeehAxpOtWJXlcUS5E8iXh6QmN+BkRX1GARS3wRaXEEgzCcB10gTQazO42tpNIya8xIyNx8fll1OFPrg==}
     engines: {node: '>= 0.8.0'}
@@ -4731,8 +4736,8 @@ packages:
   sockjs@0.3.24:
     resolution: {integrity: sha512-GJgLTZ7vYb/JtPSSZ10hsOYIvEYsjbNU+zPdIHcUaWVNUEPivzxku31865sSSud0Da0W4lEeOPlmw93zLQchuQ==}
 
-  sonarqube-scanner@5.0.2:
-    resolution: {integrity: sha512-2bfwauqwuC7gcLs9H3pWhDkQLkcys7Q6B0M7qmgb9DRo7KG/Pza2VNVeDgabyVlLD/EyS4lTkUo7oCYQ4Xeu4g==}
+  sonarqube-scanner@5.1.0:
+    resolution: {integrity: sha512-jxXRjlufmcXNM3YlZlHL4CglLRfrqhCzLq6loLI/7IrRU0LP+6KsMhWo78xUWN/Uo+RrrMnENdJGAyo6NRvARw==}
     engines: {node: '>=22.12.0'}
     hasBin: true
 
@@ -7378,7 +7383,7 @@ snapshots:
 
   axe-core@4.14.1: {}
 
-  axios@1.20.0:
+  axios@1.21.0:
     dependencies:
       follow-redirects: 1.16.3
       form-data: 4.0.6
@@ -9739,7 +9744,7 @@ snapshots:
       object.entries: 1.1.9
       semver: 6.3.2
 
-  node-forge@1.4.0: {}
+  node-forge@1.4.3: {}
 
   node-http-proxy-json@0.1.9:
     dependencies:
@@ -10457,6 +10462,8 @@ snapshots:
 
   semver@7.8.5: {}
 
+  semver@7.8.6: {}
+
   send@0.19.2:
     dependencies:
       debug: 2.6.9
@@ -10588,16 +10595,16 @@ snapshots:
       uuid: 8.3.2
       websocket-driver: 0.7.5
 
-  sonarqube-scanner@5.0.2(bare-buffer@3.7.3):
+  sonarqube-scanner@5.1.0(bare-buffer@3.7.3):
     dependencies:
       adm-zip: 0.6.1
-      axios: 1.20.0
+      axios: 1.21.0
       commander: 15.0.0
       hpagent: 1.2.0
-      node-forge: 1.4.0
+      node-forge: 1.4.3
       properties-file: 5.0.7
       proxy-from-env: 2.1.0
-      semver: 7.8.5
+      semver: 7.8.6
       slugify: 1.6.9
       tar-stream: 3.2.2(bare-buffer@3.7.3)
     transitivePeerDependencies:
