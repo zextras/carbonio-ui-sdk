@@ -54,8 +54,8 @@ importers:
         specifier: 8.5.10
         version: 8.5.10
       postcss-loader:
-        specifier: 8.2.1
-        version: 8.2.1(postcss@8.5.10)(typescript@5.9.3)(webpack@5.108.3(postcss@8.5.10))
+        specifier: 8.2.2
+        version: 8.2.2(postcss@8.5.10)(typescript@5.9.3)(webpack@5.108.3(postcss@8.5.10))
       semver:
         specifier: 7.8.5
         version: 7.8.5
@@ -4273,8 +4273,8 @@ packages:
     resolution: {integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==}
     engines: {node: '>= 0.4'}
 
-  postcss-loader@8.2.1:
-    resolution: {integrity: sha512-k98jtRzthjj3f76MYTs9JTpRqV1RaaMhEU0Lpw9OTmQZQdppg4B30VZ74BojuBHt3F4KyubHJoXCMUeM8Bqeow==}
+  postcss-loader@8.2.2:
+    resolution: {integrity: sha512-NMFUxyFeNHdQSnK0wewFwnkYwsjmohSZzGUBTjcxPMJzOOf7BVANeU8rljwkfjuWhZVRSGgCaXwV6YSkfETeyg==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@rspack/core': 0.x || ^1.0.0 || ^2.0.0-0
@@ -10051,7 +10051,7 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  postcss-loader@8.2.1(postcss@8.5.10)(typescript@5.9.3)(webpack@5.108.3(postcss@8.5.10)):
+  postcss-loader@8.2.2(postcss@8.5.10)(typescript@5.9.3)(webpack@5.108.3(postcss@8.5.10)):
     dependencies:
       cosmiconfig: 9.0.2(typescript@5.9.3)
       jiti: 2.7.0
